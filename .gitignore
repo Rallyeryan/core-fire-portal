@@ -126,7 +126,9 @@ temp/
 .profile
 .zshrc
 .gitconfig
+.lesshst
 Downloads/
 upload/
 skills/
 sandbox.txt
+terminal_full_output/

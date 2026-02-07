@@ -65,6 +65,35 @@ export async function generateAgreementPDF(data: AgreementData): Promise<Buffer>
         console.error('Failed to fetch logo:', err);
       }
 
+      // Add watermark pattern function
+      const addWatermarkPattern = () => {
+        if (!logoBuffer) return;
+        
+        doc.save();
+        doc.opacity(0.04); // Very light watermark (4% opacity)
+        
+        const pageWidth = doc.page.width;
+        const pageHeight = doc.page.height;
+        const watermarkSize = 80;
+        const spacing = 150;
+        
+        // Create repeating pattern across the page
+        for (let y = 0; y < pageHeight; y += spacing) {
+          for (let x = 0; x < pageWidth; x += spacing) {
+            try {
+              doc.image(logoBuffer, x, y, { width: watermarkSize });
+            } catch (e) {
+              // Skip if image placement fails
+            }
+          }
+        }
+        
+        doc.restore();
+      };
+
+      // Add watermark pattern to first page
+      addWatermarkPattern();
+      
       // Header with logo
       if (logoBuffer) {
         doc.image(logoBuffer, 50, 45, { width: 150 });
@@ -111,6 +140,7 @@ Should you require any further information or clarification, please do not hesit
 
       // New page for agreement details
       doc.addPage();
+      addWatermarkPattern();
 
       // Section 1: Equipment Schedule
       doc.fontSize(16).font('Helvetica-Bold')
@@ -142,6 +172,7 @@ Should you require any further information or clarification, please do not hesit
 
       // Section 3: Agreement Overview
       doc.addPage();
+      addWatermarkPattern();
       doc.fontSize(16).font('Helvetica-Bold').fillColor('#00ff00')
         .text('3. AGREEMENT OVERVIEW', { underline: true });
       doc.fillColor('#000');
@@ -192,6 +223,7 @@ Billing Cycle: ${data.billingCycle}`;
 
       // Section 4: Terms & Conditions
       doc.addPage();
+      addWatermarkPattern();
       doc.fontSize(16).font('Helvetica-Bold')
         .text('4. Terms & Conditions', { underline: true });
       doc.moveDown();
@@ -214,6 +246,7 @@ Terms Accepted: ${data.termsAccepted ? 'Yes' : 'No'}`;
 
       // Section 5: Signatures
       doc.addPage();
+      addWatermarkPattern();
       doc.fontSize(16).font('Helvetica-Bold')
         .text('5. Signatures', { underline: true });
       doc.moveDown();
