@@ -1,0 +1,1 @@
+ALTER TABLE `agreements` ADD `companyRegistrationNo` varchar(100);
