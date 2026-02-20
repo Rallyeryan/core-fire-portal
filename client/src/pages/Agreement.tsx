@@ -110,7 +110,26 @@ const DEFAULT_SECTION_ORDER = [
   "terms-conditions",
 ] as const;
 
-type SectionId = typeof DEFAULT_SECTION_ORDER[number];
+type SectionId = typeof DEFAULT_SECTION_ORDER[number] | string;
+
+// ─── Custom Section Types ─────────────────────────────────────────────────────
+
+type CustomSectionType = "free-text" | "table" | "checklist" | "image";
+
+interface CustomSectionRow {
+  col1: string;
+  col2: string;
+  col3: string;
+}
+
+interface CustomSection {
+  id: string;
+  type: CustomSectionType;
+  title: string;
+  body: string;            // free-text / image URL
+  rows: CustomSectionRow[]; // table rows
+  items: string[];          // checklist items
+}
 
 // ─── SortableSection wrapper ──────────────────────────────────────────────────
 
@@ -119,7 +138,7 @@ function SortableSection({
   index,
   children,
 }: {
-  id: SectionId;
+  id: string;
   index: number;
   children: (dragHandleProps: React.HTMLAttributes<HTMLElement>, index: number) => React.ReactNode;
 }) {
@@ -130,7 +149,7 @@ function SortableSection({
     transform,
     transition,
     isDragging,
-  } = useSortable({ id });
+  } = useSortable({ id: id as string });
 
   const style: React.CSSProperties = {
     transform: CSS.Transform.toString(transform),
@@ -153,7 +172,11 @@ export default function Agreement() {
   const [isGuidedMode, setIsGuidedMode] = useState(false);
 
   // Section reordering
-  const [sectionOrder, setSectionOrder] = useState<SectionId[]>([...DEFAULT_SECTION_ORDER]);
+  const [sectionOrder, setSectionOrder] = useState<string[]>([...DEFAULT_SECTION_ORDER]);
+  const [customSections, setCustomSections] = useState<CustomSection[]>([]);
+  const [showAddSectionModal, setShowAddSectionModal] = useState(false);
+  const [newSectionType, setNewSectionType] = useState<CustomSectionType>("free-text");
+  const [newSectionTitle, setNewSectionTitle] = useState("");
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
@@ -162,12 +185,80 @@ export default function Agreement() {
     const { active, over } = event;
     if (over && active.id !== over.id) {
       setSectionOrder((prev) => {
-        const oldIndex = prev.indexOf(active.id as SectionId);
-        const newIndex = prev.indexOf(over.id as SectionId);
+        const oldIndex = prev.indexOf(active.id as string);
+        const newIndex = prev.indexOf(over.id as string);
         return arrayMove(prev, oldIndex, newIndex);
       });
     }
   }, []);
+
+  // ── Custom section helpers ──────────────────────────────────────────────────
+  const addCustomSection = () => {
+    if (!newSectionTitle.trim()) return;
+    const id = `custom-${nanoid(8)}`;
+    const newSection: CustomSection = {
+      id,
+      type: newSectionType,
+      title: newSectionTitle.trim(),
+      body: "",
+      rows: [{ col1: "", col2: "", col3: "" }],
+      items: [""],
+    };
+    setCustomSections((prev) => [...prev, newSection]);
+    setSectionOrder((prev) => [...prev, id]);
+    setShowAddSectionModal(false);
+    setNewSectionTitle("");
+    setNewSectionType("free-text");
+    toast.success(`Section "${newSection.title}" added`);
+  };
+
+  const removeCustomSection = (id: string) => {
+    setCustomSections((prev) => prev.filter((s) => s.id !== id));
+    setSectionOrder((prev) => prev.filter((sid) => sid !== id));
+    toast.success("Section removed");
+  };
+
+  const updateCustomSection = (id: string, updates: Partial<CustomSection>) => {
+    setCustomSections((prev) => prev.map((s) => s.id === id ? { ...s, ...updates } : s));
+  };
+
+  const addTableRow = (id: string) => {
+    setCustomSections((prev) => prev.map((s) => s.id === id ? { ...s, rows: [...s.rows, { col1: "", col2: "", col3: "" }] } : s));
+  };
+
+  const updateTableRow = (sectionId: string, rowIdx: number, field: keyof CustomSectionRow, value: string) => {
+    setCustomSections((prev) => prev.map((s) => {
+      if (s.id !== sectionId) return s;
+      const rows = s.rows.map((r, i) => i === rowIdx ? { ...r, [field]: value } : r);
+      return { ...s, rows };
+    }));
+  };
+
+  const removeTableRow = (sectionId: string, rowIdx: number) => {
+    setCustomSections((prev) => prev.map((s) => {
+      if (s.id !== sectionId) return s;
+      return { ...s, rows: s.rows.filter((_, i) => i !== rowIdx) };
+    }));
+  };
+
+  const addChecklistItem = (id: string) => {
+    setCustomSections((prev) => prev.map((s) => s.id === id ? { ...s, items: [...s.items, ""] } : s));
+  };
+
+  const updateChecklistItem = (sectionId: string, itemIdx: number, value: string) => {
+    setCustomSections((prev) => prev.map((s) => {
+      if (s.id !== sectionId) return s;
+      const items = s.items.map((it, i) => i === itemIdx ? value : it);
+      return { ...s, items };
+    }));
+  };
+
+  const removeChecklistItem = (sectionId: string, itemIdx: number) => {
+    setCustomSections((prev) => prev.map((s) => {
+      if (s.id !== sectionId) return s;
+      return { ...s, items: s.items.filter((_, i) => i !== itemIdx) };
+    }));
+  };
 
   // Client Information
   const [clientName, setClientName] = useState("");
@@ -1776,11 +1867,185 @@ export default function Agreement() {
                       )}
                     </SortableSection>
                   );
-                  return null;
+                  // ── Custom section renderer ──────────────────────────────────────
+                  const custom = customSections.find((s) => s.id === sectionId);
+                  if (custom) return (
+                    <SortableSection key={sectionId} id={sectionId} index={sectionNum}>
+                      {(dragHandleProps) => (
+                        <Card className="border-primary/20">
+                          <CardHeader className="pb-3">
+                            <div className="flex items-center gap-3">
+                              <button {...dragHandleProps} className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground p-1 rounded transition-colors touch-none" title="Drag to reorder section"><GripVertical className="h-5 w-5" /></button>
+                              <div className="w-10 h-10 rounded-full bg-primary/20 text-primary flex items-center justify-center font-semibold text-sm">{sectionNum}</div>
+                              <div className="flex-1">
+                                <Input
+                                  value={custom.title}
+                                  onChange={(e) => updateCustomSection(custom.id, { title: e.target.value })}
+                                  className="font-semibold text-base border-dashed bg-transparent h-8 px-2"
+                                  placeholder="Section title..."
+                                />
+                                <div className="text-xs text-muted-foreground mt-0.5 ml-2 capitalize">{custom.type.replace("-", " ")} section</div>
+                              </div>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => removeCustomSection(custom.id)}
+                                className="text-destructive hover:text-destructive hover:bg-destructive/10 ml-auto"
+                                title="Remove this section"
+                              >
+                                <X className="h-4 w-4 mr-1" />Remove
+                              </Button>
+                            </div>
+                          </CardHeader>
+                          <CardContent className="space-y-3">
+                            {custom.type === "free-text" && (
+                              <Textarea
+                                value={custom.body}
+                                onChange={(e) => updateCustomSection(custom.id, { body: e.target.value })}
+                                placeholder="Enter your custom section content here..."
+                                rows={6}
+                                className="border-dashed bg-muted/20 resize-y"
+                              />
+                            )}
+                            {custom.type === "image" && (
+                              <div className="space-y-3">
+                                <div className="space-y-1">
+                                  <Label className="text-xs text-muted-foreground">Image URL or description</Label>
+                                  <Input
+                                    value={custom.body}
+                                    onChange={(e) => updateCustomSection(custom.id, { body: e.target.value })}
+                                    placeholder="https://... or describe the image to include"
+                                    className="border-dashed bg-muted/20"
+                                  />
+                                </div>
+                                {custom.body && custom.body.startsWith("http") && (
+                                  <img src={custom.body} alt={custom.title} className="max-h-64 rounded-lg border object-contain" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                                )}
+                                <Textarea
+                                  value={custom.rows[0]?.col1 || ""}
+                                  onChange={(e) => updateTableRow(custom.id, 0, "col1", e.target.value)}
+                                  placeholder="Image caption or additional notes..."
+                                  rows={2}
+                                  className="border-dashed bg-muted/20 resize-none"
+                                />
+                              </div>
+                            )}
+                            {custom.type === "table" && (
+                              <div className="space-y-2">
+                                <div className="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 text-xs font-medium text-muted-foreground uppercase tracking-wide px-1">
+                                  <span>Column 1</span><span>Column 2</span><span>Column 3</span><span></span>
+                                </div>
+                                {custom.rows.map((row, rowIdx) => (
+                                  <div key={rowIdx} className="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 items-center">
+                                    <Input value={row.col1} onChange={(e) => updateTableRow(custom.id, rowIdx, "col1", e.target.value)} placeholder="Value..." className="h-8 text-sm border-dashed bg-muted/20" />
+                                    <Input value={row.col2} onChange={(e) => updateTableRow(custom.id, rowIdx, "col2", e.target.value)} placeholder="Value..." className="h-8 text-sm border-dashed bg-muted/20" />
+                                    <Input value={row.col3} onChange={(e) => updateTableRow(custom.id, rowIdx, "col3", e.target.value)} placeholder="Value..." className="h-8 text-sm border-dashed bg-muted/20" />
+                                    <Button type="button" variant="ghost" size="sm" onClick={() => removeTableRow(custom.id, rowIdx)} className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"><X className="h-3 w-3" /></Button>
+                                  </div>
+                                ))}
+                                <Button type="button" variant="outline" size="sm" onClick={() => addTableRow(custom.id)} className="mt-1">
+                                  <Plus className="h-3 w-3 mr-1" />Add Row
+                                </Button>
+                              </div>
+                            )}
+                            {custom.type === "checklist" && (
+                              <div className="space-y-2">
+                                {custom.items.map((item, itemIdx) => (
+                                  <div key={itemIdx} className="flex items-center gap-2">
+                                    <Checkbox disabled className="opacity-50" />
+                                    <Input
+                                      value={item}
+                                      onChange={(e) => updateChecklistItem(custom.id, itemIdx, e.target.value)}
+                                      placeholder="Checklist item..."
+                                      className="flex-1 h-8 text-sm border-dashed bg-muted/20"
+                                    />
+                                    <Button type="button" variant="ghost" size="sm" onClick={() => removeChecklistItem(custom.id, itemIdx)} className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"><X className="h-3 w-3" /></Button>
+                                  </div>
+                                ))}
+                                <Button type="button" variant="outline" size="sm" onClick={() => addChecklistItem(custom.id)} className="mt-1">
+                                  <Plus className="h-3 w-3 mr-1" />Add Item
+                                </Button>
+                              </div>
+                            )}
+                          </CardContent>
+                        </Card>
+                      )}
+                    </SortableSection>
+                  );
                 })}
               </div>
             </SortableContext>
           </DndContext>
+
+          {/* ── Add Section Button ──────────────────────────────────────────── */}
+          <div className="flex justify-center py-2">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setShowAddSectionModal(true)}
+              className="border-dashed border-2 border-primary/40 text-primary hover:border-primary hover:bg-primary/5 px-8 py-6 text-base font-medium gap-2"
+            >
+              <Plus className="h-5 w-5" />
+              Add Custom Section
+            </Button>
+          </div>
+
+          {/* ── Add Section Modal ────────────────────────────────────────────── */}
+          {showAddSectionModal && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setShowAddSectionModal(false)}>
+              <Card className="w-full max-w-md shadow-2xl" onClick={(e) => e.stopPropagation()}>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="flex items-center gap-2"><Plus className="h-5 w-5 text-primary" />Add Custom Section</CardTitle>
+                    <Button type="button" variant="ghost" size="sm" onClick={() => setShowAddSectionModal(false)}><X className="h-4 w-4" /></Button>
+                  </div>
+                  <CardDescription>Choose a section type and give it a title. You can drag it to any position in the agreement.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="newSectionTitle">Section Title *</Label>
+                    <Input
+                      id="newSectionTitle"
+                      value={newSectionTitle}
+                      onChange={(e) => setNewSectionTitle(e.target.value)}
+                      placeholder="e.g. Special Conditions, Site Survey Notes..."
+                      onKeyDown={(e) => e.key === "Enter" && addCustomSection()}
+                      autoFocus
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Section Type</Label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {([
+                        { type: "free-text" as CustomSectionType, label: "Free Text", desc: "Paragraphs & notes", icon: "📝" },
+                        { type: "table" as CustomSectionType, label: "Table", desc: "3-column data table", icon: "📊" },
+                        { type: "checklist" as CustomSectionType, label: "Checklist", desc: "Tick-box list", icon: "✅" },
+                        { type: "image" as CustomSectionType, label: "Image / Logo", desc: "Image with caption", icon: "🖼️" },
+                      ] as const).map(({ type, label, desc, icon }) => (
+                        <button
+                          key={type}
+                          type="button"
+                          onClick={() => setNewSectionType(type)}
+                          className={`flex flex-col items-start gap-1 p-3 rounded-lg border-2 text-left transition-colors ${newSectionType === type ? "border-primary bg-primary/5" : "border-border hover:border-primary/50 hover:bg-muted/30"}`}
+                        >
+                          <span className="text-xl">{icon}</span>
+                          <span className="font-medium text-sm">{label}</span>
+                          <span className="text-xs text-muted-foreground">{desc}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex gap-2 pt-2">
+                    <Button type="button" variant="outline" onClick={() => setShowAddSectionModal(false)} className="flex-1">Cancel</Button>
+                    <Button type="button" onClick={addCustomSection} disabled={!newSectionTitle.trim()} className="flex-1">
+                      <Plus className="h-4 w-4 mr-1" />Add Section
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
 
           {/* ── Action Buttons ───────────────────────────────────────────────── */}
           <div className="flex justify-between items-center pb-8">
