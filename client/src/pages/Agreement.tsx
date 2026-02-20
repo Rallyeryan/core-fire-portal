@@ -8,12 +8,29 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import {
   Plus, X, Printer, Send, Loader2, Shield, CheckCircle2, Download, Save,
   Navigation, ChevronDown, ChevronUp, Bell, Droplets, Flame, Building2,
   Flashlight, Lightbulb, DoorClosed, ClipboardCheck, ShieldAlert,
-  Camera, KeyRound, Radio, Siren, Compass, Info
+  Camera, KeyRound, Radio, Siren, Compass, Info, GripVertical
 } from "lucide-react";
 import { GuidedWalkthrough } from "@/components/GuidedWalkthrough";
 import { getGuidedFields } from "@/lib/guidedFields";
@@ -82,11 +99,75 @@ function calcAnnualCost(sel: SelectedService, svc: ServiceItem): number {
   return sel.visits * sel.unitPrice;
 }
 
+// ─── Section IDs ─────────────────────────────────────────────────────────────
+
+const DEFAULT_SECTION_ORDER = [
+  "service-schedule",
+  "pricing-summary",
+  "agreement-overview",
+  "scope-remedial",
+  "signatures",
+  "terms-conditions",
+] as const;
+
+type SectionId = typeof DEFAULT_SECTION_ORDER[number];
+
+// ─── SortableSection wrapper ──────────────────────────────────────────────────
+
+function SortableSection({
+  id,
+  index,
+  children,
+}: {
+  id: SectionId;
+  index: number;
+  children: (dragHandleProps: React.HTMLAttributes<HTMLElement>, index: number) => React.ReactNode;
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id });
+
+  const style: React.CSSProperties = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    position: "relative",
+  };
+
+  return (
+    <div ref={setNodeRef} style={style}>
+      {children({ ...attributes, ...listeners }, index)}
+    </div>
+  );
+}
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function Agreement() {
   // Guided Mode
   const [isGuidedMode, setIsGuidedMode] = useState(false);
+
+  // Section reordering
+  const [sectionOrder, setSectionOrder] = useState<SectionId[]>([...DEFAULT_SECTION_ORDER]);
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  );
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      setSectionOrder((prev) => {
+        const oldIndex = prev.indexOf(active.id as SectionId);
+        const newIndex = prev.indexOf(over.id as SectionId);
+        return arrayMove(prev, oldIndex, newIndex);
+      });
+    }
+  }, []);
 
   // Client Information
   const [clientName, setClientName] = useState("");
@@ -938,11 +1019,19 @@ export default function Agreement() {
             </CardContent>
           </Card>
 
-          {/* ── Section 1: Service Schedule ─────────────────────────────────── */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold">1</div>
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <SortableContext items={sectionOrder} strategy={verticalListSortingStrategy}>
+              <div className="space-y-8">
+                {sectionOrder.map((sectionId, idx) => {
+                  const sectionNum = idx + 1;
+                  if (sectionId === "service-schedule") return (
+                    <SortableSection key={sectionId} id={sectionId} index={sectionNum}>
+                      {(dragHandleProps) => (
+                        <Card>
+                          <CardHeader>
+                            <div className="flex items-center gap-3">
+                              <button {...dragHandleProps} className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground p-1 rounded transition-colors touch-none" title="Drag to reorder section"><GripVertical className="h-5 w-5" /></button>
+                              <div className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold">{sectionNum}</div>
                 <div>
                   <CardTitle>Service Schedule</CardTitle>
                   <CardDescription>
@@ -1127,14 +1216,19 @@ export default function Agreement() {
                 );
               })}
             </CardContent>
-          </Card>
-
-          {/* ── Section 2: Pricing Summary ──────────────────────────────────── */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-accent text-accent-foreground flex items-center justify-center font-semibold">2</div>
-                <CardTitle>Pricing Summary</CardTitle>
+                        </Card>
+                      )}
+                    </SortableSection>
+                  );
+                  if (sectionId === "pricing-summary") return (
+                    <SortableSection key={sectionId} id={sectionId} index={sectionNum}>
+                      {(dragHandleProps) => (
+                        <Card>
+                          <CardHeader>
+                            <div className="flex items-center gap-3">
+                              <button {...dragHandleProps} className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground p-1 rounded transition-colors touch-none" title="Drag to reorder section"><GripVertical className="h-5 w-5" /></button>
+                              <div className="w-10 h-10 rounded-full bg-accent text-accent-foreground flex items-center justify-center font-semibold">{sectionNum}</div>
+                              <CardTitle>Pricing Summary</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
@@ -1190,14 +1284,19 @@ export default function Agreement() {
                 </div>
               </div>
             </CardContent>
-          </Card>
-
-          {/* ── Section 3: Agreement Overview ───────────────────────────────── */}
-          <Card className="border-destructive/50 bg-destructive/5">
-            <CardHeader className="bg-destructive/10">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center font-semibold">3</div>
-                <CardTitle className="text-destructive">Agreement Overview</CardTitle>
+                        </Card>
+                      )}
+                    </SortableSection>
+                  );
+                  if (sectionId === "agreement-overview") return (
+                    <SortableSection key={sectionId} id={sectionId} index={sectionNum}>
+                      {(dragHandleProps) => (
+                        <Card className="border-destructive/50 bg-destructive/5">
+                          <CardHeader className="bg-destructive/10">
+                            <div className="flex items-center gap-3">
+                              <button {...dragHandleProps} className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground p-1 rounded transition-colors touch-none" title="Drag to reorder section"><GripVertical className="h-5 w-5" /></button>
+                              <div className="w-10 h-10 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center font-semibold">{sectionNum}</div>
+                              <CardTitle className="text-destructive">Agreement Overview</CardTitle>
               </div>
             </CardHeader>
             <CardContent className="space-y-6 pt-6">
@@ -1437,14 +1536,19 @@ export default function Agreement() {
                 </p>
               </div>
             </CardContent>
-          </Card>
-
-          {/* ── Section 4: Service Scope Notes & Remedial Work ──────────────── */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-accent text-accent-foreground flex items-center justify-center font-semibold">4</div>
-                <CardTitle>Service Scope Notes & Remedial Work Authorisation</CardTitle>
+                        </Card>
+                      )}
+                    </SortableSection>
+                  );
+                  if (sectionId === "scope-remedial") return (
+                    <SortableSection key={sectionId} id={sectionId} index={sectionNum}>
+                      {(dragHandleProps) => (
+                        <Card>
+                          <CardHeader>
+                            <div className="flex items-center gap-3">
+                              <button {...dragHandleProps} className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground p-1 rounded transition-colors touch-none" title="Drag to reorder section"><GripVertical className="h-5 w-5" /></button>
+                              <div className="w-10 h-10 rounded-full bg-accent text-accent-foreground flex items-center justify-center font-semibold">{sectionNum}</div>
+                              <CardTitle>Service Scope Notes & Remedial Work Authorisation</CardTitle>
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -1507,16 +1611,21 @@ export default function Agreement() {
                 </div>
               </div>
             </CardContent>
-          </Card>
-
-          {/* ── Section 5: Signatures ────────────────────────────────────────── */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-accent text-accent-foreground flex items-center justify-center font-semibold">5</div>
-                <CardTitle>Signatures</CardTitle>
-              </div>
-              <CardDescription>Please sign below to confirm your agreement to the terms and conditions</CardDescription>
+                        </Card>
+                      )}
+                    </SortableSection>
+                  );
+                  if (sectionId === "signatures") return (
+                    <SortableSection key={sectionId} id={sectionId} index={sectionNum}>
+                      {(dragHandleProps) => (
+                        <Card>
+                          <CardHeader>
+                            <div className="flex items-center gap-3">
+                              <button {...dragHandleProps} className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground p-1 rounded transition-colors touch-none" title="Drag to reorder section"><GripVertical className="h-5 w-5" /></button>
+                              <div className="w-10 h-10 rounded-full bg-accent text-accent-foreground flex items-center justify-center font-semibold">{sectionNum}</div>
+                              <CardTitle>Signatures</CardTitle>
+                            </div>
+                            <CardDescription>Please sign below to confirm your agreement to the terms and conditions</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-2 gap-6">
@@ -1585,16 +1694,21 @@ export default function Agreement() {
                 </div>
               </div>
             </CardContent>
-          </Card>
-
-          {/* ── Section 6: Terms & Conditions ───────────────────────────────── */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-accent text-accent-foreground flex items-center justify-center font-semibold">6</div>
-                <CardTitle>Terms & Conditions</CardTitle>
-              </div>
-            </CardHeader>
+                        </Card>
+                      )}
+                    </SortableSection>
+                  );
+                  if (sectionId === "terms-conditions") return (
+                    <SortableSection key={sectionId} id={sectionId} index={sectionNum}>
+                      {(dragHandleProps) => (
+                        <Card>
+                          <CardHeader>
+                            <div className="flex items-center gap-3">
+                              <button {...dragHandleProps} className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground p-1 rounded transition-colors touch-none" title="Drag to reorder section"><GripVertical className="h-5 w-5" /></button>
+                              <div className="w-10 h-10 rounded-full bg-accent text-accent-foreground flex items-center justify-center font-semibold">{sectionNum}</div>
+                              <CardTitle>Terms & Conditions</CardTitle>
+                            </div>
+                          </CardHeader>
             <CardContent className="space-y-4">
               <div className="bg-muted/30 rounded-lg p-6 space-y-4 text-sm">
                 <p className="text-xs text-primary font-semibold uppercase tracking-wide">All clauses below are editable — click any text area to modify</p>
@@ -1658,7 +1772,15 @@ export default function Agreement() {
                 ))}
               </div>
             </CardContent>
-          </Card>
+                        </Card>
+                      )}
+                    </SortableSection>
+                  );
+                  return null;
+                })}
+              </div>
+            </SortableContext>
+          </DndContext>
 
           {/* ── Action Buttons ───────────────────────────────────────────────── */}
           <div className="flex justify-between items-center pb-8">
