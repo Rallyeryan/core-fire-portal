@@ -64,7 +64,7 @@ export default function Home() {
             <div className="space-y-8">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/30 rounded-full text-sm font-medium text-primary">
                 <Zap className="h-4 w-4" />
-                Digital Service Agreement Portal
+                Systems Business Service Agreement Portal
               </div>
               
               <h1 className="text-5xl md:text-7xl font-bold leading-tight">
@@ -81,8 +81,7 @@ export default function Home() {
               </h1>
               
               <p className="text-xl text-muted-foreground leading-relaxed">
-                Complete your fire equipment maintenance contract digitally with our intelligent service agreement platform.
-                Sign electronically, manage equipment schedules, and ensure compliance with British Standards.
+                Create comprehensive fire and security systems maintenance contracts digitally. Select from 76+ services across 14 categories, sign electronically, and ensure compliance with all applicable British Standards.
               </p>
 
               <div className="flex flex-col sm:flex-row items-start gap-4 pt-4">
@@ -176,9 +175,9 @@ export default function Home() {
                 <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-primary/20 to-cyan-400/20 flex items-center justify-center mb-4 border border-primary/30">
                   <Shield className="h-7 w-7 text-primary" />
                 </div>
-                <CardTitle className="text-xl">Equipment Management</CardTitle>
+                <CardTitle className="text-xl">Systems Management</CardTitle>
                 <CardDescription className="text-base">
-                  AI-powered equipment tracking with predictive maintenance alerts. Dynamic schedule management across all your premises with real-time updates.
+                  Full service schedule covering fire detection, sprinklers, suppression, CCTV, access control, emergency lighting and more. 76 services across 14 categories.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -202,7 +201,7 @@ export default function Home() {
                 </div>
                 <CardTitle className="text-xl">Standards Compliant</CardTitle>
                 <CardDescription className="text-base">
-                  Fully compliant with BS EN 3 and BS 5306-3 standards. BAFE registered services ensuring the highest quality with automated compliance reporting.
+                  Compliant with BS 5839-1:2025, BS EN 12845, PD 6662, BS 5266-1 and all applicable British Standards. BAFE, NSI Gold and BSI Kitemark accredited.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -281,9 +280,11 @@ export default function Home() {
             <div>
               <h3 className="font-bold mb-4 text-primary">Services</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>Fire Extinguisher Maintenance</li>
-                <li>Equipment Inspection</li>
-                <li>Compliance Certification</li>
+                <li>Fire Detection & Alarm Systems</li>
+                <li>Sprinkler & Suppression Systems</li>
+                <li>CCTV & Access Control</li>
+                <li>Emergency Lighting</li>
+                <li>Portable Fire Equipment</li>
                 <li>Emergency Callout</li>
               </ul>
             </div>
@@ -298,7 +299,7 @@ export default function Home() {
             </div>
           </div>
           <div className="mt-12 pt-8 border-t border-primary/20 text-center text-sm text-muted-foreground">
-            <p>&copy; 2026 Core Fire Protection Ltd. All rights reserved. | BS EN 3 Compliant | BS 5306-3 Certified | BAFE Registered</p>
+            <p>&copy; 2026 Core Fire Protection Ltd. All rights reserved. | BAFE Registered | NSI Gold | BSI Kitemark | BS 5839-1:2025 | BS EN 12845 | PD 6662</p>
           </div>
         </div>
       </footer>

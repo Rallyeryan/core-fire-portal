@@ -54,17 +54,17 @@ export async function generateAgreementPDFBuffer(
   yPos += 10;
   doc.setFontSize(16);
   doc.setFont("helvetica", "bold");
-  doc.text("Portable Fire Equipment Service Agreement", pageWidth / 2, yPos, { align: "center" });
+  doc.text("Fire & Security Systems Service Agreement", pageWidth / 2, yPos, { align: "center" });
   yPos += 7;
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
-  doc.text("Annual Maintenance & Inspection Contract", pageWidth / 2, yPos, { align: "center" });
+  doc.text("Systems Maintenance & Inspection Contract", pageWidth / 2, yPos, { align: "center" });
   yPos += 15;
 
-  // Equipment Schedule
+  // Services Schedule
   doc.setFontSize(12);
   doc.setFont("helvetica", "bold");
-  doc.text("1. Equipment Schedule", margin, yPos);
+  doc.text("1. Services Included", margin, yPos);
   yPos += 8;
   doc.setFontSize(9);
   doc.setFont("helvetica", "normal");
@@ -196,7 +196,7 @@ export async function generateAgreementPDFBuffer(
   }
   doc.setFontSize(8);
   doc.setFont("helvetica", "bold");
-  doc.text("✓ BS EN 3 Compliant  ✓ BS 5306-3:2017  ✓ BAFE Certified", margin, yPos);
+  doc.text("✓ BAFE SP203-1  ✓ NSI Gold  ✓ BSI Kitemark  ✓ BS 5839-1:2025  ✓ BS EN 12845  ✓ PD 6662", margin, yPos);
 
   // Convert to buffer
   const pdfArrayBuffer = doc.output('arraybuffer');

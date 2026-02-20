@@ -67,7 +67,7 @@ export const appRouter = router({
       }))
       .mutation(async ({ input }) => {
         // Generate contract reference
-        const contractReference = `CFP-PFE-${nanoid(8).toUpperCase()}`;
+        const contractReference = `CFP-SYS-${nanoid(8).toUpperCase()}`;
 
         // Upload signatures to S3
         const clientSignatureBuffer = Buffer.from(input.clientSignature.split(',')[1], 'base64');

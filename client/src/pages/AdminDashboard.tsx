@@ -362,9 +362,9 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
-              {/* Equipment */}
+              {/* Services */}
               <div>
-                <h3 className="text-lg font-semibold mb-3">Equipment Schedule</h3>
+                <h3 className="text-lg font-semibold mb-3">Services Included</h3>
                 <div className="rounded-md border">
                   <Table>
                     <TableHeader>
