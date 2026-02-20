@@ -127,6 +127,13 @@ export default function Agreement() {
   // Proposal Letter
   const [recipientName, setRecipientName] = useState("");
   const [senderName, setSenderName] = useState("");
+  const [letterPara1, setLetterPara1] = useState("On behalf of Core Fire Protection, I am pleased to present our service agreement proposal for the planned preventative maintenance of Fire, Security, and Safety systems.");
+  const [letterPara3, setLetterPara3] = useState("Our proposal includes scheduled preventative maintenance visits per annum, in line with the recommendations set out in the latest British Standards in accordance to the provided schedule of rates that presents the frequency of visits and associated annual costs.");
+  const [letterPara4, setLetterPara4] = useState("This agreement provides a structured service framework that outlines expectations and service delivery programs for both parties. It is intended as a working document that may evolve to accommodate changing needs.");
+  const [letterPara5, setLetterPara5] = useState("The agreement covers a {duration} month period from the date of acceptance on a rolling basis. Our estimate assumes unrestricted access to all relevant areas for our engineers, ensuring continuous and uninterrupted work. We will make every effort to coordinate with other suppliers and trades; any delays or disruptions caused by third parties may result in additional charges.");
+  const [letterPara6, setLetterPara6] = useState("Unless otherwise agreed, all work will be carried out during our standard business hours. Any services required outside these hours, including overtime, weekends, or bank holidays, can be arranged but may be subject to additional costs.");
+  const [letterPara7, setLetterPara7] = useState("This document and its terms are directly linked to the systems covered under this agreement, incorporating the relevant terms and conditions for the duration of the Service Level Agreement.");
+  const [letterPara8, setLetterPara8] = useState("Should you require any further information or clarification, please do not hesitate to contact me.");
 
   // Terms & Signatures
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -527,14 +534,14 @@ export default function Agreement() {
     yPos += 7;
 
     const letterParagraphs = [
-      `On behalf of Core Fire Protection, I am pleased to present our service agreement proposal for the planned preventative maintenance of Fire, Security, and Safety systems.`,
+      letterPara1,
       `This agreement is proposed between Core Fire Ltd T/A Core Fire Protection ("The Service Provider") and ${clientName || "[Customer Company Name]"} ("the Customer") for the service and maintenance of the systems specified within this document.`,
-      `Our proposal includes scheduled preventative maintenance visits per annum, in line with the recommendations set out in the latest British Standards in accordance to the provided schedule of rates that presents the frequency of visits and associated annual costs.`,
-      `This agreement provides a structured service framework that outlines expectations and service delivery programs for both parties. It is intended as a working document that may evolve to accommodate changing needs.`,
+      letterPara3,
+      letterPara4,
       `The agreement covers a ${contractDuration} month period from the date of acceptance on a rolling basis. Our estimate assumes unrestricted access to all relevant areas for our engineers, ensuring continuous and uninterrupted work. We will make every effort to coordinate with other suppliers and trades; any delays or disruptions caused by third parties may result in additional charges.`,
-      `Unless otherwise agreed, all work will be carried out during our standard business hours. Any services required outside these hours, including overtime, weekends, or bank holidays, can be arranged but may be subject to additional costs.`,
-      `This document and its terms are directly linked to the systems covered under this agreement, incorporating the relevant terms and conditions for the duration of the Service Level Agreement.`,
-      `Should you require any further information or clarification, please do not hesitate to contact me.`,
+      letterPara6,
+      letterPara7,
+      letterPara8,
     ];
 
     for (const para of letterParagraphs) {
@@ -798,34 +805,71 @@ export default function Agreement() {
                   <span className="text-sm text-muted-foreground">,</span>
                 </div>
 
-                {/* Body paragraphs */}
-                <div className="space-y-4 text-sm leading-relaxed text-muted-foreground border-l-4 border-primary/30 pl-5 py-2">
-                  <p>
-                    On behalf of Core Fire Protection, I am pleased to present our service agreement proposal for the planned preventative maintenance of Fire, Security, and Safety systems.
-                  </p>
-                  <p>
+                {/* Body paragraphs — editable */}
+                <div className="space-y-3 border-l-4 border-primary/30 pl-5 py-2">
+                  <p className="text-xs text-muted-foreground italic mb-1">Edit each paragraph below. The client name and contract duration fields update automatically from the Agreement Overview section.</p>
+
+                  {/* Para 1 — editable */}
+                  <Textarea
+                    value={letterPara1}
+                    onChange={(e) => setLetterPara1(e.target.value)}
+                    className="text-sm leading-relaxed resize-none min-h-[60px] bg-transparent border-dashed"
+                    rows={3}
+                  />
+
+                  {/* Para 2 — semi-dynamic (client name auto-inserted) */}
+                  <div className="text-sm leading-relaxed text-muted-foreground bg-muted/30 rounded px-3 py-2 border border-dashed border-muted-foreground/30">
+                    <span className="text-xs text-primary font-semibold block mb-1">Auto-generated (updates from client name field)</span>
                     This agreement is proposed between Core Fire Ltd T/A Core Fire Protection (&ldquo;The Service Provider&rdquo;) and{" "}
                     <span className="font-semibold text-foreground">{clientName || "[Customer Company Name]"}</span>{" "}
                     (&ldquo;the Customer&rdquo;) for the service and maintenance of the systems specified within this document.
-                  </p>
-                  <p>
-                    Our proposal includes scheduled preventative maintenance visits per annum, in line with the recommendations set out in the latest British Standards in accordance to the provided schedule of rates that presents the frequency of visits and associated annual costs.
-                  </p>
-                  <p>
-                    This agreement provides a structured service framework that outlines expectations and service delivery programs for both parties. It is intended as a working document that may evolve to accommodate changing needs.
-                  </p>
-                  <p>
+                  </div>
+
+                  {/* Para 3 — editable */}
+                  <Textarea
+                    value={letterPara3}
+                    onChange={(e) => setLetterPara3(e.target.value)}
+                    className="text-sm leading-relaxed resize-none min-h-[60px] bg-transparent border-dashed"
+                    rows={3}
+                  />
+
+                  {/* Para 4 — editable */}
+                  <Textarea
+                    value={letterPara4}
+                    onChange={(e) => setLetterPara4(e.target.value)}
+                    className="text-sm leading-relaxed resize-none min-h-[50px] bg-transparent border-dashed"
+                    rows={2}
+                  />
+
+                  {/* Para 5 — semi-dynamic (duration auto-inserted) */}
+                  <div className="text-sm leading-relaxed text-muted-foreground bg-muted/30 rounded px-3 py-2 border border-dashed border-muted-foreground/30">
+                    <span className="text-xs text-primary font-semibold block mb-1">Auto-generated (updates from contract duration field)</span>
                     The agreement covers a <span className="font-semibold text-foreground">{contractDuration} month</span> period from the date of acceptance on a rolling basis. Our estimate assumes unrestricted access to all relevant areas for our engineers, ensuring continuous and uninterrupted work. We will make every effort to coordinate with other suppliers and trades; any delays or disruptions caused by third parties may result in additional charges.
-                  </p>
-                  <p>
-                    Unless otherwise agreed, all work will be carried out during our standard business hours. Any services required outside these hours, including overtime, weekends, or bank holidays, can be arranged but may be subject to additional costs.
-                  </p>
-                  <p>
-                    This document and its terms are directly linked to the systems covered under this agreement, incorporating the relevant terms and conditions for the duration of the Service Level Agreement.
-                  </p>
-                  <p>
-                    Should you require any further information or clarification, please do not hesitate to contact me.
-                  </p>
+                  </div>
+
+                  {/* Para 6 — editable */}
+                  <Textarea
+                    value={letterPara6}
+                    onChange={(e) => setLetterPara6(e.target.value)}
+                    className="text-sm leading-relaxed resize-none min-h-[60px] bg-transparent border-dashed"
+                    rows={3}
+                  />
+
+                  {/* Para 7 — editable */}
+                  <Textarea
+                    value={letterPara7}
+                    onChange={(e) => setLetterPara7(e.target.value)}
+                    className="text-sm leading-relaxed resize-none min-h-[50px] bg-transparent border-dashed"
+                    rows={2}
+                  />
+
+                  {/* Para 8 — editable */}
+                  <Textarea
+                    value={letterPara8}
+                    onChange={(e) => setLetterPara8(e.target.value)}
+                    className="text-sm leading-relaxed resize-none min-h-[40px] bg-transparent border-dashed"
+                    rows={2}
+                  />
                 </div>
 
                 {/* Sign-off */}
