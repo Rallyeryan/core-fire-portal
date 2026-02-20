@@ -124,6 +124,36 @@ export default function Agreement() {
   // Pricing
   const [discount, setDiscount] = useState(0);
 
+  // Cover Header
+  const [companyName, setCompanyName] = useState("Core Fire Protection Ltd");
+  const [companyTagline, setCompanyTagline] = useState("Professional Fire & Security Solutions");
+  const [companyAddress, setCompanyAddress] = useState("Unit 4, 200 Woodville Street, Glasgow, G51 2RL");
+  const [documentTitle, setDocumentTitle] = useState("Fire & Security Systems Service Agreement");
+  const [documentSubtitle, setDocumentSubtitle] = useState("Systems Maintenance & Inspection Contract — All services subject to site-specific scope confirmation");
+
+  // Agreement Overview — editable legal text
+  const [servicesProvidedText, setServicesProvidedText] = useState("in accordance with the schedule of rates. These services include, but are not limited to, PPM Test & Inspections, System Support and Service and necessary repairs or replacements in accordance with the service schedule.");
+  const [durationText, setDurationText] = useState(""); // auto-generated, but allow override
+  const [clientAcceptanceText, setClientAcceptanceText] = useState("I, the Customer accept/s the above Agreement for the provision of the Services at the Sites subject to the following Terms and Conditions:");
+  const [tcLinkText, setTcLinkText] = useState("Core Fire Ltd Service and Maintenance Terms and Conditions 2023");
+  const [tcLinkUrl, setTcLinkUrl] = useState("https://www.corefireprotection.co.uk/wp-content/uploads/2020/01/Core-Fire-Protection-Fire-Extinguisher-Maintenance-Terms-and-Conditions-2020.doc");
+
+  // Remedial Work Authorisation — editable descriptions
+  const [remedialNote, setRemedialNote] = useState("Compliance with applicable laws and regulations will remain breached until reported corrective actions are closed out and certified by a competent person.");
+  const [immediateRectificationText, setImmediateRectificationText] = useState("Remedial works to be completed during attendance at current equipment rates.");
+  const [onSiteAuthorizationText, setOnSiteAuthorizationText] = useState("Remedial works to be approved by site personnel with appropriate capacity at time of attendance.");
+  const [defectQuotationText, setDefectQuotationText] = useState("Remedial works to be issued via quotation for client approval.");
+
+  // Terms & Conditions — editable clauses
+  const [tc1, setTc1] = useState("All services will be carried out in accordance with applicable British Standards (including BS 5839-1:2025, BS EN 12845, PD 6662, BS 5306-3:2017 and others as applicable) and by competent, trained engineers holding relevant qualifications and certifications.");
+  const [tc2, setTc2] = useState("The Client agrees to provide reasonable access to all systems and equipment during normal working hours. Service visits will be scheduled in advance with a minimum of 5 working days\u2019 notice. Emergency call-outs are available at additional cost as per the schedule of rates.");
+  const [tc3, setTc3] = useState("This agreement covers routine inspection and servicing only. Additional charges may apply for replacement of defective parts, equipment requiring extended service or refurbishment, and any equipment found to be beyond economical repair. All defects will be reported and quoted separately.");
+  const [tc4, setTc4] = useState("Payment is due as per the selected payment terms. Late payments may incur interest charges at 8% above Bank of England base rate. Core Fire Protection reserves the right to suspend services for accounts overdue by more than 30 days.");
+  const [tc5, setTc5] = useState("Core Fire Protection maintains full Public Liability Insurance (\u00a35,000,000) and Professional Indemnity Insurance (\u00a32,000,000). Our liability is limited to the annual contract value except in cases of proven negligence.");
+  const [tc6, setTc6] = useState("This agreement is for the duration specified above. Either party may terminate with 30 days\u2019 written notice. Early termination by the Client may result in charges for services already provided plus a cancellation fee of 25% of the remaining contract value.");
+  const [tc7, setTc7] = useState("The Client is responsible for ensuring all systems are maintained in accordance with applicable legislation including the Regulatory Reform (Fire Safety) Order 2005, Fire (Scotland) Act 2005, and any other relevant statutory requirements. Core Fire Protection will provide documentation to support compliance but cannot accept responsibility for pre-existing non-compliances.");
+  const [tc8, setTc8] = useState("Core Fire Protection reserves the right to subcontract specialist works to approved, accredited subcontractors. All subcontracted works will be managed and warranted by Core Fire Protection.");
+
   // Proposal Letter
   const [recipientName, setRecipientName] = useState("");
   const [senderName, setSenderName] = useState("");
@@ -751,10 +781,22 @@ export default function Agreement() {
               <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-black/70" />
               <CardHeader className="relative z-10 text-center space-y-2">
                 <div className="flex justify-between items-start mb-4">
-                  <div className="text-left">
-                    <h1 className="text-2xl font-bold drop-shadow-lg">Core Fire Protection Ltd</h1>
-                    <p className="text-sm opacity-90 drop-shadow">Professional Fire & Security Solutions</p>
-                    <p className="text-xs opacity-75 mt-1">Unit 4, 200 Woodville Street, Glasgow, G51 2RL</p>
+                  <div className="text-left space-y-1">
+                    <Input
+                      value={companyName}
+                      onChange={(e) => setCompanyName(e.target.value)}
+                      className="text-2xl font-bold bg-transparent border-white/30 text-white placeholder-white/50 focus-visible:ring-white/30 h-auto py-0.5 px-1 w-72"
+                    />
+                    <Input
+                      value={companyTagline}
+                      onChange={(e) => setCompanyTagline(e.target.value)}
+                      className="text-sm bg-transparent border-white/30 text-white/90 placeholder-white/50 focus-visible:ring-white/30 h-auto py-0.5 px-1 w-80"
+                    />
+                    <Input
+                      value={companyAddress}
+                      onChange={(e) => setCompanyAddress(e.target.value)}
+                      className="text-xs bg-transparent border-white/30 text-white/75 placeholder-white/50 focus-visible:ring-white/30 h-auto py-0.5 px-1 w-80"
+                    />
                   </div>
                   <div className="text-right text-sm">
                     <p className="opacity-75 uppercase tracking-wide text-xs drop-shadow">Contract Reference</p>
@@ -762,12 +804,18 @@ export default function Agreement() {
                   </div>
                 </div>
                 <Separator className="bg-white/20" />
-                <CardTitle className="text-3xl pt-4 drop-shadow-lg">
-                  Fire & Security Systems Service Agreement
-                </CardTitle>
-                <CardDescription className="text-white/80 text-base">
-                  Systems Maintenance & Inspection Contract — All services subject to site-specific scope confirmation
-                </CardDescription>
+                <div className="pt-4 space-y-2">
+                  <Input
+                    value={documentTitle}
+                    onChange={(e) => setDocumentTitle(e.target.value)}
+                    className="text-3xl font-bold text-center bg-transparent border-white/30 text-white placeholder-white/50 focus-visible:ring-white/30 h-auto py-1 px-2 drop-shadow-lg"
+                  />
+                  <Input
+                    value={documentSubtitle}
+                    onChange={(e) => setDocumentSubtitle(e.target.value)}
+                    className="text-base text-center bg-transparent border-white/30 text-white/80 placeholder-white/50 focus-visible:ring-white/30 h-auto py-0.5 px-2"
+                  />
+                </div>
                 <div className="flex flex-wrap justify-center gap-2 pt-2">
                   {["BAFE SP203-1", "BAFE SP101", "NSI Gold", "BSI Kitemark", "BS 5839-1:2025"].map((badge) => (
                     <Badge key={badge} variant="outline" className="border-white/30 text-white/80 text-xs">
@@ -1232,13 +1280,18 @@ export default function Agreement() {
               {/* Services Provided */}
               <div className="border-l-4 border-destructive pl-4">
                 <h3 className="text-destructive font-semibold mb-3">SERVICES PROVIDED</h3>
-                <p className="text-sm">
+                <p className="text-sm mb-2">
                   The Service Provider will perform maintenance services at{" "}
                   <span className="font-semibold">
                     {siteAddress ? `${siteAddress}${city ? ", " + city : ""}${postcode ? ", " + postcode : ""}` : "[Site Location]"}
                   </span>{" "}
-                  in accordance with the schedule of rates. These services include, but are not limited to, PPM Test & Inspections, System Support and Service and necessary repairs or replacements in accordance with the service schedule.
                 </p>
+                <Textarea
+                  value={servicesProvidedText}
+                  onChange={(e) => setServicesProvidedText(e.target.value)}
+                  className="text-sm leading-relaxed resize-none border-dashed bg-muted/20"
+                  rows={3}
+                />
               </div>
 
               <Separator className="bg-destructive/20" />
@@ -1328,32 +1381,59 @@ export default function Agreement() {
               {/* Duration */}
               <div className="border-l-4 border-destructive pl-4">
                 <h3 className="text-destructive font-semibold mb-3">DURATION OF AGREEMENT</h3>
-                <p className="text-sm">
+                <div className="text-sm mb-2 text-muted-foreground bg-muted/30 rounded px-3 py-2 border border-dashed border-muted-foreground/30">
+                  <span className="text-xs text-primary font-semibold block mb-1">Auto-generated (updates from contract duration field)</span>
                   The term of this Agreement shall commence and is effective for an initial term of{" "}
-                  <span className="font-semibold">{contractDuration || "[X]"} months</span> from the date of acceptance.
+                  <span className="font-semibold text-foreground">{contractDuration || "[X]"} months</span> from the date of acceptance.
                   {isRollingContract ? (
-                    <span> This is a <span className="font-semibold">rolling contract</span> that will automatically renew for subsequent {contractDuration || "12"}-month terms.</span>
+                    <span> This is a <span className="font-semibold text-foreground">rolling contract</span> that will automatically renew for subsequent {contractDuration || "12"}-month terms.</span>
                   ) : (
                     <span> Upon expiration, the Agreement will automatically renew for subsequent {contractDuration || "12"}-month terms.</span>
                   )}
-                </p>
+                </div>
+                <Textarea
+                  value={durationText}
+                  onChange={(e) => setDurationText(e.target.value)}
+                  className="text-sm leading-relaxed resize-none border-dashed bg-muted/20"
+                  placeholder="Optional: Add additional duration or renewal terms here..."
+                  rows={2}
+                />
               </div>
 
               <Separator className="bg-destructive/20" />
 
               {/* Client Acceptance */}
-              <div className="border-l-4 border-destructive pl-4">
+              <div className="border-l-4 border-destructive pl-4 space-y-3">
                 <h3 className="text-destructive font-semibold mb-3">CLIENT ACCEPTANCE</h3>
+                <Textarea
+                  value={clientAcceptanceText}
+                  onChange={(e) => setClientAcceptanceText(e.target.value)}
+                  className="text-sm leading-relaxed resize-none border-dashed bg-muted/20"
+                  rows={2}
+                />
+                <div className="grid grid-cols-1 gap-2">
+                  <div className="space-y-1">
+                    <Label className="text-xs text-muted-foreground">T&C Link Text</Label>
+                    <Input
+                      value={tcLinkText}
+                      onChange={(e) => setTcLinkText(e.target.value)}
+                      className="text-sm border-dashed bg-muted/20"
+                      placeholder="Terms and Conditions document name"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-xs text-muted-foreground">T&C Document URL</Label>
+                    <Input
+                      value={tcLinkUrl}
+                      onChange={(e) => setTcLinkUrl(e.target.value)}
+                      className="text-sm border-dashed bg-muted/20"
+                      placeholder="https://..."
+                    />
+                  </div>
+                </div>
                 <p className="text-sm">
-                  I, the Customer accept/s the above Agreement for the provision of the Services at the Sites subject to the following Terms and Conditions:{" "}
-                  <a
-                    href="https://www.corefireprotection.co.uk/wp-content/uploads/2020/01/Core-Fire-Protection-Fire-Extinguisher-Maintenance-Terms-and-Conditions-2020.doc"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-destructive hover:text-destructive/80 underline font-semibold"
-                  >
-                    Core Fire Ltd Service and Maintenance Terms and Conditions 2023
-                  </a>.
+                  {clientAcceptanceText}{" "}
+                  <a href={tcLinkUrl} target="_blank" rel="noopener noreferrer" className="text-destructive hover:text-destructive/80 underline font-semibold">{tcLinkText}</a>.
                 </p>
               </div>
             </CardContent>
@@ -1383,28 +1463,47 @@ export default function Agreement() {
                 <Label className="mb-3 block font-semibold">Remedial Work Authorisation</Label>
                 <div className="space-y-3">
                   <div className="flex items-start space-x-3">
-                    <Checkbox id="immediateRectification" checked={immediateRectification} onCheckedChange={(c) => setImmediateRectification(c as boolean)} />
-                    <label htmlFor="immediateRectification" className="text-sm leading-relaxed cursor-pointer">
-                      <span className="font-medium">Immediate Rectification:</span> Remedial works to be completed during attendance at current equipment rates.
-                    </label>
+                    <Checkbox id="immediateRectification" checked={immediateRectification} onCheckedChange={(c) => setImmediateRectification(c as boolean)} className="mt-2" />
+                    <div className="flex-1 space-y-1">
+                      <label htmlFor="immediateRectification" className="text-sm font-medium cursor-pointer">Immediate Rectification:</label>
+                      <Input
+                        value={immediateRectificationText}
+                        onChange={(e) => setImmediateRectificationText(e.target.value)}
+                        className="text-sm border-dashed bg-muted/20"
+                      />
+                    </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <Checkbox id="onSiteAuthorization" checked={onSiteAuthorization} onCheckedChange={(c) => setOnSiteAuthorization(c as boolean)} />
-                    <label htmlFor="onSiteAuthorization" className="text-sm leading-relaxed cursor-pointer">
-                      <span className="font-medium">On-Site Authorisation:</span> Remedial works to be approved by site personnel with appropriate capacity at time of attendance.
-                    </label>
+                    <Checkbox id="onSiteAuthorization" checked={onSiteAuthorization} onCheckedChange={(c) => setOnSiteAuthorization(c as boolean)} className="mt-2" />
+                    <div className="flex-1 space-y-1">
+                      <label htmlFor="onSiteAuthorization" className="text-sm font-medium cursor-pointer">On-Site Authorisation:</label>
+                      <Input
+                        value={onSiteAuthorizationText}
+                        onChange={(e) => setOnSiteAuthorizationText(e.target.value)}
+                        className="text-sm border-dashed bg-muted/20"
+                      />
+                    </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <Checkbox id="defectQuotation" checked={defectQuotation} onCheckedChange={(c) => setDefectQuotation(c as boolean)} />
-                    <label htmlFor="defectQuotation" className="text-sm leading-relaxed cursor-pointer">
-                      <span className="font-medium">Defect Quotation:</span> Remedial works to be issued via quotation for client approval.
-                    </label>
+                    <Checkbox id="defectQuotation" checked={defectQuotation} onCheckedChange={(c) => setDefectQuotation(c as boolean)} className="mt-2" />
+                    <div className="flex-1 space-y-1">
+                      <label htmlFor="defectQuotation" className="text-sm font-medium cursor-pointer">Defect Quotation:</label>
+                      <Input
+                        value={defectQuotationText}
+                        onChange={(e) => setDefectQuotationText(e.target.value)}
+                        className="text-sm border-dashed bg-muted/20"
+                      />
+                    </div>
                   </div>
                 </div>
-                <div className="mt-4 p-3 bg-amber-500/10 border border-amber-500/20 rounded-md">
-                  <p className="text-sm text-amber-700 dark:text-amber-400">
-                    <strong>Note:</strong> Compliance with applicable laws and regulations will remain breached until reported corrective actions are closed out and certified by a competent person.
-                  </p>
+                <div className="mt-4 p-3 bg-amber-500/10 border border-amber-500/20 rounded-md space-y-2">
+                  <p className="text-xs font-semibold text-amber-700 dark:text-amber-400 uppercase tracking-wide">Compliance Note (editable)</p>
+                  <Textarea
+                    value={remedialNote}
+                    onChange={(e) => setRemedialNote(e.target.value)}
+                    className="text-sm text-amber-700 dark:text-amber-400 bg-transparent border-amber-400/40 resize-none"
+                    rows={2}
+                  />
                 </div>
               </div>
             </CardContent>
@@ -1497,39 +1596,28 @@ export default function Agreement() {
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="bg-muted/30 rounded-lg p-6 space-y-4 text-sm max-h-96 overflow-y-auto">
-                <div>
-                  <h4 className="font-semibold mb-2">1. Service Standards</h4>
-                  <p className="text-muted-foreground">All services will be carried out in accordance with applicable British Standards (including BS 5839-1:2025, BS EN 12845, PD 6662, BS 5306-3:2017 and others as applicable) and by competent, trained engineers holding relevant qualifications and certifications.</p>
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-2">2. Access & Scheduling</h4>
-                  <p className="text-muted-foreground">The Client agrees to provide reasonable access to all systems and equipment during normal working hours. Service visits will be scheduled in advance with a minimum of 5 working days' notice. Emergency call-outs are available at additional cost as per the schedule of rates.</p>
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-2">3. Equipment & System Condition</h4>
-                  <p className="text-muted-foreground">This agreement covers routine inspection and servicing only. Additional charges may apply for replacement of defective parts, equipment requiring extended service or refurbishment, and any equipment found to be beyond economical repair. All defects will be reported and quoted separately.</p>
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-2">4. Payment Terms</h4>
-                  <p className="text-muted-foreground">Payment is due as per the selected payment terms. Late payments may incur interest charges at 8% above Bank of England base rate. Core Fire Protection reserves the right to suspend services for accounts overdue by more than 30 days.</p>
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-2">5. Liability & Insurance</h4>
-                  <p className="text-muted-foreground">Core Fire Protection maintains full Public Liability Insurance (£5,000,000) and Professional Indemnity Insurance (£2,000,000). Our liability is limited to the annual contract value except in cases of proven negligence.</p>
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-2">6. Contract Duration & Cancellation</h4>
-                  <p className="text-muted-foreground">This agreement is for the duration specified above. Either party may terminate with 30 days' written notice. Early termination by the Client may result in charges for services already provided plus a cancellation fee of 25% of the remaining contract value.</p>
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-2">7. Compliance & Regulatory</h4>
-                  <p className="text-muted-foreground">The Client is responsible for ensuring all systems are maintained in accordance with applicable legislation including the Regulatory Reform (Fire Safety) Order 2005, Fire (Scotland) Act 2005, and any other relevant statutory requirements. Core Fire Protection will provide documentation to support compliance but cannot accept responsibility for pre-existing non-compliances.</p>
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-2">8. Subcontracting</h4>
-                  <p className="text-muted-foreground">Core Fire Protection reserves the right to subcontract specialist works to approved, accredited subcontractors. All subcontracted works will be managed and warranted by Core Fire Protection.</p>
-                </div>
+              <div className="bg-muted/30 rounded-lg p-6 space-y-4 text-sm">
+                <p className="text-xs text-primary font-semibold uppercase tracking-wide">All clauses below are editable — click any text area to modify</p>
+                {[
+                  { num: 1, title: "Service Standards", val: tc1, set: setTc1 },
+                  { num: 2, title: "Access & Scheduling", val: tc2, set: setTc2 },
+                  { num: 3, title: "Equipment & System Condition", val: tc3, set: setTc3 },
+                  { num: 4, title: "Payment Terms", val: tc4, set: setTc4 },
+                  { num: 5, title: "Liability & Insurance", val: tc5, set: setTc5 },
+                  { num: 6, title: "Contract Duration & Cancellation", val: tc6, set: setTc6 },
+                  { num: 7, title: "Compliance & Regulatory", val: tc7, set: setTc7 },
+                  { num: 8, title: "Subcontracting", val: tc8, set: setTc8 },
+                ].map(({ num, title, val, set }) => (
+                  <div key={num}>
+                    <h4 className="font-semibold mb-2">{num}. {title}</h4>
+                    <Textarea
+                      value={val}
+                      onChange={(e) => set(e.target.value)}
+                      className="text-muted-foreground border-dashed bg-background/50 resize-none leading-relaxed"
+                      rows={3}
+                    />
+                  </div>
+                ))}
               </div>
 
               <div className="flex items-start space-x-2 pt-4">
