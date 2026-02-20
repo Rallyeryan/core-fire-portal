@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Core Fire Protection — Systems Service Agreement Portal</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #00ff88;
+      --primary-dim: rgba(0,255,136,0.15);
+      --primary-border: rgba(0,255,136,0.3);
+      --bg: #0a0a0f;
+      --card: #0f1117;
+      --card-border: rgba(0,255,136,0.15);
+      --text: #e8eaf0;
+      --muted: #8b92a8;
+      --cyan: #00d4ff;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--primary-border); border-radius: 3px; }
+
+    /* ── Gradient Text ── */
+    .gradient-text {
+      background: linear-gradient(135deg, var(--primary), var(--cyan), var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── Navigation ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(10,10,15,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--primary-border);
+    }
+    .nav-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo img { height: 38px; width: auto; object-fit: contain; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--primary); }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      background: var(--primary);
+      color: #0a0a0f;
+      font-weight: 700;
+      font-size: 14px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 0 20px rgba(0,255,136,0.3);
+    }
+    .btn-primary:hover {
+      background: #00e87a;
+      box-shadow: 0 0 30px rgba(0,255,136,0.5);
+      transform: translateY(-1px) scale(1.02);
+    }
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      background: transparent;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 14px;
+      border-radius: 8px;
+      border: 1px solid var(--primary-border);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-outline:hover {
+      background: var(--primary-dim);
+      border-color: var(--primary);
+      transform: translateY(-1px) scale(1.02);
+    }
+
+    /* ── Hero ── */
+    #home {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 120px 24px 80px;
+      overflow: hidden;
+    }
+    #particles-canvas {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.45;
+    }
+    .hero-gradient {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 50%, rgba(0,255,136,0.06) 0%, transparent 60%),
+                  radial-gradient(ellipse at 30% 80%, rgba(0,212,255,0.04) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .hero-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--primary-dim);
+      border: 1px solid var(--primary-border);
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 24px;
+    }
+    .hero-title {
+      font-size: clamp(42px, 6vw, 72px);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -1px;
+      margin-bottom: 24px;
+    }
+    .hero-subtitle {
+      font-size: 18px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 36px;
+      max-width: 520px;
+    }
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+    .stat-num {
+      font-size: 40px;
+      font-weight: 900;
+      color: var(--primary);
+      line-height: 1;
+    }
+    .stat-label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+    .compliance-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .badge {
+      padding: 5px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--primary-dim);
+      border: 1px solid var(--primary-border);
+      border-radius: 50px;
+      color: var(--primary);
+    }
+    .hero-image-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-glow {
+      position: absolute;
+      width: 80%;
+      height: 80%;
+      background: radial-gradient(ellipse, rgba(0,255,136,0.18) 0%, transparent 70%);
+      border-radius: 50%;
+      filter: blur(40px);
+    }
+    .hero-image {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-height: 520px;
+      object-fit: contain;
+      animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-22px); }
+    }
+    .scroll-indicator {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--primary);
+      animation: bounce 2s ease-in-out infinite;
+      font-size: 28px;
+      z-index: 2;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(10px); }
+    }
+
+    /* ── Section Shared ── */
+    section { padding: 96px 24px; }
+    .section-inner { max-width: 1280px; margin: 0 auto; }
+    .section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--primary-dim);
+      border: 1px solid var(--primary-border);
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .section-subtitle {
+      font-size: 18px;
+      color: var(--muted);
+      max-width: 640px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+    .text-center { text-align: center; }
+
+    /* ── Features ── */
+    #features { background: linear-gradient(180deg, transparent, rgba(0,255,136,0.02), transparent); }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 56px;
+    }
+    .feature-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 28px;
+      transition: all 0.3s;
+    }
+    .feature-card:hover {
+      border-color: rgba(0,255,136,0.4);
+      box-shadow: 0 0 30px rgba(0,255,136,0.08);
+      transform: translateY(-4px);
+    }
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(0,255,136,0.15), rgba(0,212,255,0.15));
+      border: 1px solid var(--primary-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+    .feature-title { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+    .feature-desc { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+    /* ── Services ── */
+    #services { position: relative; overflow: hidden; }
+    .services-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent, rgba(0,255,136,0.03), transparent);
+      pointer-events: none;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .services-image-wrap { position: relative; }
+    .services-image-glow {
+      position: absolute;
+      inset: -20px;
+      background: radial-gradient(ellipse, rgba(0,255,136,0.1) 0%, transparent 70%);
+      border-radius: 24px;
+      filter: blur(20px);
+    }
+    .services-image {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 480px;
+      border-radius: 20px;
+      border: 1px solid var(--primary-border);
+      box-shadow: 0 20px 60px rgba(0,255,136,0.1);
+    }
+    .services-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 28px 0 36px;
+    }
+    .service-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .service-item .check { color: var(--primary); font-size: 16px; flex-shrink: 0; }
+
+    /* ── CTA ── */
+    #cta {
+      background: linear-gradient(135deg, rgba(0,255,136,0.06), rgba(0,212,255,0.04));
+      border-top: 1px solid var(--primary-border);
+      border-bottom: 1px solid var(--primary-border);
+    }
+    .cta-logo { height: 80px; width: auto; object-fit: contain; margin-bottom: 32px; opacity: 0.95; }
+    .cta-title {
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    .cta-subtitle { font-size: 18px; color: var(--muted); margin-bottom: 36px; }
+
+    /* ── Footer ── */
+    footer {
+      background: rgba(15,17,23,0.8);
+      border-top: 1px solid var(--primary-border);
+      padding: 64px 24px 32px;
+    }
+    .footer-grid {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1.2fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+    .footer-logo { height: 32px; width: auto; object-fit: contain; margin-bottom: 16px; }
+    .footer-col h4 { font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 16px; }
+    .footer-col p, .footer-col li {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.8;
+      list-style: none;
+    }
+    .footer-accreditations { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .acc-badge {
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--primary-dim);
+      border: 1px solid var(--primary-border);
+      border-radius: 4px;
+      color: var(--primary);
+    }
+    .footer-bottom {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding-top: 24px;
+      border-top: 1px solid var(--primary-border);
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+      .hero-image-wrap { order: -1; }
+      .hero-image { max-height: 340px; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .services-grid { grid-template-columns: 1fr; gap: 48px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .features-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .hero-stats { gap: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-inner">
+      <div class="nav-logo">
+        <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663328149057/JiTjkhwCQcNFndvg.png" alt="Core Fire Protection" />
+      </div>
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#" style="color:var(--muted)">My Portal</a></li>
+        <li>
+          <a href="#cta" class="btn-primary" style="padding:9px 20px;font-size:13px;">
+            &#9656; Start Agreement
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section id="home">
+    <canvas id="particles-canvas"></canvas>
+    <div class="hero-gradient"></div>
+
+    <div class="hero-inner">
+      <!-- Left -->
+      <div>
+        <div class="hero-badge">
+          <span>&#9889;</span> Systems Business Service Agreement Portal
+        </div>
+        <h1 class="hero-title">
+          THE ULTIMATE<br>
+          <span class="gradient-text">INTELLIGENCE</span><br>
+          FOR A <span class="gradient-text">DIGITAL</span> FUTURE
+        </h1>
+        <p class="hero-subtitle">
+          Create comprehensive fire and security systems maintenance contracts digitally.
+          Select from 76+ services across 14 categories, sign electronically, and ensure
+          compliance with all applicable British Standards.
+        </p>
+        <div class="hero-cta">
+          <a href="#cta" class="btn-primary">&#128196; Get Started</a>
+          <a href="#features" class="btn-outline">&#128737; Learn More</a>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <div class="stat-num">76+</div>
+            <div class="stat-label">Services Available</div>
+          </div>
+          <div>
+            <div class="stat-num">14</div>
+            <div class="stat-label">Service Categories</div>
+          </div>
+          <div>
+            <div class="stat-num">10+</div>
+            <div class="stat-label">Years Experience</div>
+          </div>
+        </div>
+        <div class="compliance-badges">
+          <span class="badge">BAFE SP203-1</span>
+          <span class="badge">NSI Gold</span>
+          <span class="badge">BSI Kitemark</span>
+          <span class="badge">BS 5839-1:2025</span>
+          <span class="badge">BS EN 12845</span>
+          <span class="badge">PD 6662</span>
+        </div>
+      </div>
+
+      <!-- Right — Mascot Hero -->
+      <div class="hero-image-wrap">
+        <div class="hero-glow"></div>
+        <img
+          class="hero-image"
+          src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663328149057/SZeDWIMkEBbvcIZE.png"
+          alt="Core Fire Protection AI Robot Assistant with branded service van"
+        />
+      </div>
+    </div>
+
+    <div class="scroll-indicator">&#8964;</div>
+  </section>
+
+  <!-- Features -->
+  <section id="features">
+    <div class="section-inner">
+      <div class="text-center" style="margin-bottom:0">
+        <div class="section-badge" style="display:inline-flex">&#10003; UNLOCK THE POWER</div>
+        <h2 class="section-title">
+          <span class="gradient-text">INTELLIGENCE</span> FOR A<br>
+          DIGITAL <span class="gradient-text">FUTURE</span>
+        </h2>
+        <p class="section-subtitle">
+          Leap into the future with our AI-powered fire safety management platform.
+          Experience seamless digital workflows and intelligent automation.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">&#9889;</div>
+          <div class="feature-title">Digital Signatures</div>
+          <div class="feature-desc">Sign contracts electronically with touch or mouse. Legally binding digital signatures for both client and company representative.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128737;</div>
+          <div class="feature-title">Systems Management</div>
+          <div class="feature-desc">Full service schedule covering fire detection, sprinklers, suppression, CCTV, access control, emergency lighting and more. 76 services across 14 categories.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#9201;</div>
+          <div class="feature-title">Instant Processing</div>
+          <div class="feature-desc">Real-time pricing calculations with VAT. Automated compliance checks and instant PDF generation for immediate contract execution.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128101;</div>
+          <div class="feature-title">Standards Compliant</div>
+          <div class="feature-desc">Compliant with BS 5839-1:2025, BS EN 12845, PD 6662, BS 5266-1 and all applicable British Standards. BAFE, NSI Gold and BSI Kitemark accredited.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128196;</div>
+          <div class="feature-title">Smart Documents</div>
+          <div class="feature-desc">Generate professional PDF documents with one click. Editable cover page, introduction letter, service schedule and full T&Cs with drag-and-drop section ordering.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128274;</div>
+          <div class="feature-title">Secure &amp; Validated</div>
+          <div class="feature-desc">Enterprise-grade security with end-to-end encryption. Smart form validation ensures data accuracy and compliance across all service categories.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services">
+    <div class="services-bg"></div>
+    <div class="section-inner">
+      <div class="services-grid">
+        <!-- 3D Data Viz -->
+        <div class="services-image-wrap">
+          <div class="services-image-glow"></div>
+          <img
+            class="services-image"
+            src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663328149057/djNeAHXiQcQruXwU.jpg"
+            alt="Dynamic data visualization showing fire safety compliance analytics"
+          />
+        </div>
+
+        <!-- Service Categories -->
+        <div>
+          <div class="section-badge">&#128293; 14 SERVICE CATEGORIES</div>
+          <h2 class="section-title">
+            Complete Fire &amp; Security<br>
+            <span class="gradient-text">Systems Coverage</span>
+          </h2>
+          <p style="color:var(--muted);font-size:16px;line-height:1.7;margin-bottom:8px;">
+            From fire detection and sprinkler systems to CCTV, access control and remote monitoring —
+            our service agreement covers every aspect of your fire and security compliance obligations.
+          </p>
+          <div class="services-list">
+            <div class="service-item"><span class="check">&#10003;</span> Fire Detection &amp; Alarm</div>
+            <div class="service-item"><span class="check">&#10003;</span> Sprinkler Systems</div>
+            <div class="service-item"><span class="check">&#10003;</span> Fire Suppression</div>
+            <div class="service-item"><span class="check">&#10003;</span> Emergency Lighting</div>
+            <div class="service-item"><span class="check">&#10003;</span> Passive Fire Protection</div>
+            <div class="service-item"><span class="check">&#10003;</span> Intruder Alarm</div>
+            <div class="service-item"><span class="check">&#10003;</span> CCTV &amp; Surveillance</div>
+            <div class="service-item"><span class="check">&#10003;</span> Access Control</div>
+            <div class="service-item"><span class="check">&#10003;</span> Remote Monitoring</div>
+            <div class="service-item"><span class="check">&#10003;</span> Portable Equipment</div>
+            <div class="service-item"><span class="check">&#10003;</span> Emergency Callout</div>
+            <div class="service-item"><span class="check">&#10003;</span> Professional Services</div>
+          </div>
+          <a href="#cta" class="btn-primary">&#128196; Create Your Agreement</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta">
+    <div class="section-inner text-center">
+      <img
+        class="cta-logo"
+        src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663328149057/NoaGItwgwFCzfCoG.png"
+        alt="Core Fire Protection"
+      />
+      <h2 class="cta-title">
+        Ready to Transform Your<br>
+        <span class="gradient-text">Fire Safety Management?</span>
+      </h2>
+      <p class="cta-subtitle">
+        Join businesses already using our intelligent platform to manage their fire and security compliance
+      </p>
+      <a href="#" class="btn-primary" style="font-size:16px;padding:14px 40px;">
+        &#128196; Start Your Agreement Now
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <img class="footer-logo"
+          src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663328149057/JiTjkhwCQcNFndvg.png"
+          alt="Core Fire Protection"
+        />
+        <p>Professional Fire &amp; Security Solutions</p>
+        <p>Unit 4, 200 Woodville Street</p>
+        <p>Glasgow, G51 2RL</p>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li>Tel: 0141 433 1934</li>
+          <li>Email: service@corefire.co.uk</li>
+          <li>www.corefire.co.uk</li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li>Fire Detection &amp; Alarm Systems</li>
+          <li>Sprinkler &amp; Suppression Systems</li>
+          <li>CCTV &amp; Access Control</li>
+          <li>Emergency Lighting</li>
+          <li>Portable Fire Equipment</li>
+          <li>Remote Monitoring</li>
+          <li>Emergency Callout</li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li>Terms &amp; Conditions</li>
+          <li>Privacy Policy</li>
+          <li>Service Standards</li>
+          <li>Support</li>
+        </ul>
+        <h4 style="margin-top:20px">Accreditations</h4>
+        <div class="footer-accreditations">
+          <span class="acc-badge">BAFE</span>
+          <span class="acc-badge">NSI Gold</span>
+          <span class="acc-badge">BSI</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 Core Fire Protection Ltd. All rights reserved. &nbsp;|&nbsp;
+      BAFE SP203-1 &nbsp;|&nbsp; BAFE SP101 &nbsp;|&nbsp; NSI Gold &nbsp;|&nbsp;
+      BSI Kitemark &nbsp;|&nbsp; BS 5839-1:2025 &nbsp;|&nbsp; BS EN 12845 &nbsp;|&nbsp; PD 6662
+    </div>
+  </footer>
+
+  <!-- Animated Particles -->
+  <script>
+    (function () {
+      const canvas = document.getElementById('particles-canvas');
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+      const COUNT = 60;
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      for (let i = 0; i < COUNT; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 2.5 + 0.8,
+          vx: (Math.random() - 0.5) * 0.45,
+          vy: (Math.random() - 0.5) * 0.45,
+          opacity: Math.random() * 0.5 + 0.2,
+        });
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0) p.x = canvas.width;
+          if (p.x > canvas.width) p.x = 0;
+          if (p.y < 0) p.y = canvas.height;
+          if (p.y > canvas.height) p.y = 0;
+
+          const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 4);
+          g.addColorStop(0, `rgba(0,255,136,${p.opacity})`);
+          g.addColorStop(1, 'rgba(0,255,136,0)');
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size * 4, 0, Math.PI * 2);
+          ctx.fillStyle = g;
+          ctx.fill();
+        });
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+  </script>
+
+</body>
+</html>
