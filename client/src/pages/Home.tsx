@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle2, FileText, Shield, Zap, Clock, Users, ChevronDown } from "lucide-react";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { CheckCircle2, FileText, Shield, Zap, Clock, Users, ChevronDown, Flame, Lock, Bell } from "lucide-react";
 import { Link } from "wouter";
+import AnimatedBackground from "@/components/AnimatedBackground";
 
 export default function Home() {
   const scrollToSection = (id: string) => {
@@ -15,15 +16,15 @@ export default function Home() {
     <div className="min-h-screen bg-background">
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-primary/20">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
+            {/* Logo */}
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-lg bg-primary/20 flex items-center justify-center">
-                <Shield className="h-6 w-6 text-primary" />
-              </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-primary to-cyan-400 bg-clip-text text-transparent">
-                Core Fire
-              </span>
+              <img
+                src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663328149057/JiTjkhwCQcNFndvg.png"
+                alt="Core Fire Protection"
+                className="h-10 w-auto object-contain"
+              />
             </div>
             <div className="hidden md:flex items-center gap-8">
               <button onClick={() => scrollToSection("home")} className="text-sm hover:text-primary transition-colors font-medium">
@@ -32,13 +33,16 @@ export default function Home() {
               <button onClick={() => scrollToSection("features")} className="text-sm hover:text-primary transition-colors font-medium">
                 Features
               </button>
+              <button onClick={() => scrollToSection("services")} className="text-sm hover:text-primary transition-colors font-medium">
+                Services
+              </button>
               <Link href="/portal">
                 <button className="text-sm hover:text-primary transition-colors font-medium">
                   My Portal
                 </button>
               </Link>
               <Link href="/agreement">
-                <Button variant="default" size="sm" className="bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20">
+                <Button variant="default" size="sm" className="bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 btn-pulse btn-hover-scale btn-hover-glow">
                   Start Agreement
                 </Button>
               </Link>
@@ -48,17 +52,27 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section id="home" className="relative pt-32 pb-20 px-4 overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-30">
-          <img 
-            src="https://private-us-east-1.manuscdn.com/sessionFile/hrBnEIOQk2izp2n6q5hcSX/sandbox/aUhAj8nRDCXR1KHTW6BjbP-img-3_1770429556000_na1fn_Y3VydmVkLWxpbmVzLWJn.png?x-oss-process=image/resize,w_1920,h_1920/format,webp/quality,q_80&Expires=1798761600&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9wcml2YXRlLXVzLWVhc3QtMS5tYW51c2Nkbi5jb20vc2Vzc2lvbkZpbGUvaHJCbkVJT1FrMml6cDJuNnE1aGNTWC9zYW5kYm94L2FVaEFqOG5SRENYUjFLSFRXNkJqYlAtaW1nLTNfMTc3MDQyOTU1NjAwMF9uYTFmbl9ZM1Z5ZG1Wa0xXeHBibVZ6TFdKbi5wbmc~eC1vc3MtcHJvY2Vzcz1pbWFnZS9yZXNpemUsd18xOTIwLGhfMTkyMC9mb3JtYXQsd2VicC9xdWFsaXR5LHFfODAiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3OTg3NjE2MDB9fX1dfQ__&Key-Pair-Id=K2HSFNDJXOU9YS&Signature=DbhlRJMmT32a-Uy7uiJUhW89mD4TzW3rsCnKkgH1UW75OKWMRcz2OdokSliDILDtc4-u2q~V4lr8n4KVCqFizXPrxB-BzFtvXI7jnA~gzEkyCOlok5i7tCp5d6fGzZdvzfGStYm6GG9~HWvuIeiTY77pmG5e09nSgF4w9i0TezObYL9S~UFoNO88L3RsHLyD0trZXwCjWi1R0HBnPI3g1G0fCXSGGMo31ZrqR~nt7Yp13rFi6Os~ifGGSvVIGw3J928WJ6fi8Fnhs7vECG4gxmo03fb3AevnIAQJNfr-VNGpxX1~33Ej~~bMMKhXWIs~obzq1FWQKyKuV~dV-tfMKw__"
-            alt="Background pattern"
+      <section id="home" className="relative pt-28 pb-20 px-4 overflow-hidden min-h-screen flex items-center">
+        {/* Animated Particles Background */}
+        <AnimatedBackground />
+
+        {/* Video Background (subtle overlay) */}
+        <div className="absolute inset-0 opacity-10 pointer-events-none overflow-hidden">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
             className="w-full h-full object-cover"
-          />
+          >
+            <source src="/hero-bg-video.mp4" type="video/mp4" />
+          </video>
         </div>
 
-        <div className="container mx-auto max-w-7xl relative z-10">
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-background/95 to-primary/5 pointer-events-none" />
+
+        <div className="container mx-auto max-w-7xl relative z-10 w-full">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left Column - Text */}
             <div className="space-y-8">
@@ -66,7 +80,7 @@ export default function Home() {
                 <Zap className="h-4 w-4" />
                 Systems Business Service Agreement Portal
               </div>
-              
+
               <h1 className="text-5xl md:text-7xl font-bold leading-tight">
                 THE ULTIMATE{" "}
                 <span className="bg-gradient-to-r from-primary via-cyan-400 to-primary bg-clip-text text-transparent">
@@ -79,19 +93,26 @@ export default function Home() {
                 </span>{" "}
                 FUTURE
               </h1>
-              
+
               <p className="text-xl text-muted-foreground leading-relaxed">
-                Create comprehensive fire and security systems maintenance contracts digitally. Select from 76+ services across 14 categories, sign electronically, and ensure compliance with all applicable British Standards.
+                Create comprehensive fire and security systems maintenance contracts digitally.
+                Select from 76+ services across 14 categories, sign electronically, and ensure
+                compliance with all applicable British Standards.
               </p>
 
               <div className="flex flex-col sm:flex-row items-start gap-4 pt-4">
                 <Link href="/agreement">
-                  <Button size="lg" className="bg-primary hover:bg-primary/90 shadow-lg shadow-primary/30 text-lg px-8">
+                  <Button size="lg" className="bg-primary hover:bg-primary/90 shadow-lg shadow-primary/30 text-lg px-8 btn-pulse btn-hover-scale btn-hover-glow">
                     <FileText className="mr-2 h-5 w-5" />
                     Get Started
                   </Button>
                 </Link>
-                <Button size="lg" variant="outline" className="border-primary/30 hover:bg-primary/10 text-lg px-8">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-primary/30 hover:bg-primary/10 text-lg px-8 btn-hover-scale hover:border-primary/50"
+                  onClick={() => scrollToSection("features")}
+                >
                   <Shield className="mr-2 h-5 w-5" />
                   Learn More
                 </Button>
@@ -100,27 +121,36 @@ export default function Home() {
               {/* Stats */}
               <div className="flex flex-wrap gap-8 pt-8">
                 <div>
-                  <div className="text-4xl font-bold text-primary">218K+</div>
-                  <div className="text-sm text-muted-foreground">Equipment Inspected</div>
+                  <div className="text-4xl font-bold text-primary">76+</div>
+                  <div className="text-sm text-muted-foreground">Services Available</div>
                 </div>
                 <div>
-                  <div className="text-4xl font-bold text-primary">100M+</div>
-                  <div className="text-sm text-muted-foreground">Digital Signatures</div>
+                  <div className="text-4xl font-bold text-primary">14</div>
+                  <div className="text-sm text-muted-foreground">Service Categories</div>
                 </div>
                 <div>
                   <div className="text-4xl font-bold text-primary">10+</div>
                   <div className="text-sm text-muted-foreground">Years Experience</div>
                 </div>
               </div>
+
+              {/* Compliance badges */}
+              <div className="flex flex-wrap gap-2 pt-2">
+                {["BAFE SP203-1", "NSI Gold", "BSI Kitemark", "BS 5839-1:2025", "BS EN 12845", "PD 6662"].map((badge) => (
+                  <span key={badge} className="px-3 py-1 text-xs font-medium bg-primary/10 border border-primary/20 rounded-full text-primary">
+                    {badge}
+                  </span>
+                ))}
+              </div>
             </div>
 
-            {/* Right Column - Robot Image */}
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-cyan-400/20 blur-3xl rounded-full"></div>
-              <img 
-                src="https://private-us-east-1.manuscdn.com/sessionFile/hrBnEIOQk2izp2n6q5hcSX/sandbox/aUhAj8nRDCXR1KHTW6BjbP-img-1_1770429551000_na1fn_cm9ib3QtaGVybw.png?x-oss-process=image/resize,w_1920,h_1920/format,webp/quality,q_80&Expires=1798761600&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9wcml2YXRlLXVzLWVhc3QtMS5tYW51c2Nkbi5jb20vc2Vzc2lvbkZpbGUvaHJCbkVJT1FrMml6cDJuNnE1aGNTWC9zYW5kYm94L2FVaEFqOG5SRENYUjFLSFRXNkJqYlAtaW1nLTFfMTc3MDQyOTU1MTAwMF9uYTFmbl9jbTlpYjNRdGFHVnlidy5wbmc~eC1vc3MtcHJvY2Vzcz1pbWFnZS9yZXNpemUsd18xOTIwLGhfMTkyMC9mb3JtYXQsd2VicC9xdWFsaXR5LHFfODAiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3OTg3NjE2MDB9fX1dfQ__&Key-Pair-Id=K2HSFNDJXOU9YS&Signature=j-cK3eIj2rQMdUgNPiiDBYCgkIfddMzUxlB40BltUaLPhEcrYqPgzqhJo~LOsi39ELf-045TFd-oti6i46nWRIheAubBTAJKW-lCgAcSUjVC7Ph7UwpcZTmj~9IPlSqsIaaL4fXlsXVdz18w~8mmLN6j14bw9ZFSOQLDTza0p7HVG70LwPVK5dK~vkkNB5~0if2UpyFNnNK5OZlPdNDTIE2hX-h~hC764mNW0d860ATGYR124n88Rg2MkoX0GxCUX5WWL-Dg0~S9Jha~twtAeKpxCrnqZIPDwHfJikBldzjzsUlJgj2wxgxbxRlAYAPs6sEvsKUOEa-5HdhascJ~xQ__"
-                alt="AI Robot Assistant"
-                className="relative z-10 w-full max-w-md mx-auto animate-float"
+            {/* Right Column - Branded Mascot Hero */}
+            <div className="relative order-first lg:order-last">
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-cyan-400/20 blur-3xl rounded-full scale-75" />
+              <img
+                src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663328149057/SZeDWIMkEBbvcIZE.png"
+                alt="Core Fire Protection AI Robot Assistant with branded service van"
+                className="relative z-10 w-full h-[500px] object-contain object-center animate-float"
               />
             </div>
           </div>
@@ -158,85 +188,127 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card className="border-primary/20 hover:border-primary/50 transition-all hover:shadow-lg hover:shadow-primary/10 bg-card/50 backdrop-blur-sm">
-              <CardHeader>
-                <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-primary/20 to-cyan-400/20 flex items-center justify-center mb-4 border border-primary/30">
-                  <Zap className="h-7 w-7 text-primary" />
-                </div>
-                <CardTitle className="text-xl">Digital Signatures</CardTitle>
-                <CardDescription className="text-base">
-                  Sign contracts electronically with touch or mouse. Legally binding digital signatures for both client and company representative with blockchain verification.
-                </CardDescription>
-              </CardHeader>
-            </Card>
+            {[
+              {
+                icon: <Zap className="h-7 w-7 text-primary" />,
+                title: "Digital Signatures",
+                desc: "Sign contracts electronically with touch or mouse. Legally binding digital signatures for both client and company representative.",
+              },
+              {
+                icon: <Shield className="h-7 w-7 text-primary" />,
+                title: "Systems Management",
+                desc: "Full service schedule covering fire detection, sprinklers, suppression, CCTV, access control, emergency lighting and more. 76 services across 14 categories.",
+              },
+              {
+                icon: <Clock className="h-7 w-7 text-primary" />,
+                title: "Instant Processing",
+                desc: "Real-time pricing calculations with VAT. Automated compliance checks and instant PDF generation for immediate contract execution.",
+              },
+              {
+                icon: <Users className="h-7 w-7 text-primary" />,
+                title: "Standards Compliant",
+                desc: "Compliant with BS 5839-1:2025, BS EN 12845, PD 6662, BS 5266-1 and all applicable British Standards. BAFE, NSI Gold and BSI Kitemark accredited.",
+              },
+              {
+                icon: <FileText className="h-7 w-7 text-primary" />,
+                title: "Smart Documents",
+                desc: "Generate professional PDF documents with one click. Editable cover page, introduction letter, service schedule and full T&Cs with drag-and-drop section ordering.",
+              },
+              {
+                icon: <Lock className="h-7 w-7 text-primary" />,
+                title: "Secure & Validated",
+                desc: "Enterprise-grade security with end-to-end encryption. Smart form validation ensures data accuracy and compliance across all service categories.",
+              },
+            ].map((feature) => (
+              <Card key={feature.title} className="glass-card border-glow hover:glow-green-sm transition-all duration-300">
+                <CardHeader>
+                  <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-primary/20 to-cyan-400/20 flex items-center justify-center mb-4 border border-primary/30">
+                    {feature.icon}
+                  </div>
+                  <CardTitle className="text-xl">{feature.title}</CardTitle>
+                  <CardDescription className="text-base">{feature.desc}</CardDescription>
+                </CardHeader>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
 
-            <Card className="border-primary/20 hover:border-primary/50 transition-all hover:shadow-lg hover:shadow-primary/10 bg-card/50 backdrop-blur-sm">
-              <CardHeader>
-                <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-primary/20 to-cyan-400/20 flex items-center justify-center mb-4 border border-primary/30">
-                  <Shield className="h-7 w-7 text-primary" />
-                </div>
-                <CardTitle className="text-xl">Systems Management</CardTitle>
-                <CardDescription className="text-base">
-                  Full service schedule covering fire detection, sprinklers, suppression, CCTV, access control, emergency lighting and more. 76 services across 14 categories.
-                </CardDescription>
-              </CardHeader>
-            </Card>
+      {/* Services Overview Section */}
+      <section id="services" className="py-24 px-4 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
+        <div className="container mx-auto max-w-7xl relative z-10">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left - 3D Data Visualization */}
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-cyan-400/10 blur-3xl rounded-full" />
+              <img
+                src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663328149057/djNeAHXiQcQruXwU.jpg"
+                alt="Dynamic data visualization showing fire safety compliance analytics"
+                className="relative z-10 w-full max-w-lg mx-auto rounded-2xl shadow-2xl shadow-primary/20 border border-primary/20"
+              />
+            </div>
 
-            <Card className="border-primary/20 hover:border-primary/50 transition-all hover:shadow-lg hover:shadow-primary/10 bg-card/50 backdrop-blur-sm">
-              <CardHeader>
-                <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-primary/20 to-cyan-400/20 flex items-center justify-center mb-4 border border-primary/30">
-                  <Clock className="h-7 w-7 text-primary" />
-                </div>
-                <CardTitle className="text-xl">Instant Processing</CardTitle>
-                <CardDescription className="text-base">
-                  Real-time pricing calculations with VAT. Automated compliance checks and instant PDF generation for immediate contract execution.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="border-primary/20 hover:border-primary/50 transition-all hover:shadow-lg hover:shadow-primary/10 bg-card/50 backdrop-blur-sm">
-              <CardHeader>
-                <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-primary/20 to-cyan-400/20 flex items-center justify-center mb-4 border border-primary/30">
-                  <Users className="h-7 w-7 text-primary" />
-                </div>
-                <CardTitle className="text-xl">Standards Compliant</CardTitle>
-                <CardDescription className="text-base">
-                  Compliant with BS 5839-1:2025, BS EN 12845, PD 6662, BS 5266-1 and all applicable British Standards. BAFE, NSI Gold and BSI Kitemark accredited.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="border-primary/20 hover:border-primary/50 transition-all hover:shadow-lg hover:shadow-primary/10 bg-card/50 backdrop-blur-sm">
-              <CardHeader>
-                <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-primary/20 to-cyan-400/20 flex items-center justify-center mb-4 border border-primary/30">
-                  <FileText className="h-7 w-7 text-primary" />
-                </div>
-                <CardTitle className="text-xl">Smart Documents</CardTitle>
-                <CardDescription className="text-base">
-                  Generate professional PDF documents with one click. AI-powered document assembly with automatic data population and version control.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="border-primary/20 hover:border-primary/50 transition-all hover:shadow-lg hover:shadow-primary/10 bg-card/50 backdrop-blur-sm">
-              <CardHeader>
-                <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-primary/20 to-cyan-400/20 flex items-center justify-center mb-4 border border-primary/30">
-                  <Shield className="h-7 w-7 text-primary" />
-                </div>
-                <CardTitle className="text-xl">Secure & Validated</CardTitle>
-                <CardDescription className="text-base">
-                  Enterprise-grade security with end-to-end encryption. Smart form validation ensures data accuracy with AI-powered fraud detection.
-                </CardDescription>
-              </CardHeader>
-            </Card>
+            {/* Right - Service Categories */}
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/30 rounded-full text-sm font-medium text-primary">
+                <Flame className="h-4 w-4" />
+                14 SERVICE CATEGORIES
+              </div>
+              <h2 className="text-4xl font-bold">
+                Complete Fire &amp; Security{" "}
+                <span className="bg-gradient-to-r from-primary via-cyan-400 to-primary bg-clip-text text-transparent">
+                  Systems Coverage
+                </span>
+              </h2>
+              <p className="text-muted-foreground text-lg">
+                From fire detection and sprinkler systems to CCTV, access control and remote monitoring —
+                our service agreement covers every aspect of your fire and security compliance obligations.
+              </p>
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  "Fire Detection & Alarm",
+                  "Sprinkler Systems",
+                  "Fire Suppression",
+                  "Emergency Lighting",
+                  "Passive Fire Protection",
+                  "Intruder Alarm",
+                  "CCTV & Surveillance",
+                  "Access Control",
+                  "Remote Monitoring",
+                  "Portable Equipment",
+                  "Emergency Callout",
+                  "Professional Services",
+                ].map((service) => (
+                  <div key={service} className="flex items-center gap-2 text-sm">
+                    <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
+                    <span className="text-muted-foreground">{service}</span>
+                  </div>
+                ))}
+              </div>
+              <Link href="/agreement">
+                <Button className="bg-primary hover:bg-primary/90 mt-4 btn-hover-scale btn-hover-glow">
+                  <FileText className="mr-2 h-4 w-4" />
+                  Create Your Agreement
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
       <section className="py-24 px-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-cyan-400/10"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-cyan-400/10" />
         <div className="container mx-auto max-w-4xl relative z-10 text-center">
+          {/* Large logo watermark */}
+          <div className="flex justify-center mb-8">
+            <img
+              src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663328149057/NoaGItwgwFCzfCoG.png"
+              alt="Core Fire Protection"
+              className="h-24 w-auto object-contain opacity-90"
+            />
+          </div>
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Ready to Transform Your
             <br />
@@ -245,10 +317,10 @@ export default function Home() {
             </span>
           </h2>
           <p className="text-xl text-muted-foreground mb-8">
-            Join hundreds of businesses already using our intelligent platform
+            Join businesses already using our intelligent platform to manage their fire and security compliance
           </p>
           <Link href="/agreement">
-            <Button size="lg" className="bg-primary hover:bg-primary/90 shadow-lg shadow-primary/30 text-lg px-12">
+            <Button size="lg" className="bg-primary hover:bg-primary/90 shadow-lg shadow-primary/30 text-lg px-12 btn-pulse btn-hover-scale btn-hover-glow">
               <FileText className="mr-2 h-5 w-5" />
               Start Your Agreement Now
             </Button>
@@ -262,13 +334,14 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="h-8 w-8 rounded-lg bg-primary/20 flex items-center justify-center">
-                  <Shield className="h-5 w-5 text-primary" />
-                </div>
-                <h3 className="font-bold text-primary">Core Fire</h3>
+                <img
+                  src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663328149057/JiTjkhwCQcNFndvg.png"
+                  alt="Core Fire Protection"
+                  className="h-8 w-auto object-contain"
+                />
               </div>
-              <p className="text-sm text-muted-foreground">Professional Fire Safety Solutions</p>
-              <p className="text-sm text-muted-foreground mt-2">Unit 4 Woodville Park Industrial Estate</p>
+              <p className="text-sm text-muted-foreground">Professional Fire &amp; Security Solutions</p>
+              <p className="text-sm text-muted-foreground mt-2">Unit 4, 200 Woodville Street</p>
               <p className="text-sm text-muted-foreground">Glasgow, G51 2RL</p>
             </div>
             <div>
@@ -280,26 +353,35 @@ export default function Home() {
             <div>
               <h3 className="font-bold mb-4 text-primary">Services</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>Fire Detection & Alarm Systems</li>
-                <li>Sprinkler & Suppression Systems</li>
-                <li>CCTV & Access Control</li>
+                <li>Fire Detection &amp; Alarm Systems</li>
+                <li>Sprinkler &amp; Suppression Systems</li>
+                <li>CCTV &amp; Access Control</li>
                 <li>Emergency Lighting</li>
                 <li>Portable Fire Equipment</li>
+                <li>Remote Monitoring</li>
                 <li>Emergency Callout</li>
               </ul>
             </div>
             <div>
               <h3 className="font-bold mb-4 text-primary">Resources</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>Terms & Conditions</li>
+                <li>Terms &amp; Conditions</li>
                 <li>Privacy Policy</li>
                 <li>Service Standards</li>
                 <li>Support</li>
               </ul>
+              <div className="mt-6">
+                <h3 className="font-bold mb-3 text-primary">Accreditations</h3>
+                <div className="flex flex-wrap gap-1">
+                  {["BAFE", "NSI Gold", "BSI"].map((acc) => (
+                    <span key={acc} className="px-2 py-0.5 text-xs bg-primary/10 border border-primary/20 rounded text-primary">{acc}</span>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
           <div className="mt-12 pt-8 border-t border-primary/20 text-center text-sm text-muted-foreground">
-            <p>&copy; 2026 Core Fire Protection Ltd. All rights reserved. | BAFE Registered | NSI Gold | BSI Kitemark | BS 5839-1:2025 | BS EN 12845 | PD 6662</p>
+            <p>&copy; 2026 Core Fire Protection Ltd. All rights reserved. | BAFE SP203-1 | BAFE SP101 | NSI Gold | BSI Kitemark | BS 5839-1:2025 | BS EN 12845 | PD 6662</p>
           </div>
         </div>
       </footer>
