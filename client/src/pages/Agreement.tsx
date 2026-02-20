@@ -459,8 +459,8 @@ export default function Agreement() {
       }
     };
 
-    // Header
-    doc.setFontSize(16);
+    // ── Cover / Header ──────────────────────────────────────────────────────
+    doc.setFontSize(18);
     doc.setFont("helvetica", "bold");
     doc.text("Core Fire Protection Ltd", margin, yPos);
     yPos += 7;
@@ -472,13 +472,95 @@ export default function Agreement() {
     doc.text(`Contract Reference: CFP-SYS-${Date.now().toString().slice(-6)}`, pageWidth - margin, yPos, { align: "right" });
     yPos += 8;
 
-    doc.setFontSize(14);
+    // Divider line
+    doc.setDrawColor(13, 148, 136);
+    doc.setLineWidth(0.5);
+    doc.line(margin, yPos, pageWidth - margin, yPos);
+    yPos += 8;
+
+    doc.setFontSize(16);
     doc.setFont("helvetica", "bold");
     doc.text("Fire & Security Systems Service Agreement", pageWidth / 2, yPos, { align: "center" });
     yPos += 6;
-    doc.setFontSize(9);
+    doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
     doc.text("Systems Maintenance & Inspection Contract", pageWidth / 2, yPos, { align: "center" });
+    yPos += 5;
+    doc.setFontSize(8);
+    doc.setTextColor(100, 100, 100);
+    doc.text("All services subject to site-specific scope confirmation", pageWidth / 2, yPos, { align: "center" });
+    doc.setTextColor(0, 0, 0);
+    yPos += 10;
+
+    // Compliance badges row
+    doc.setFontSize(7);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(13, 148, 136);
+    const badges = ["BAFE SP203-1", "BAFE SP101", "NSI Gold", "BSI Kitemark", "BS 5839-1:2025", "BS EN 12845", "PD 6662"];
+    doc.text(badges.join("  |  "), pageWidth / 2, yPos, { align: "center" });
+    doc.setTextColor(0, 0, 0);
+    yPos += 10;
+
+    // Divider line
+    doc.setDrawColor(13, 148, 136);
+    doc.setLineWidth(0.5);
+    doc.line(margin, yPos, pageWidth - margin, yPos);
+    yPos += 12;
+
+    // ── Introduction Letter ─────────────────────────────────────────────────
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "bold");
+    doc.text("Introduction Letter", margin, yPos);
+    yPos += 8;
+
+    // Teal left-border box background
+    doc.setFillColor(249, 250, 251);
+    doc.setDrawColor(13, 148, 136);
+    doc.setLineWidth(1.5);
+    const letterBoxY = yPos - 4;
+
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "normal");
+
+    const salutation = `Dear ${recipientName || "[Recipient Name]"},`;
+    doc.text(salutation, margin + 5, yPos);
+    yPos += 7;
+
+    const letterParagraphs = [
+      `On behalf of Core Fire Protection, I am pleased to present our service agreement proposal for the planned preventative maintenance of Fire, Security, and Safety systems.`,
+      `This agreement is proposed between Core Fire Ltd T/A Core Fire Protection ("The Service Provider") and ${clientName || "[Customer Company Name]"} ("the Customer") for the service and maintenance of the systems specified within this document.`,
+      `Our proposal includes scheduled preventative maintenance visits per annum, in line with the recommendations set out in the latest British Standards in accordance to the provided schedule of rates that presents the frequency of visits and associated annual costs.`,
+      `This agreement provides a structured service framework that outlines expectations and service delivery programs for both parties. It is intended as a working document that may evolve to accommodate changing needs.`,
+      `The agreement covers a ${contractDuration} month period from the date of acceptance on a rolling basis. Our estimate assumes unrestricted access to all relevant areas for our engineers, ensuring continuous and uninterrupted work. We will make every effort to coordinate with other suppliers and trades; any delays or disruptions caused by third parties may result in additional charges.`,
+      `Unless otherwise agreed, all work will be carried out during our standard business hours. Any services required outside these hours, including overtime, weekends, or bank holidays, can be arranged but may be subject to additional costs.`,
+      `This document and its terms are directly linked to the systems covered under this agreement, incorporating the relevant terms and conditions for the duration of the Service Level Agreement.`,
+      `Should you require any further information or clarification, please do not hesitate to contact me.`,
+    ];
+
+    for (const para of letterParagraphs) {
+      checkPage(15);
+      const lines = doc.splitTextToSize(para, contentWidth - 10);
+      doc.text(lines, margin + 5, yPos);
+      yPos += lines.length * 4.5 + 4;
+    }
+
+    checkPage(15);
+    doc.text("Yours sincerely,", margin + 5, yPos);
+    yPos += 6;
+    doc.setFont("helvetica", "bold");
+    doc.text(senderName || "Core Fire Protection", margin + 5, yPos);
+    yPos += 4;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(100, 100, 100);
+    doc.text("Core Fire Protection Ltd", margin + 5, yPos);
+    doc.setTextColor(0, 0, 0);
+    yPos += 4;
+
+    // Draw left border for letter box
+    doc.setDrawColor(13, 148, 136);
+    doc.setLineWidth(2);
+    doc.line(margin, letterBoxY, margin, yPos + 4);
     yPos += 12;
 
     // Client Details
@@ -688,6 +770,80 @@ export default function Agreement() {
                 </div>
               </CardHeader>
             </div>
+          </Card>
+
+          {/* ── Introduction Letter ──────────────────────────────────────── */}
+          <Card className="border-primary/20">
+            <CardContent className="pt-8 pb-8">
+              <div className="max-w-3xl mx-auto space-y-5">
+                {/* Letter heading */}
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-1 h-10 bg-primary rounded-full" />
+                  <div>
+                    <p className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Introduction Letter</p>
+                    <p className="text-sm text-muted-foreground">This letter will appear at the top of the printed agreement</p>
+                  </div>
+                </div>
+
+                {/* Salutation */}
+                <div className="flex items-center gap-3">
+                  <Label htmlFor="recipientName" className="whitespace-nowrap text-sm font-semibold">Dear</Label>
+                  <Input
+                    id="recipientName"
+                    value={recipientName}
+                    onChange={(e) => setRecipientName(e.target.value)}
+                    placeholder="Recipient Name / Title"
+                    className="flex-1 max-w-sm"
+                  />
+                  <span className="text-sm text-muted-foreground">,</span>
+                </div>
+
+                {/* Body paragraphs */}
+                <div className="space-y-4 text-sm leading-relaxed text-muted-foreground border-l-4 border-primary/30 pl-5 py-2">
+                  <p>
+                    On behalf of Core Fire Protection, I am pleased to present our service agreement proposal for the planned preventative maintenance of Fire, Security, and Safety systems.
+                  </p>
+                  <p>
+                    This agreement is proposed between Core Fire Ltd T/A Core Fire Protection (&ldquo;The Service Provider&rdquo;) and{" "}
+                    <span className="font-semibold text-foreground">{clientName || "[Customer Company Name]"}</span>{" "}
+                    (&ldquo;the Customer&rdquo;) for the service and maintenance of the systems specified within this document.
+                  </p>
+                  <p>
+                    Our proposal includes scheduled preventative maintenance visits per annum, in line with the recommendations set out in the latest British Standards in accordance to the provided schedule of rates that presents the frequency of visits and associated annual costs.
+                  </p>
+                  <p>
+                    This agreement provides a structured service framework that outlines expectations and service delivery programs for both parties. It is intended as a working document that may evolve to accommodate changing needs.
+                  </p>
+                  <p>
+                    The agreement covers a <span className="font-semibold text-foreground">{contractDuration} month</span> period from the date of acceptance on a rolling basis. Our estimate assumes unrestricted access to all relevant areas for our engineers, ensuring continuous and uninterrupted work. We will make every effort to coordinate with other suppliers and trades; any delays or disruptions caused by third parties may result in additional charges.
+                  </p>
+                  <p>
+                    Unless otherwise agreed, all work will be carried out during our standard business hours. Any services required outside these hours, including overtime, weekends, or bank holidays, can be arranged but may be subject to additional costs.
+                  </p>
+                  <p>
+                    This document and its terms are directly linked to the systems covered under this agreement, incorporating the relevant terms and conditions for the duration of the Service Level Agreement.
+                  </p>
+                  <p>
+                    Should you require any further information or clarification, please do not hesitate to contact me.
+                  </p>
+                </div>
+
+                {/* Sign-off */}
+                <div className="space-y-3 pt-2">
+                  <p className="text-sm">Yours sincerely,</p>
+                  <div className="space-y-1">
+                    <Input
+                      id="senderName"
+                      value={senderName}
+                      onChange={(e) => setSenderName(e.target.value)}
+                      placeholder="Your Name"
+                      className="max-w-xs border-b border-t-0 border-x-0 rounded-none px-0 focus-visible:ring-0 bg-transparent"
+                    />
+                    <p className="text-xs text-muted-foreground">Core Fire Protection Ltd</p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
           </Card>
 
           {/* ── Section 1: Service Schedule ─────────────────────────────────── */}
