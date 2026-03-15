@@ -40,77 +40,94 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  /* Core Fire custom colors */
+  --color-fire: var(--fire);
+  --color-ember: var(--ember);
+  --color-gold: var(--gold);
 }
 
+/* ── Core Fire Protection Brand Palette ─────────────────────────── */
 :root {
-  --primary: oklch(0.70 0.15 200);
-  --primary-foreground: oklch(1 0 0);
-  --sidebar-primary: oklch(0.70 0.15 200);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --chart-1: oklch(0.70 0.15 200);
-  --chart-2: oklch(0.65 0.14 200);
-  --chart-3: oklch(0.60 0.13 200);
-  --chart-4: oklch(0.55 0.12 200);
-  --chart-5: oklch(0.50 0.11 200);
+  /* Brand */
+  --fire: #E8340A;
+  --ember: #FF6B35;
+  --gold: #F5A623;
+
+  /* Light mode */
   --radius: 0.75rem;
-  --background: oklch(0.96 0.005 200);
-  --foreground: oklch(0.20 0.015 200);
+  --background: oklch(0.97 0.004 30);
+  --foreground: oklch(0.15 0.02 30);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.20 0.015 200);
+  --card-foreground: oklch(0.15 0.02 30);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.20 0.015 200);
-  --secondary: oklch(0.92 0.01 200);
-  --secondary-foreground: oklch(0.25 0.015 200);
-  --muted: oklch(0.94 0.008 200);
-  --muted-foreground: oklch(0.50 0.012 200);
-  --accent: oklch(0.94 0.008 200);
-  --accent-foreground: oklch(0.20 0.015 200);
-  --destructive: oklch(0.70 0.15 200);
+  --popover-foreground: oklch(0.15 0.02 30);
+  --primary: oklch(0.52 0.22 28);       /* fire red */
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.93 0.01 30);
+  --secondary-foreground: oklch(0.25 0.015 30);
+  --muted: oklch(0.94 0.008 30);
+  --muted-foreground: oklch(0.50 0.012 30);
+  --accent: oklch(0.93 0.01 30);
+  --accent-foreground: oklch(0.20 0.015 30);
+  --destructive: oklch(0.52 0.22 28);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.88 0.008 200);
-  --input: oklch(0.88 0.008 200);
-  --ring: oklch(0.70 0.15 200);
+  --border: oklch(0.88 0.008 30);
+  --input: oklch(0.88 0.008 30);
+  --ring: oklch(0.52 0.22 28);
+  --chart-1: oklch(0.52 0.22 28);
+  --chart-2: oklch(0.65 0.18 50);
+  --chart-3: oklch(0.75 0.15 80);
+  --chart-4: oklch(0.60 0.12 200);
+  --chart-5: oklch(0.55 0.10 260);
   --sidebar: oklch(1 0 0);
-  --sidebar-foreground: oklch(0.20 0.015 200);
-  --sidebar-accent: oklch(0.94 0.008 200);
-  --sidebar-accent-foreground: oklch(0.20 0.015 200);
-  --sidebar-border: oklch(0.88 0.008 200);
-  --sidebar-ring: oklch(0.70 0.15 200);
+  --sidebar-foreground: oklch(0.15 0.02 30);
+  --sidebar-primary: oklch(0.52 0.22 28);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.94 0.008 30);
+  --sidebar-accent-foreground: oklch(0.20 0.015 30);
+  --sidebar-border: oklch(0.88 0.008 30);
+  --sidebar-ring: oklch(0.52 0.22 28);
 }
 
 .dark {
-  --primary: oklch(0.75 0.18 200);
-  --primary-foreground: oklch(0.10 0.02 200);
-  --sidebar-primary: oklch(0.75 0.18 200);
-  --sidebar-primary-foreground: oklch(0.10 0.02 200);
-  --background: oklch(0.12 0.025 200);
-  --foreground: oklch(0.90 0.008 200);
-  --card: oklch(0.18 0.028 200);
-  --card-foreground: oklch(0.90 0.008 200);
-  --popover: oklch(0.18 0.028 200);
-  --popover-foreground: oklch(0.90 0.008 200);
-  --secondary: oklch(0.22 0.03 200);
-  --secondary-foreground: oklch(0.85 0.01 200);
-  --muted: oklch(0.25 0.03 200);
-  --muted-foreground: oklch(0.65 0.012 200);
-  --accent: oklch(0.25 0.03 200);
-  --accent-foreground: oklch(0.95 0.008 200);
-  --destructive: oklch(0.75 0.18 200);
-  --destructive-foreground: oklch(0.10 0.02 200);
-  --border: oklch(0.75 0.18 200 / 20%);
-  --input: oklch(0.75 0.18 200 / 15%);
-  --ring: oklch(0.75 0.18 200);
-  --chart-1: oklch(0.75 0.18 200);
-  --chart-2: oklch(0.70 0.16 200);
-  --chart-3: oklch(0.65 0.14 200);
-  --chart-4: oklch(0.60 0.12 200);
-  --chart-5: oklch(0.55 0.10 200);
-  --sidebar: oklch(0.15 0.026 200);
-  --sidebar-foreground: oklch(0.90 0.008 200);
-  --sidebar-accent: oklch(0.25 0.03 200);
-  --sidebar-accent-foreground: oklch(0.95 0.008 200);
-  --sidebar-border: oklch(0.75 0.18 200 / 20%);
-  --sidebar-ring: oklch(0.75 0.18 200);
+  /* Brand */
+  --fire: #E8340A;
+  --ember: #FF6B35;
+  --gold: #F5A623;
+
+  /* Dark mode — matches the original HTML dark theme */
+  --background: oklch(0.11 0.018 240);   /* #0D1117 */
+  --foreground: oklch(0.88 0.01 220);    /* #E4ECF4 */
+  --card: oklch(0.14 0.02 240);          /* #161B22 */
+  --card-foreground: oklch(0.88 0.01 220);
+  --popover: oklch(0.14 0.02 240);
+  --popover-foreground: oklch(0.88 0.01 220);
+  --primary: oklch(0.60 0.24 28);        /* ember/fire */
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.18 0.025 240);    /* #1E2530 */
+  --secondary-foreground: oklch(0.85 0.01 220);
+  --muted: oklch(0.20 0.025 240);
+  --muted-foreground: oklch(0.55 0.012 220);
+  --accent: oklch(0.20 0.025 240);
+  --accent-foreground: oklch(0.95 0.008 220);
+  --destructive: oklch(0.60 0.24 28);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.88 0.01 220 / 10%);
+  --input: oklch(0.88 0.01 220 / 10%);
+  --ring: oklch(0.60 0.24 28);
+  --chart-1: oklch(0.60 0.24 28);        /* fire */
+  --chart-2: oklch(0.65 0.20 50);        /* ember */
+  --chart-3: oklch(0.72 0.16 80);        /* gold */
+  --chart-4: oklch(0.65 0.16 200);       /* teal */
+  --chart-5: oklch(0.60 0.14 260);       /* blue */
+  --sidebar: oklch(0.13 0.02 240);
+  --sidebar-foreground: oklch(0.88 0.01 220);
+  --sidebar-primary: oklch(0.60 0.24 28);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.20 0.025 240);
+  --sidebar-accent-foreground: oklch(0.95 0.008 220);
+  --sidebar-border: oklch(0.88 0.01 220 / 12%);
+  --sidebar-ring: oklch(0.60 0.24 28);
 }
 
 @layer base {
@@ -134,24 +151,11 @@
 }
 
 @layer components {
-  /**
-   * Custom container utility that centers content and adds responsive padding.
-   *
-   * This overrides Tailwind's default container behavior to:
-   * - Auto-center content (mx-auto)
-   * - Add responsive horizontal padding
-   * - Set max-width for large screens
-   *
-   * Usage: <div className="container">...</div>
-   *
-   * For custom widths, use max-w-* utilities directly:
-   * <div className="max-w-6xl mx-auto px-4">...</div>
-   */
   .container {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-    padding-left: 1rem; /* 16px - mobile padding */
+    padding-left: 1rem;
     padding-right: 1rem;
   }
 
@@ -162,16 +166,86 @@
 
   @media (min-width: 640px) {
     .container {
-      padding-left: 1.5rem; /* 24px - tablet padding */
+      padding-left: 1.5rem;
       padding-right: 1.5rem;
     }
   }
 
   @media (min-width: 1024px) {
     .container {
-      padding-left: 2rem; /* 32px - desktop padding */
+      padding-left: 2rem;
       padding-right: 2rem;
-      max-width: 1280px; /* Standard content width */
+      max-width: 1280px;
     }
+  }
+
+  /* ── Core Fire brand utilities ───────────────────────────── */
+  .fire-gradient {
+    background: linear-gradient(135deg, #E8340A, #FF6B35 60%, #F5A623);
+  }
+  .fire-gradient-text {
+    background: linear-gradient(135deg, #E8340A, #FF6B35 60%, #F5A623);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .fire-glow {
+    box-shadow: 0 4px 20px rgba(232, 52, 10, 0.3);
+  }
+  .fire-glow:hover {
+    box-shadow: 0 8px 30px rgba(232, 52, 10, 0.45);
+  }
+  .accent-bar {
+    height: 3px;
+    background: linear-gradient(90deg, #E8340A, #FF6B35, #F5A623);
+  }
+
+  /* ── Noise overlay ───────────────────────────────────────── */
+  .noise-overlay::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.025'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ── Status badge colours ────────────────────────────────── */
+  .status-active   { @apply bg-green-500/10 text-green-400 border border-green-500/25; }
+  .status-pending  { @apply bg-amber-500/10 text-amber-400 border border-amber-500/25; }
+  .status-draft    { @apply bg-slate-500/10 text-slate-400 border border-slate-500/25; }
+  .status-cancelled{ @apply bg-red-500/10 text-red-400 border border-red-500/25; }
+  .status-completed{ @apply bg-blue-500/10 text-blue-400 border border-blue-500/25; }
+
+  /* ── Animated blink ──────────────────────────────────────── */
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.3; }
+  }
+  .blink { animation: blink 2s infinite; }
+
+  /* ── Stat card hover ─────────────────────────────────────── */
+  .stat-card {
+    @apply rounded-xl border bg-card p-5 transition-all duration-200;
+  }
+  .stat-card:hover {
+    @apply shadow-lg;
+    border-color: rgba(232, 52, 10, 0.3);
+  }
+
+  /* ── Portal nav ──────────────────────────────────────────── */
+  .portal-nav-item {
+    @apply flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150;
+    color: var(--muted-foreground);
+  }
+  .portal-nav-item:hover {
+    @apply bg-secondary;
+    color: var(--foreground);
+  }
+  .portal-nav-item.active {
+    background: rgba(232, 52, 10, 0.1);
+    border: 1px solid rgba(232, 52, 10, 0.25);
+    color: #FF6B35;
   }
 }
