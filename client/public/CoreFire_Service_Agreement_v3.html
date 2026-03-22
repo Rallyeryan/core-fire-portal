@@ -961,9 +961,9 @@ function buildSvcRow(s, cat) {
   const qty = selectedServices[s.id]?.qty || 1;
   function priceCell(price, colCls, freqKey) {
     const isActive = isSel && selFreq === freqKey;
-    if (price == null) return `<div class="freq-cell ${colCls}"><span class="fval na">—</span></div>`;
+    const val = (price != null) ? price.toFixed(2) : '0.00';
     return `<div class="freq-cell ${colCls}${isActive?' '+colCls+'-active':''}" onclick="event.stopPropagation(); selectAndFreq('${s.id}','${cat.id}','${freqKey}')">
-      <input class="price-input ${colCls}-inp" type="number" value="${price.toFixed(2)}" min="0" step="0.01"
+      <input class="price-input ${colCls}-inp" type="number" value="${val}" min="0" step="0.01" placeholder="0.00"
         onclick="event.stopPropagation()"
         oninput="updatePrice('${s.id}','${freqKey}',this.value)"
         title="Price (£)">
@@ -972,10 +972,9 @@ function buildSvcRow(s, cat) {
 
   function qtyCell(price, colCls, freqKey) {
     const isActive = isSel && selFreq === freqKey;
-    if (price == null) return `<div class="freq-cell ${colCls}"><span class="fval na">—</span></div>`;
     const cellQty = (isSel && isActive) ? qty : 1;
     return `<div class="freq-cell ${colCls}${isActive?' '+colCls+'-active':''}" onclick="event.stopPropagation()">
-      <input class="qty-input ${colCls}-inp" type="number" value="${cellQty}" min="1" max="999"
+      <input class="qty-input ${colCls}-inp" type="number" value="${cellQty}" min="1" max="999" placeholder="1"
         onclick="event.stopPropagation()"
         oninput="updateQtyForFreq('${s.id}','${cat.id}','${freqKey}',this.value)"
         title="Quantity">
