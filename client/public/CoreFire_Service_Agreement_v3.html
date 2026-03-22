@@ -136,6 +136,7 @@ h1.hero-title span{background:linear-gradient(135deg,var(--fire),var(--ember) 60
 .svc-tag{font-size:9px;font-weight:700;letter-spacing:.8px;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,.05);color:var(--dim);border:1px solid var(--border)}
 .svc-tag.std{color:var(--teal);background:rgba(20,184,166,.08);border-color:rgba(20,184,166,.2)}
 .svc-tag.oneoff{color:#F87171;background:rgba(248,113,113,.08);border-color:rgba(248,113,113,.25)}
+.svc-tag.adhoc{color:#FBBF24;background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.25)}
 
 /* Frequency cells */
 .freq-cell{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 4px;height:100%;border-left:1px solid var(--border);text-align:center}
@@ -731,123 +732,154 @@ canvas.sig-canvas{display:block;cursor:crosshair;touch-action:none}
 // activeFreq stored in selectedServices[id].freq ('annual'|'biAnnual'|'quarterly')
 const CATALOG = [
   {
-    id:'fda', icon:'🔥', name:'Fire Detection & Alarm', std:'BS 5839-1:2025',
+    id:'fda', icon:'🔥', name:'Fire Detection & Alarm', std:'BS5839 Part 1 2025',
     color:'rgba(232,52,10,.12)', colorAccent:'#E8340A',
     services:[
-      {id:'FDA-001',name:'Fire Alarm Takeover / Special Inspection',desc:'One-off service. Review all existing documentation, certificates, drawings, commissioning records. Test system compliance, document findings and defects.',std:'BS 5839-1:2025',annual:350,biAnnual:null,quarterly:null,oneOff:true},
-      {id:'FDA-002',name:'Inspection & Maintenance of Fire Detection & Alarm',desc:'Annual, Bi-Annual & Quarterly PPM. Asset register, defect reports, cause-and-effect testing, audibility, standby capacity.',std:'BS 5839-1:2025',annual:1500,biAnnual:1850,quarterly:2400},
-      {id:'FDA-003',name:'Weekly Fire Alarm Testing (×52)',desc:'Weekly manual call point test on rotation. Log book entry, fault reporting, annual summary.',std:'BS 5839-1:2025',annual:1040,biAnnual:null,quarterly:null},
-      {id:'FDA-004',name:'VESDA Aspirating Smoke Detection PPM',desc:'Pipe integrity, filter cleaning, sensitivity testing, threshold verification to EN 54-20. Specialist VESDA engineers.',std:'BS 5839-1:2025 / EN 54-20',annual:500,biAnnual:720,quarterly:null},
-      {id:'FDA-005',name:'Disabled Refuge System PPM',desc:'Testing of all call points, master control units, speech communication, and battery standby in accordance with BS 5839-9.',std:'BS 5839-9 / BS 9266',annual:280,biAnnual:400,quarterly:null},
-      {id:'FDA-006',name:'Fire Alarm / Sprinkler System Maintenance',desc:'PPM of fire alarm integrated with sprinkler systems. Testing of flow switches, pressure switches, alarm valve connections.',std:'BS 5839-1:2025 / BS EN 12845',annual:420,biAnnual:600,quarterly:null},
+      {id:'FDA-001',name:'Fire Detection & Alarm System Takeover / Special Inspection',std:'BS5839 Part 1 2025',annual:null,biAnnual:null,quarterly:null,oneOff:true},
+      {id:'FDA-002',name:'Inspection & Maintenance of Fire Detection & Alarm',std:'BS5839-1:2025',annual:null,biAnnual:null,quarterly:null},
+      {id:'FDA-003',name:'Weekly Fire Alarm Testing',std:'BS5839-1:2025',annual:null,biAnnual:null,quarterly:null},
+      {id:'FDA-004',name:'Inspection & Maintenance of Disabled Refuge System',std:'BS 5839-9 / BS 9266',annual:null,biAnnual:null,quarterly:null},
+      {id:'FDA-005',name:'Fire Alarm Sprinkler System Maintenance',std:'BS5839-1:2025 / BS EN 12845',annual:null,biAnnual:null,quarterly:null},
+      {id:'FDA-006',name:'VESDA Alarm System Maintenance',std:'BS5839-1:2025',annual:null,biAnnual:null,quarterly:null},
+      {id:'FDA-007',name:'Aspirating Smoke Detection System Maintenance',std:'BS5839-1:2025 / EN 54-20',annual:null,biAnnual:null,quarterly:null},
     ]
   },
   {
-    id:'ia', icon:'🔒', name:'Intruder Alarm', std:'EN 50131 / PD 6662:2017',
+    id:'ia', icon:'🔒', name:'Intruder Alarm', std:'EN 50131 / PD6662',
     color:'rgba(59,130,246,.1)', colorAccent:'#3B82F6',
     services:[
-      {id:'IA-001',name:'Intruder Alarm Takeover / Special Inspection',desc:'One-off service. Review documentation, certificates, drawings, manuals. Test system compliance with PD6662 and EN 50131.',std:'EN 50131 / PD 6662',annual:250,biAnnual:null,quarterly:null,oneOff:true},
-      {id:'IA-002',name:'Inspection & Maintenance of Intruder Detection & Alarm',desc:'Annual & bi-annual PPM. Full detector walk test, keypad checks, battery standby, tamper testing, ARC signalling verification.',std:'EN 50131 / PD 6662',annual:700,biAnnual:950,quarterly:null},
+      {id:'IA-001',name:'Intruder Detection & Alarm System Takeover / Special Inspection',std:'EN 50131 / PD6662',annual:null,biAnnual:null,quarterly:null,oneOff:true},
+      {id:'IA-002',name:'Inspection & Maintenance of Intruder Detection & Alarm',std:'EN 50131 / PD6662',annual:null,biAnnual:null,quarterly:null},
     ]
   },
   {
     id:'cctv', icon:'📷', name:'CCTV Surveillance', std:'BS EN 62676',
     color:'rgba(139,92,246,.1)', colorAccent:'#8B5CF6',
     services:[
-      {id:'CCTV-001',name:'Inspection & Maintenance of CCTV System',desc:'Camera alignment and focus, recording integrity, storage capacity, remote access testing, image quality assessment.',std:'BS EN 62676',annual:350,biAnnual:500,quarterly:null},
+      {id:'CCTV-001',name:'Inspection & Maintenance of CCTV System',std:'BS EN 62676',annual:null,biAnnual:null,quarterly:null},
     ]
   },
   {
     id:'ac', icon:'🚪', name:'Access Control', std:'BS EN 60839 / NCP 109',
     color:'rgba(20,184,166,.1)', colorAccent:'#14B8A6',
     services:[
-      {id:'AC-001',name:'Inspection & Maintenance of Access Control',desc:'Door controller testing, credential reader verification, locking device checks, battery backup, audit trail review.',std:'BS EN 60839 / NCP 109',annual:420,biAnnual:600,quarterly:null},
-      {id:'AC-002',name:'Disabled Intercom / Call System PPM',desc:'Testing of call points, speech units, visual indicators, control panels. BS 8300 accessibility compliance.',std:'BS 8300 / BS EN 60839',annual:220,biAnnual:320,quarterly:null},
-      {id:'AC-003',name:'Keypad / Fob Alarm Maintenance',desc:'Annual inspection and maintenance of keypad and fob-based access control alarm systems.',std:'EN 50131 / PD 6662',annual:180,biAnnual:260,quarterly:null},
+      {id:'AC-001',name:'Inspection & Maintenance of Access Control System',std:'BS EN 60839 / NCP 109',annual:null,biAnnual:null,quarterly:null},
+      {id:'AC-002',name:'Inspection & Maintenance of Disabled Intercom/Call System',std:'BS 8300 / BS EN 60839',annual:null,biAnnual:null,quarterly:null},
+      {id:'AC-003',name:'Inspection & Maintenance of Keypad/Fob Alarm',std:'EN 50131 / PD6662',annual:null,biAnnual:null,quarterly:null},
     ]
   },
   {
-    id:'pfe', icon:'🧯', name:'Portable Fire Equipment', std:'BS 5306-3 / BS EN 1869',
+    id:'pfe', icon:'🧯', name:'Portable Fire Equipment', std:'BS 5306 Part 3',
     color:'rgba(245,166,35,.1)', colorAccent:'#F5A623',
     services:[
-      {id:'PFE-001',name:'BS5306 Part 3 Attendance Charge',desc:"Qualified engineer's visit, travel, setup, and reporting for portable fire equipment attendance.",std:'BS 5306 Part 3',annual:95,biAnnual:null,quarterly:null},
-      {id:'PFE-002',name:'Inspect & Maintain Portable Fire Extinguisher',desc:'Visual inspection, pressure check, weight verification, discharge test, label and signage check, service record update. Per unit.',std:'BS 5306-3',annual:7.95,biAnnual:null,quarterly:null},
-      {id:'PFE-003',name:'Commission Portable Fire Equipment',desc:'Placement verification, pressure and weight checks, safety pin and tamper seal fitting, signage, commissioning certificate. Per unit.',std:'BS 5306',annual:12,biAnnual:null,quarterly:null},
-      {id:'PFE-004',name:'Inspect & Maintain Fire Blanket',desc:'Condition check of blanket fabric and packaging, mounting bracket inspection, accessibility assessment, service label. Per unit.',std:'BS EN 1869',annual:3,biAnnual:null,quarterly:null},
-      {id:'PFE-005',name:'Ad Hoc Half-Hourly Rate (Reactive Repairs)',desc:'Reactive attendance for unplanned repairs to portable fire equipment. Per half-hour on site. Excludes parts.',std:'BS 5306',annual:42.50,biAnnual:null,quarterly:null},
+      {id:'PFE-001',name:'Annual Portable Fire Equipment / BS5306 Part 3 Attendance Charge',std:'BS 5306 Part 3',annual:null,biAnnual:null,quarterly:null},
+      {id:'PFE-002',name:'Inspect & Maintain Portable Fire Equipment',std:'BS 5306 / PFE-PPM',annual:null,biAnnual:null,quarterly:null},
+      {id:'PFE-003',name:'Commission Portable Fire Equipment',std:'BS 5306',annual:null,biAnnual:null,quarterly:null},
+      {id:'PFE-004',name:'Inspect & Maintain Fire Blanket',std:'BS EN 1869 / FB-PPM',annual:null,biAnnual:null,quarterly:null},
+      {id:'PFE-005',name:'Ad Hoc Half-Hourly Rate (Reactive Repairs & Related Services)',std:'BS 5306 / PFE-LAB1',annual:null,biAnnual:null,quarterly:null},
     ]
   },
   {
-    id:'ffe', icon:'💧', name:'Fixed Fire Equipment', std:'BS 9990:2015 / BS EN 671-3',
+    id:'ffe', icon:'💧', name:'Fixed Fire Equipment', std:'BS9990:2015',
     color:'rgba(14,165,233,.1)', colorAccent:'#0EA5E9',
     services:[
-      {id:'FFE-001',name:'Inspection & Maintenance of Dry & Wet Risers',desc:'Annual PPM in accordance with BS 9990. Flow and pressure testing, valve operation, pit and cover inspection.',std:'BS 9990:2015',annual:380,biAnnual:540,quarterly:null},
-      {id:'FFE-002',name:'Inspection & Maintenance of Fire Hydrants',desc:'Flow and pressure testing, valve operation checks, pit and cover inspection, hydrant board verification.',std:'BS 750:2012',annual:240,biAnnual:null,quarterly:null},
-      {id:'FFE-003',name:'Fire Hose Reel Inspection & Maintenance',desc:'Hose condition and length check, reel rotation, swing test, valve operation, flow test, pressure verification.',std:'BS EN 671-3',annual:190,biAnnual:null,quarterly:null},
+      {id:'FFE-001',name:'Inspection & Maintenance of Dry & Wet Risers',std:'BS9990:2015',annual:null,biAnnual:null,quarterly:null},
+      {id:'FFE-002',name:'Inspection & Maintenance of Fire Hydrants',std:'BS 750:2012',annual:null,biAnnual:null,quarterly:null},
+      {id:'FFE-003',name:'Fire Hose Reel Inspection & Maintenance',std:'BS EN 671-3',annual:null,biAnnual:null,quarterly:null},
     ]
   },
   {
-    id:'spr', icon:'💦', name:'Fire Sprinkler Systems', std:'BS EN 12845',
+    id:'spr', icon:'💦', name:'Fire Sprinkler Systems', std:'BS EN 12845 / NFPA 13',
     color:'rgba(6,182,212,.1)', colorAccent:'#06B6D4',
     services:[
-      {id:'SPR-001',name:'Sprinkler System Wet Systems Service',desc:'Valve room inspection, alarm valve servicing, sprinkler head condition, pipe and hanger inspection, water supply verification.',std:'BS EN 12845',annual:850,biAnnual:null,quarterly:1600},
-      {id:'SPR-002',name:'Sprinkler System Dry Systems Service',desc:'Air pressure checks, dry pipe valve inspection, trip test, sprinkler head condition check, full inspection report.',std:'BS EN 12845',annual:920,biAnnual:null,quarterly:null},
-      {id:'SPR-003',name:'Sprinkler System Foam System Service',desc:'Foam concentrate sampling, proportioner testing, nozzle condition, system performance verification.',std:'BS EN 12845 / NFPA 11',annual:1100,biAnnual:null,quarterly:null},
-      {id:'SPR-004',name:'Sprinkler System Quarterly Inspection',desc:'Quarterly valve room inspection, control valve checks, alarm valve servicing, water supply verification.',std:'BS EN 12845',annual:null,biAnnual:null,quarterly:1600},
-      {id:'SPR-005',name:'Sprinkler Head Replacement (per head)',desc:'Supply and replacement of sprinkler heads. Removal of defective heads, pressure test, updated inspection record.',std:'BS EN 12845',annual:45,biAnnual:null,quarterly:null},
+      {id:'SPR-001',name:'Sprinkler System Halon Pump Service',std:'BS EN 12845 / NFPA 13',annual:null,biAnnual:null,quarterly:null},
+      {id:'SPR-002',name:'Sprinkler System Motor Pump Service',std:'BS EN 12845 / NFPA 13',annual:null,biAnnual:null,quarterly:null},
+      {id:'SPR-003',name:'Sprinkler System Wet Systems Service',std:'BS EN 12845',annual:null,biAnnual:null,quarterly:null},
+      {id:'SPR-004',name:'Sprinkler System Dry Systems Service',std:'BS EN 12845',annual:null,biAnnual:null,quarterly:null},
+      {id:'SPR-005',name:'Sprinkler System Foam System Service',std:'BS EN 12845 / NFPA 11',annual:null,biAnnual:null,quarterly:null},
+      {id:'SPR-006',name:'Sprinkler System Deluge System Service',std:'BS EN 12845',annual:null,biAnnual:null,quarterly:null},
+      {id:'SPR-007',name:'Sprinkler Head Replacement',std:'BS EN 12845',annual:null,biAnnual:null,quarterly:null},
+      {id:'SPR-008',name:'Sprinkler System Quarterly Inspection',std:'BS EN 12845',annual:null,biAnnual:null,quarterly:null},
+      {id:'SPR-009',name:'Sprinkler System Halon/Inert Test',std:'BS EN 12845 / NFPA 13',annual:null,biAnnual:null,quarterly:null},
+      {id:'SPR-010',name:'Sprinkler System 5 Year Inspection/Inspection',std:'BS EN 12845',annual:null,biAnnual:null,quarterly:null},
     ]
   },
   {
-    id:'fsg', icon:'⚗️', name:'Fire Suppression Gas', std:'BS EN 15004 / NFPA 2001',
+    id:'fsg', icon:'⚗️', name:'Fire Suppression Gas', std:'BS EN 15004 / BS 8489',
     color:'rgba(168,85,247,.1)', colorAccent:'#A855F7',
     services:[
-      {id:'FSG-001',name:'Gas & Watermist Suppression PPM',desc:'Cylinder weight and pressure checks, nozzle and pipework inspection, detection system testing, control panel verification, discharge simulation.',std:'BS EN 15004 / BS 8489',annual:1200,biAnnual:null,quarterly:null},
-      {id:'FSG-002',name:'FM200 Suppression System PPM',desc:'Agent quantity verification, cylinder valve inspection, nozzle condition, discharge simulation. Server room protection.',std:'BS EN 15004-9 / NFPA 2001',annual:2200,biAnnual:null,quarterly:null},
-      {id:'FSG-003',name:'CO2 Suppression System PPM',desc:'Annual inspection of CO2 systems. Cylinder content verification, valve and pipework inspection, detection interface testing.',std:'BS EN 15004-8 / NFPA 12',annual:1800,biAnnual:null,quarterly:null},
-      {id:'FSG-004',name:'Inert Gas Suppression System PPM',desc:'Pressure vessel inspection, selector valve testing, nozzle condition check, control panel verification.',std:'BS EN 15004-6 / NFPA 2001',annual:1600,biAnnual:null,quarterly:null},
-      {id:'FSG-005',name:'Watermist System PPM',desc:'Pump set inspection, nozzle condition, pipe network pressure test, detection system interface, and full system report.',std:'BS 8489',annual:1400,biAnnual:1900,quarterly:null},
+      {id:'FSG-001',name:'Inspection & Maintenance of Gas & Watermist Fire Suppression',std:'BS EN 15004 / BS 8489',annual:null,biAnnual:null,quarterly:null},
+      {id:'FSG-002',name:'Kitchen Fire Suppression System Maintenance',std:'BS EN 15004 / NFPA 17A',annual:null,biAnnual:null,quarterly:null},
+      {id:'FSG-003',name:'CO2 Fire Suppression System Maintenance',std:'BS EN 15004-4 / NFPA 12',annual:null,biAnnual:null,quarterly:null},
+      {id:'FSG-004',name:'Inert Gas Fire Suppression System Maintenance',std:'BS EN 15004-5',annual:null,biAnnual:null,quarterly:null},
+      {id:'FSG-005',name:'FM-200 / Novec 1230 Clean Agent System Maintenance',std:'BS EN 15004 / NFPA 2001',annual:null,biAnnual:null,quarterly:null},
     ]
   },
   {
-    id:'el', icon:'💡', name:'Emergency Lighting', std:'BS 5266-1:2023',
+    id:'el', icon:'💡', name:'Emergency Lighting', std:'BS5266-1:2023',
     color:'rgba(234,179,8,.1)', colorAccent:'#EAB308',
     services:[
-      {id:'EL-001',name:'Emergency Lighting PPM',desc:'Annual and monthly testing of all emergency luminaires, exit signs, central battery systems. Includes test reports and compliance certification.',std:'BS 5266-1:2023',annual:500,biAnnual:null,quarterly:850},
-      {id:'EL-002',name:'Emergency Lighting 3-Hour Duration Test',desc:'Full 3-hour discharge test of emergency lighting system per BS 5266-1. All faults documented and reported.',std:'BS 5266-1:2023',annual:320,biAnnual:null,quarterly:null},
-      {id:'EL-003',name:'Central Battery System PPM',desc:'Annual inspection of central battery unit, cell condition testing, charging circuit verification, load test.',std:'BS 5266-1:2023',annual:480,biAnnual:null,quarterly:null},
+      {id:'EL-001',name:'Inspection & Maintenance of Emergency Lighting',std:'BS5266-1:2023',annual:null,biAnnual:null,quarterly:null},
+      {id:'EL-002',name:'Emergency Lighting Monthly Testing',std:'BS5266-1:2023',annual:null,biAnnual:null,quarterly:null},
+      {id:'EL-003',name:'Central Battery System Maintenance',std:'BS5266-1:2023 / BS EN 50171',annual:null,biAnnual:null,quarterly:null},
     ]
   },
   {
-    id:'pfp', icon:'🧱', name:'Passive Fire Protection', std:'BS 8214:2016 / BS 9999',
+    id:'pfp', icon:'🧱', name:'Passive Fire Protection', std:'BS 9999 / BS 476',
     color:'rgba(239,68,68,.1)', colorAccent:'#EF4444',
     services:[
-      {id:'PFP-001',name:'Fire Door Inspection & Maintenance',desc:'Inspection and testing of fire doors, including door furniture, seals, closers, and integrity in accordance with BS 8214 and BS 9999.',std:'BS 8214:2016 / BS 9999',annual:850,biAnnual:1100,quarterly:null},
-      {id:'PFP-002',name:'Compartmentation Survey',desc:'Visual survey of fire compartments to identify breaches in floors, walls, and ceilings. Detailed photographic report with recommended remedials.',std:'BS 9999 / Approved Doc B',annual:1200,biAnnual:null,quarterly:null},
-      {id:'PFP-003',name:'Firestopping & Penetration Seals Inspection',desc:'Inspection of all fire-rated penetrations and seals. Photographic record and defect schedule for remedial quotation.',std:'BS 9999 / BS EN 1366',annual:650,biAnnual:null,quarterly:null},
-      {id:'PFP-004',name:'Fire Risk Assessment',desc:'Qualified Type 1 Fire Risk Assessment in accordance with RRO 2005 and PAS 79. Detailed report with prioritised action plan.',std:'RRO 2005 / PAS 79',annual:950,biAnnual:null,quarterly:null},
+      {id:'PFP-001',name:'Fire Partition Inspection & Maintenance',std:'BS 9999 / BS 476',annual:null,biAnnual:null,quarterly:null},
+      {id:'PFP-002',name:'Fire Door Inspection & Maintenance',std:'BS 8214:2016',annual:null,biAnnual:null,quarterly:null},
+      {id:'PFP-003',name:'Passive Fire Protection Survey',std:'BS 9999 / BS 476',annual:null,biAnnual:null,quarterly:null},
+      {id:'PFP-004',name:'Fire Damper Inspection & Testing',std:'BS 9999:2023',annual:null,biAnnual:null,quarterly:null},
+      {id:'PFP-005',name:'Smoke Control System Testing',std:'BS 9991 / BS EN 12101',annual:null,biAnnual:null,quarterly:null},
     ]
   },
   {
-    id:'mon', icon:'📡', name:'Monitoring & Remote Services', std:'BS EN 50518 / EN 50136',
+    id:'fsm', icon:'📋', name:'Fire Safety Management', std:'PAS 79-1:2020 / RRO 2005',
+    color:'rgba(251,146,60,.1)', colorAccent:'#FB923C',
+    services:[
+      {id:'FSM-001',name:'FRA Non-Housing (PAS 79-1:2020)',std:'PAS 79-1:2020 / RRO 2005',annual:null,biAnnual:null,quarterly:null},
+      {id:'FSM-002',name:'FRA Housing (PAS 79-2:2020 / BS 9792:2025)',std:'PAS 79-2:2020 / BS 9792:2025',annual:null,biAnnual:null,quarterly:null},
+      {id:'FSM-003',name:'FRA Housing Type 1 (Common Parts Non-Intrusive)',std:'PAS 79-2:2020 / BS 9792:2025',annual:null,biAnnual:null,quarterly:null},
+      {id:'FSM-004',name:'FRA Housing Type 2 (Common Parts Intrusive)',std:'PAS 79-2:2020 / BS 9792:2025',annual:null,biAnnual:null,quarterly:null},
+      {id:'FSM-005',name:'FRA Housing Type 3 (Common Parts & Flats Non-Intrusive)',std:'PAS 79-2:2020 / BS 9792:2025',annual:null,biAnnual:null,quarterly:null},
+      {id:'FSM-006',name:'FRA Housing Type 4 (Common Parts & Flats Intrusive)',std:'PAS 79-2:2020 / BS 9792:2025',annual:null,biAnnual:null,quarterly:null},
+      {id:'FSM-007',name:'Fire Marshal & Fire Warden Training',std:'RRO 2005',annual:null,biAnnual:null,quarterly:null},
+    ]
+  },
+  {
+    id:'mon', icon:'📡', name:'Monitoring & Remote Services', std:'BS EN 50518 / BS 5979',
     color:'rgba(34,197,94,.1)', colorAccent:'#22C55E',
     services:[
-      {id:'MON-001',name:'DualCom DP2 Radio/Radio – Grade 2 Monitoring',desc:'Dual-path Grade 2 Radio/Radio communicator. Two independent radio paths to the ARC. £50 connection fee.',std:'BS EN 50518 / EN 50136 Gr.2',annual:480,biAnnual:null,quarterly:null},
-      {id:'MON-002',name:'DualCom DP2 LAN/Radio – Grade 2 Monitoring',desc:'LAN primary with radio backup. Maintains ARC connectivity on broadband failure. Grade 2 compliant.',std:'BS EN 50518 / EN 50136 Gr.2',annual:520,biAnnual:null,quarterly:null},
-      {id:'MON-003',name:'DualCom DP3 Radio/Radio – Grade 3 Monitoring',desc:'High-risk commercial sites. Two independent radio paths with enhanced signalling integrity. Grade 3.',std:'BS EN 50518 / EN 50136 Gr.3',annual:720,biAnnual:null,quarterly:null},
-      {id:'MON-004',name:'DualCom DP4 Radio/Radio – Grade 4 Monitoring',desc:'Maximum signalling integrity for highest-risk sites. Two independent radio paths. Grade 4 compliant.',std:'EN 50136 Grade 4',annual:990,biAnnual:null,quarterly:null},
-      {id:'MON-005',name:'CLSS Fire Alarm Remote Management – Cloud',desc:'Cloud-based remote monitoring and management for compatible fire alarm panels. Real-time event notification.',std:'BS 5839-1:2025',annual:650,biAnnual:null,quarterly:null},
-      {id:'MON-006',name:'Remote Diagnostics – Reset Code Generation',desc:'Operator generates and provides system reset codes. Resolves panel faults without site attendance. Per incident.',std:'EN 50136',annual:35,biAnnual:null,quarterly:null},
-      {id:'MON-007',name:'Remote Diagnostics – Engineer Telephone Advice',desc:'Technical support by a qualified engineer via telephone. Fault diagnosis, system queries. Per 0.5hr.',std:'N/A',annual:45,biAnnual:null,quarterly:null},
+      {id:'MON-001',name:'Initial Take Over and Setup of Monitoring Including Police and Fire Service Connection',std:'BS EN 50518 / BS 5979',annual:null,biAnnual:null,quarterly:null,oneOff:true},
+      {id:'MON-002',name:'DigiAir Pro GPRS  –  Single-Path GPRS Alarm Communicator',std:'BS EN 50518 / BS 5979',annual:null,biAnnual:null,quarterly:null},
+      {id:'MON-003',name:'DigiAir Pro LAN  –  Single-Path IP Alarm Communicator',std:'BS EN 50518 / BS 5979',annual:null,biAnnual:null,quarterly:null},
+      {id:'MON-004',name:'DigiAir Pro WiFi  –  Single-Path Alarm Communicator Over WiFi',std:'BS EN 50518 / BS 5979',annual:null,biAnnual:null,quarterly:null},
+      {id:'MON-005',name:'DigiAir Pro Fire  –  Dedicated Fire Alarm Communicator',std:'BS EN 50518 / BS5839-1:2025',annual:null,biAnnual:null,quarterly:null},
+      {id:'MON-006',name:'DualCom GradeShift Pro DP2 Radio/Radio  –  Dual-Path Grade 2 Communicator',std:'BS EN 50518 / EN 50136',annual:null,biAnnual:null,quarterly:null},
+      {id:'MON-007',name:'DualCom GradeShift Pro DP2 LAN/Radio  –  Dual-Path Grade 2 Communicator',std:'BS EN 50518 / EN 50136',annual:null,biAnnual:null,quarterly:null},
+      {id:'MON-008',name:'DualCom GradeShift Pro DP2+ Radio/Radio  –  Grade 2+ Dual-Path Communicator',std:'BS EN 50518 / EN 50136',annual:null,biAnnual:null,quarterly:null},
+      {id:'MON-009',name:'DualCom GradeShift Pro DP2+ LAN/Radio  –  Grade 2+ Communicator',std:'BS EN 50518 / EN 50136',annual:null,biAnnual:null,quarterly:null},
+      {id:'MON-010',name:'DualCom GradeShift Pro DP3 Radio/Radio  –  Grade 3 Dual-Path Communicator',std:'BS EN 50518 / EN 50136',annual:null,biAnnual:null,quarterly:null},
+      {id:'MON-011',name:'DualCom GradeShift Pro DP3 LAN/Radio  –  Grade 3 Dual-Path Communicator',std:'BS EN 50518 / EN 50136',annual:null,biAnnual:null,quarterly:null},
+      {id:'MON-012',name:'DualCom GradeShift Pro DP4 Radio/Radio  –  Grade 4 Dual-Path Communicator',std:'BS EN 50518 / EN 50136',annual:null,biAnnual:null,quarterly:null},
+      {id:'MON-013',name:'CLSS Fire Alarm Remote Management & Monitoring  –  Cloud-Based',std:'BS5839-1:2025',annual:null,biAnnual:null,quarterly:null},
+      {id:'MON-014',name:'Nimbus Fire Alarm Remote Management & Monitoring  –  Cloud-Based',std:'BS5839-1:2025',annual:null,biAnnual:null,quarterly:null},
+      {id:'MON-015',name:'Remote Diagnostics  –  Operator Generates Reset Code',std:'Remote',annual:32.5,biAnnual:null,quarterly:null,adHoc:true},
+      {id:'MON-016',name:'Remote Diagnostics  –  Operator Remotely Controls System',std:'Remote',annual:39.0,biAnnual:null,quarterly:null,adHoc:true},
+      {id:'MON-017',name:'Remote Diagnostics  –  Engineer Telephone Advice',std:'Remote',annual:39.0,biAnnual:null,quarterly:null,adHoc:true},
+      {id:'MON-018',name:'Remote Diagnostics  –  Operator Silences Fire Alarm',std:'Remote',annual:13.0,biAnnual:null,quarterly:null,adHoc:true},
     ]
   },
   {
     id:'ecs', icon:'🚨', name:'Emergency Callout Services', std:'24/7 Response',
     color:'rgba(239,68,68,.1)', colorAccent:'#EF4444',
     services:[
-      {id:'ECS-001',name:'Emergency Callout – 24/7 365 Days',desc:'24/7 emergency attendance including out-of-hours, weekends, and bank holidays. Response within agreed times. Per callout.',std:'24/7 Response',annual:185,biAnnual:null,quarterly:null},
-      {id:'ECS-002',name:'Time on Site per Engineer (Emergency)',desc:'Emergency engineer time after initial attendance charge. Out-of-hours, weekends, bank holidays. Per hour, excl. parts.',std:'N/A',annual:95,biAnnual:null,quarterly:null},
-      {id:'ECS-003',name:'Planned Ad Hoc – Attendance Charge',desc:'Engineer attendance for planned ad hoc visits during normal hours. Fault investigation and repairs. Excl. parts.',std:'N/A',annual:85,biAnnual:null,quarterly:null},
-      {id:'ECS-004',name:'Subsequent Time on Site (Ad Hoc)',desc:'Additional engineer time for planned ad hoc visits after initial charge. Normal hours. Per hour, excl. parts.',std:'N/A',annual:65,biAnnual:null,quarterly:null},
+      {id:'ECS-001',name:'Emergency Callout  –  24/7 365 Days (Out of Hours)',std:'24/7 Response',annual:195.0,biAnnual:null,quarterly:null,adHoc:true},
+      {id:'ECS-002',name:'Time on Site per Engineer (Emergency)',std:'Per Hour',annual:97.5,biAnnual:null,quarterly:null,adHoc:true},
+      {id:'ECS-003',name:'Planned Ad Hoc Service  –  Attendance Charge',std:'Ad Hoc',annual:97.5,biAnnual:null,quarterly:null,adHoc:true},
+      {id:'ECS-004',name:'Subsequent Time on Site per Engineer (Ad Hoc)',std:'Ad Hoc',annual:97.5,biAnnual:null,quarterly:null,adHoc:true},
     ]
   },
 ];
@@ -956,10 +988,11 @@ function buildSvcRow(s, cat) {
       </div>
       <div class="svc-info">
         <div class="svc-name">${s.name}</div>
-        <div class="svc-desc">${s.desc}</div>
+        <div class="svc-desc">${s.desc||''}</div>
         <div class="svc-tags">
           <span class="svc-tag std">${s.std}</span>
                     ${s.oneOff ? `<span class="svc-tag oneoff">ONE-OFF</span>` : ""}
+          ${s.adHoc ? `<span class="svc-tag adhoc">AD HOC</span>` : ""}
           <span class="svc-tag">${s.id}</span>
         </div>
       </div>
