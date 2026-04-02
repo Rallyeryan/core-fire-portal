@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Client Portal — Core Fire Protection</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --fire:   #E8340A;
+      --ember:  #FF6B35;
+      --gold:   #F5A623;
+      --bg:     #0D1117;
+      --surface:#161B22;
+      --surface2:#1E2530;
+      --border: rgba(255,255,255,0.08);
+      --text:   #E4ECF4;
+      --muted:  #7A8899;
+      --radius: 14px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ── Utilities ────────────────────────────────────────────────────── */
+    .container { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 1.5rem; }
+    .fire-grad  { background: linear-gradient(135deg, var(--fire), var(--ember) 60%, var(--gold)); }
+    .fire-text  { background: linear-gradient(135deg, var(--fire), var(--ember) 55%, var(--gold));
+                  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .badge      { display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px;
+                  border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+    .badge-fire { background: rgba(232,52,10,.12); border: 1px solid rgba(232,52,10,.3); color: var(--ember); }
+    .badge-green{ background: rgba(34,197,94,.1);  border: 1px solid rgba(34,197,94,.25); color: #4ade80; }
+    .badge-blue { background: rgba(59,130,246,.1); border: 1px solid rgba(59,130,246,.25); color: #60a5fa; }
+    .badge-amber{ background: rgba(245,158,11,.1); border: 1px solid rgba(245,158,11,.25); color: #fbbf24; }
+    .card       { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+    .pill       { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+    .mono       { font-family: 'JetBrains Mono', monospace; }
+    .section-label { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--ember); margin-bottom: .5rem; }
+    .glow-btn   { box-shadow: 0 4px 20px rgba(232,52,10,.35); transition: box-shadow .2s, transform .15s; }
+    .glow-btn:hover { box-shadow: 0 8px 32px rgba(232,52,10,.5); transform: translateY(-1px); }
+
+    /* ── Noise overlay ────────────────────────────────────────────────── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+      opacity: .35;
+    }
+
+    /* ── Nav ──────────────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(13,17,23,.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-accent { height: 3px; background: linear-gradient(90deg, var(--fire), var(--ember), var(--gold)); }
+    .nav-inner  { display: flex; align-items: center; justify-content: space-between; padding: .85rem 1.5rem; max-width: 1180px; margin: 0 auto; }
+    .nav-logo   { height: 38px; object-fit: contain; }
+    .nav-links  { display: flex; align-items: center; gap: 2rem; }
+    .nav-links a { font-size: .85rem; font-weight: 500; color: var(--muted); transition: color .15s; }
+    .nav-links a:hover { color: var(--ember); }
+    .nav-cta    { display: inline-flex; align-items: center; gap: 8px; padding: 8px 20px;
+                  border-radius: 10px; font-size: .85rem; font-weight: 700; color: #fff;
+                  background: linear-gradient(135deg, var(--fire), var(--ember)); }
+    @media (max-width: 768px) { .nav-links { display: none; } }
+
+    /* ── Hero ─────────────────────────────────────────────────────────── */
+    .hero {
+      position: relative; padding: 140px 0 100px; overflow: hidden;
+      background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(232,52,10,.18) 0%, transparent 70%);
+    }
+    .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .hero-eyebrow { margin-bottom: 1.25rem; }
+    .hero h1 { font-size: clamp(2.4rem, 5vw, 3.6rem); font-weight: 900; line-height: 1.1; margin-bottom: 1.25rem; letter-spacing: -.02em; }
+    .hero p  { font-size: 1.1rem; color: var(--muted); line-height: 1.75; margin-bottom: 2rem; max-width: 500px; }
+    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .btn-primary { display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px;
+                   border-radius: 12px; font-weight: 700; font-size: .95rem; color: #fff;
+                   background: linear-gradient(135deg, var(--fire), var(--ember)); border: none; cursor: pointer; }
+    .btn-outline { display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px;
+                   border-radius: 12px; font-weight: 600; font-size: .95rem; color: var(--text);
+                   background: transparent; border: 1px solid rgba(255,255,255,.15); cursor: pointer;
+                   transition: border-color .15s, background .15s; }
+    .btn-outline:hover { border-color: var(--ember); background: rgba(232,52,10,.06); }
+    .hero-stats { display: flex; gap: 2.5rem; }
+    .hero-stat-val { font-size: 2rem; font-weight: 900; }
+    .hero-stat-lbl { font-size: .78rem; color: var(--muted); margin-top: 2px; }
+    .hero-img-wrap { position: relative; }
+    .hero-img-glow { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(232,52,10,.25), transparent 70%); border-radius: 50%; }
+    .hero-img { position: relative; z-index: 1; width: 100%; max-height: 480px; object-fit: contain; animation: float 6s ease-in-out infinite; }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-18px)} }
+    @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } .hero-img-wrap { display: none; } }
+
+    /* ── Section shared ───────────────────────────────────────────────── */
+    section { padding: 96px 0; }
+    .section-header { text-align: center; margin-bottom: 4rem; }
+    .section-header h2 { font-size: clamp(1.9rem, 3.5vw, 2.8rem); font-weight: 800; letter-spacing: -.02em; margin-bottom: .75rem; }
+    .section-header p  { font-size: 1.05rem; color: var(--muted); max-width: 600px; margin: 0 auto; }
+
+    /* ── Feature grid ─────────────────────────────────────────────────── */
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+    @media (max-width: 900px) { .features-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 560px) { .features-grid { grid-template-columns: 1fr; } }
+    .feature-card { padding: 1.75rem; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--border); transition: border-color .2s, transform .2s, box-shadow .2s; }
+    .feature-card:hover { border-color: rgba(232,52,10,.35); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,.4); }
+    .feature-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.1rem; font-size: 1.4rem; }
+    .feature-icon.fire  { background: rgba(232,52,10,.12); border: 1px solid rgba(232,52,10,.25); }
+    .feature-icon.green { background: rgba(34,197,94,.1);  border: 1px solid rgba(34,197,94,.2); }
+    .feature-icon.blue  { background: rgba(59,130,246,.1); border: 1px solid rgba(59,130,246,.2); }
+    .feature-icon.amber { background: rgba(245,158,11,.1); border: 1px solid rgba(245,158,11,.2); }
+    .feature-icon.purple{ background: rgba(168,85,247,.1); border: 1px solid rgba(168,85,247,.2); }
+    .feature-icon.teal  { background: rgba(20,184,166,.1); border: 1px solid rgba(20,184,166,.2); }
+    .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: .5rem; }
+    .feature-card p  { font-size: .875rem; color: var(--muted); line-height: 1.65; }
+
+    /* ── Portal UI mockup ─────────────────────────────────────────────── */
+    .portal-mockup { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,.6); }
+    .mockup-titlebar { background: var(--surface2); padding: .6rem 1rem; display: flex; align-items: center; gap: .5rem; border-bottom: 1px solid var(--border); }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r { background: #ff5f57; }
+    .dot-y { background: #febc2e; }
+    .dot-g { background: #28c840; }
+    .mockup-url { flex: 1; margin: 0 .75rem; background: rgba(255,255,255,.05); border-radius: 6px; padding: 4px 12px; font-size: .75rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+    .portal-layout { display: grid; grid-template-columns: 220px 1fr; min-height: 480px; }
+    .portal-sidebar { background: rgba(13,17,23,.6); border-right: 1px solid var(--border); padding: 1.25rem .75rem; display: flex; flex-direction: column; gap: .25rem; }
+    .sidebar-brand { display: flex; align-items: center; gap: .6rem; padding: .5rem .75rem; margin-bottom: .75rem; }
+    .sidebar-flame { width: 32px; height: 32px; border-radius: 9px; background: linear-gradient(135deg, var(--fire), var(--ember)); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+    .sidebar-brand-text { font-size: .8rem; font-weight: 700; line-height: 1.2; }
+    .sidebar-brand-sub  { font-size: .68rem; color: var(--muted); }
+    .sidebar-user { display: flex; align-items: center; gap: .6rem; padding: .65rem .75rem; background: rgba(255,255,255,.04); border-radius: 10px; margin-bottom: .5rem; }
+    .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--fire), var(--ember)); display: flex; align-items: center; justify-content: center; font-size: .8rem; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .user-name { font-size: .78rem; font-weight: 600; }
+    .user-email{ font-size: .68rem; color: var(--muted); }
+    .nav-item { display: flex; align-items: center; gap: .6rem; padding: .55rem .75rem; border-radius: 8px; font-size: .8rem; font-weight: 500; color: var(--muted); cursor: pointer; transition: background .15s, color .15s; }
+    .nav-item:hover { background: rgba(255,255,255,.05); color: var(--text); }
+    .nav-item.active { background: rgba(232,52,10,.1); border: 1px solid rgba(232,52,10,.22); color: var(--ember); }
+    .nav-item svg { width: 15px; height: 15px; flex-shrink: 0; }
+    .portal-main { padding: 1.5rem; overflow: hidden; }
+    .portal-main-header { margin-bottom: 1.25rem; }
+    .portal-main-header h3 { font-size: 1rem; font-weight: 700; }
+    .portal-main-header p  { font-size: .78rem; color: var(--muted); }
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: .75rem; margin-bottom: 1.25rem; }
+    .stat-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: .85rem; }
+    .stat-box-label { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: .35rem; }
+    .stat-box-val   { font-size: 1.5rem; font-weight: 800; }
+    .stat-box-sub   { font-size: .68rem; color: var(--muted); margin-top: 2px; }
+    .agreement-list { display: flex; flex-direction: column; gap: .5rem; }
+    .agreement-row { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: .75rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+    .agreement-row:hover { border-color: rgba(232,52,10,.25); }
+    .ag-icon { width: 32px; height: 32px; border-radius: 8px; background: rgba(232,52,10,.1); border: 1px solid rgba(232,52,10,.2); display: flex; align-items: center; justify-content: center; font-size: .9rem; flex-shrink: 0; }
+    .ag-name { font-size: .82rem; font-weight: 600; }
+    .ag-ref  { font-size: .7rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+    .ag-val  { font-size: .85rem; font-weight: 700; color: var(--ember); }
+    .status-pill { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 999px; font-size: .68rem; font-weight: 700; }
+    .status-active    { background: rgba(34,197,94,.1);  border: 1px solid rgba(34,197,94,.25);  color: #4ade80; }
+    .status-pending   { background: rgba(245,158,11,.1); border: 1px solid rgba(245,158,11,.25); color: #fbbf24; }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+    @media (max-width: 700px) { .portal-layout { grid-template-columns: 1fr; } .portal-sidebar { display: none; } .stats-row { grid-template-columns: 1fr 1fr; } }
+
+    /* ── Two-col split sections ───────────────────────────────────────── */
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .split.reverse { direction: rtl; }
+    .split.reverse > * { direction: ltr; }
+    @media (max-width: 860px) { .split, .split.reverse { grid-template-columns: 1fr; direction: ltr; } }
+    .split-text h2 { font-size: clamp(1.7rem, 3vw, 2.4rem); font-weight: 800; letter-spacing: -.02em; margin-bottom: 1rem; line-height: 1.2; }
+    .split-text p  { font-size: .95rem; color: var(--muted); line-height: 1.75; margin-bottom: 1.5rem; }
+    .check-list { display: flex; flex-direction: column; gap: .65rem; }
+    .check-item { display: flex; align-items: flex-start; gap: .65rem; font-size: .9rem; }
+    .check-icon { width: 20px; height: 20px; border-radius: 50%; background: rgba(34,197,94,.12); border: 1px solid rgba(34,197,94,.25); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; font-size: .65rem; color: #4ade80; }
+    .check-item span { color: var(--muted); line-height: 1.5; }
+
+    /* ── Admin mockup ─────────────────────────────────────────────────── */
+    .admin-mockup { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,.5); }
+    .admin-header { background: var(--surface2); padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .admin-title { font-size: .95rem; font-weight: 700; display: flex; align-items: center; gap: .5rem; }
+    .admin-actions { display: flex; gap: .5rem; }
+    .admin-btn { padding: 5px 14px; border-radius: 7px; font-size: .75rem; font-weight: 600; border: 1px solid var(--border); background: var(--surface); color: var(--muted); cursor: pointer; }
+    .admin-btn.primary { background: linear-gradient(135deg, var(--fire), var(--ember)); border-color: transparent; color: #fff; }
+    .kpi-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: .75rem; padding: 1.25rem; }
+    .kpi-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: .85rem; }
+    .kpi-label { font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: .3rem; }
+    .kpi-val   { font-size: 1.4rem; font-weight: 800; }
+    .kpi-sub   { font-size: .65rem; color: var(--muted); margin-top: 2px; }
+    .charts-row { display: grid; grid-template-columns: 2fr 1fr; gap: .75rem; padding: 0 1.25rem 1.25rem; }
+    .chart-box  { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; }
+    .chart-title{ font-size: .78rem; font-weight: 700; margin-bottom: .85rem; display: flex; align-items: center; gap: .4rem; color: var(--muted); }
+    .bar-chart  { display: flex; align-items: flex-end; gap: 6px; height: 80px; }
+    .bar        { flex: 1; border-radius: 4px 4px 0 0; background: linear-gradient(180deg, var(--ember), var(--fire)); min-width: 0; transition: opacity .2s; }
+    .bar:hover  { opacity: .8; }
+    .bar-labels { display: flex; gap: 6px; margin-top: 4px; }
+    .bar-label  { flex: 1; text-align: center; font-size: .6rem; color: var(--muted); }
+    .donut-wrap { display: flex; align-items: center; justify-content: center; height: 100px; position: relative; }
+    .donut-svg  { width: 100px; height: 100px; }
+    .donut-center { position: absolute; text-align: center; }
+    .donut-center-val { font-size: 1.1rem; font-weight: 800; }
+    .donut-center-lbl { font-size: .6rem; color: var(--muted); }
+    .admin-table-wrap { padding: 0 1.25rem 1.25rem; }
+    .admin-table { width: 100%; border-collapse: collapse; font-size: .78rem; }
+    .admin-table th { text-align: left; padding: .5rem .75rem; font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); border-bottom: 1px solid var(--border); }
+    .admin-table td { padding: .6rem .75rem; border-bottom: 1px solid rgba(255,255,255,.04); }
+    .admin-table tr:hover td { background: rgba(255,255,255,.02); }
+    .ref-cell { font-family: 'JetBrains Mono', monospace; color: var(--ember); font-size: .72rem; }
+    .val-cell { font-weight: 700; color: var(--ember); }
+    @media (max-width: 700px) { .kpi-row { grid-template-columns: 1fr 1fr; } .charts-row { grid-template-columns: 1fr; } .admin-table .hide-sm { display: none; } }
+
+    /* ── Document / Download section ──────────────────────────────────── */
+    .doc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    @media (max-width: 700px) { .doc-grid { grid-template-columns: 1fr; } }
+    .doc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; transition: border-color .2s, transform .2s; }
+    .doc-card:hover { border-color: rgba(232,52,10,.3); transform: translateY(-2px); }
+    .doc-icon { width: 44px; height: 44px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+    .doc-title { font-size: .95rem; font-weight: 700; margin-bottom: .25rem; }
+    .doc-desc  { font-size: .82rem; color: var(--muted); line-height: 1.6; }
+    .doc-dl-btn{ display: inline-flex; align-items: center; gap: 6px; padding: 7px 16px; border-radius: 8px; font-size: .78rem; font-weight: 700; background: rgba(232,52,10,.1); border: 1px solid rgba(232,52,10,.25); color: var(--ember); margin-top: auto; width: fit-content; }
+
+    /* ── SLA / Contact section ────────────────────────────────────────── */
+    .sla-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    @media (max-width: 700px) { .sla-grid { grid-template-columns: 1fr; } }
+    .sla-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.75rem; }
+    .sla-card.highlight { border-color: rgba(232,52,10,.3); background: rgba(232,52,10,.05); }
+    .sla-row  { display: flex; align-items: center; justify-content: space-between; padding: .7rem 0; border-bottom: 1px solid rgba(255,255,255,.05); }
+    .sla-row:last-child { border-bottom: none; }
+    .sla-label{ font-size: .85rem; color: var(--muted); display: flex; align-items: center; gap: .5rem; }
+    .sla-val  { font-size: .85rem; font-weight: 700; }
+    .cert-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: .65rem; margin-top: 1rem; }
+    .cert-item{ display: flex; align-items: flex-start; gap: .5rem; padding: .6rem .75rem; background: rgba(255,255,255,.03); border: 1px solid var(--border); border-radius: 9px; }
+    .cert-check { color: #4ade80; font-size: .75rem; margin-top: 2px; flex-shrink: 0; }
+    .cert-name  { font-size: .75rem; font-weight: 700; }
+    .cert-desc  { font-size: .68rem; color: var(--muted); }
+
+    /* ── Renewal alert ────────────────────────────────────────────────── */
+    .renewal-banner { display: flex; align-items: center; gap: .6rem; padding: .6rem 1rem; border-radius: 8px; font-size: .75rem; font-weight: 600; background: rgba(245,158,11,.1); border: 1px solid rgba(245,158,11,.25); color: #fbbf24; margin-top: .5rem; }
+
+    /* ── Steps / How it works ─────────────────────────────────────────── */
+    .steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; position: relative; }
+    .steps-grid::before { content: ''; position: absolute; top: 24px; left: 10%; right: 10%; height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); }
+    @media (max-width: 800px) { .steps-grid { grid-template-columns: 1fr 1fr; } .steps-grid::before { display: none; } }
+    @media (max-width: 500px) { .steps-grid { grid-template-columns: 1fr; } }
+    .step { text-align: center; }
+    .step-num { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--fire), var(--ember)); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 900; color: #fff; margin: 0 auto 1rem; position: relative; z-index: 1; }
+    .step h4 { font-size: .95rem; font-weight: 700; margin-bottom: .4rem; }
+    .step p  { font-size: .82rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── CTA section ──────────────────────────────────────────────────── */
+    .cta-section { background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(232,52,10,.12) 0%, transparent 70%); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .cta-inner  { text-align: center; max-width: 680px; margin: 0 auto; }
+    .cta-inner h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; letter-spacing: -.02em; margin-bottom: 1rem; }
+    .cta-inner p  { font-size: 1.05rem; color: var(--muted); margin-bottom: 2rem; }
+    .cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ── Footer ───────────────────────────────────────────────────────── */
+    footer { padding: 3rem 0; border-top: 1px solid var(--border); }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-logo  { height: 30px; object-fit: contain; opacity: .7; }
+    .footer-copy  { font-size: .78rem; color: var(--muted); }
+    .footer-certs { display: flex; gap: .5rem; flex-wrap: wrap; }
+    .footer-cert  { font-size: .68rem; padding: 3px 9px; border-radius: 6px; background: rgba(232,52,10,.08); border: 1px solid rgba(232,52,10,.18); color: var(--ember); font-weight: 600; }
+
+    /* ── Scroll fade-in ───────────────────────────────────────────────── */
+    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+    .fade-in.visible { opacity: 1; transform: none; }
+  </style>
+</head>
+<body>
+
+<!-- ── Nav ────────────────────────────────────────────────────────────────── -->
+<nav>
+  <div class="nav-accent"></div>
+  <div class="nav-inner">
+    <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663328149057/JiTjkhwCQcNFndvg.png" alt="Core Fire Protection" class="nav-logo" />
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#portal">Portal</a>
+      <a href="#admin">Admin</a>
+      <a href="#documents">Documents</a>
+      <a href="#sla">SLA</a>
+      <a href="https://github.com/Rallyeryan/core-fire-portal" target="_blank" class="nav-cta glow-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        View on GitHub
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ───────────────────────────────────────────────────────────────── -->
+<section class="hero" id="home">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-eyebrow">
+          <span class="badge badge-fire">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            New — Client Portal Launch
+          </span>
+        </div>
+        <h1>Your Fire Safety<br /><span class="fire-text">Portal. Reimagined.</span></h1>
+        <p>A fully redesigned client and admin portal for Core Fire Protection — manage agreements, download documents, track renewals, and analyse your entire portfolio from one intelligent hub.</p>
+        <div class="hero-ctas">
+          <a href="#portal" class="btn-primary glow-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+            Explore the Portal
+          </a>
+          <a href="#features" class="btn-outline">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            See All Features
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <div class="hero-stat-val fire-text">76+</div>
+            <div class="hero-stat-lbl">Services Available</div>
+          </div>
+          <div>
+            <div class="hero-stat-val fire-text">14</div>
+            <div class="hero-stat-lbl">Service Categories</div>
+          </div>
+          <div>
+            <div class="hero-stat-val fire-text">24/7</div>
+            <div class="hero-stat-lbl">Emergency Support</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-img-wrap">
+        <div class="hero-img-glow"></div>
+        <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663328149057/SZeDWIMkEBbvcIZE.png" alt="Core Fire Protection mascot" class="hero-img" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Features Grid ──────────────────────────────────────────────────────── -->
+<section id="features" style="background: linear-gradient(180deg, var(--bg) 0%, var(--surface) 50%, var(--bg) 100%);">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-label">What's New</div>
+      <h2>Everything in the <span class="fire-text">New Portal</span></h2>
+      <p>Six powerful upgrades delivered across the client portal, admin dashboard, and landing page — all built on Core Fire's fire/ember brand palette.</p>
+    </div>
+    <div class="features-grid fade-in">
+
+      <div class="feature-card">
+        <div class="feature-icon fire">🛡️</div>
+        <h3>Client Dashboard</h3>
+        <p>A personalised overview with live stats — total agreements, active contracts, portfolio value, and upcoming renewals — all at a glance.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon green">📋</div>
+        <h3>Agreement Management</h3>
+        <p>Browse, search, and filter all service contracts. Expandable detail cards show pricing breakdowns, equipment lists, and contract terms.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon blue">⬇️</div>
+        <h3>Document Downloads</h3>
+        <p>One-click PDF download for every signed agreement. Documents are retained for 7 years per UK GDPR and BS 5839-1:2025 requirements.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon amber">🔔</div>
+        <h3>Renewal Alerts</h3>
+        <p>Automatic banner warnings when contracts are within 60 days of expiry or have already lapsed — no renewal ever slips through the net.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon purple">📊</div>
+        <h3>Admin Analytics</h3>
+        <p>Bar chart of monthly contract value (last 6 months) and a live pie chart of status distribution — powered by Recharts.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon teal">📞</div>
+        <h3>Contact & SLA Tab</h3>
+        <p>Emergency line, email support, full SLA response times, and a grid of accreditations — BAFE, NSI Gold, BS 5839-1:2025 and more.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Portal Mockup ──────────────────────────────────────────────────────── -->
+<section id="portal">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-label">Client Portal</div>
+      <h2>Your <span class="fire-text">Personal Hub</span></h2>
+      <p>Clients sign in via OAuth and land on a clean, sidebar-driven portal that puts every agreement and document within two clicks.</p>
+    </div>
+
+    <div class="portal-mockup fade-in">
+      <!-- Browser chrome -->
+      <div class="mockup-titlebar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+        <div class="mockup-url">corefireprotection.co.uk/portal</div>
+      </div>
+
+      <!-- App layout -->
+      <div class="portal-layout">
+        <!-- Sidebar -->
+        <div class="portal-sidebar">
+          <div class="sidebar-brand">
+            <div class="sidebar-flame">🔥</div>
+            <div>
+              <div class="sidebar-brand-text">Core Fire</div>
+              <div class="sidebar-brand-sub">Client Portal</div>
+            </div>
+          </div>
+          <div class="sidebar-user">
+            <div class="user-avatar">A</div>
+            <div>
+              <div class="user-name">Acme Ltd</div>
+              <div class="user-email">admin@acme.co.uk</div>
+            </div>
+          </div>
+          <div class="nav-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            Overview
+          </div>
+          <div class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+            Agreements
+          </div>
+          <div class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Documents
+          </div>
+          <div class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            Contact
+          </div>
+        </div>
+
+        <!-- Main content -->
+        <div class="portal-main">
+          <div class="portal-main-header">
+            <h3>Welcome back, Acme Ltd</h3>
+            <p style="font-size:.78rem;color:var(--muted);">Your Core Fire Protection service overview</p>
+          </div>
+
+          <!-- Stats -->
+          <div class="stats-row">
+            <div class="stat-box">
+              <div class="stat-box-label">Agreements</div>
+              <div class="stat-box-val">4</div>
+              <div class="stat-box-sub">All time</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-label">Active</div>
+              <div class="stat-box-val" style="color:#4ade80">3</div>
+              <div class="stat-box-sub">1 pending</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-label">Total Value</div>
+              <div class="stat-box-val" style="color:var(--ember)">£9,240</div>
+              <div class="stat-box-sub">Inc. VAT</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-label">Renewals Due</div>
+              <div class="stat-box-val" style="color:#fbbf24">1</div>
+              <div class="stat-box-sub">Within 60 days</div>
+            </div>
+          </div>
+
+          <!-- Agreement list -->
+          <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:.6rem;">Recent Agreements</div>
+          <div class="agreement-list">
+            <div class="agreement-row">
+              <div class="ag-icon">📄</div>
+              <div style="flex:1;min-width:0">
+                <div class="ag-name">Acme Ltd — Fire Detection</div>
+                <div class="ag-ref">CFP-2026-0042</div>
+                <div class="renewal-banner">⚠ Renews in 38 days — action required</div>
+              </div>
+              <div style="text-align:right;flex-shrink:0">
+                <div class="ag-val">£3,120</div>
+                <div class="status-pill status-active"><span class="status-dot"></span>Active</div>
+              </div>
+            </div>
+            <div class="agreement-row">
+              <div class="ag-icon">📄</div>
+              <div style="flex:1;min-width:0">
+                <div class="ag-name">Acme Ltd — CCTV &amp; Access</div>
+                <div class="ag-ref">CFP-2026-0031</div>
+              </div>
+              <div style="text-align:right;flex-shrink:0">
+                <div class="ag-val">£2,880</div>
+                <div class="status-pill status-active"><span class="status-dot"></span>Active</div>
+              </div>
+            </div>
+            <div class="agreement-row">
+              <div class="ag-icon">📄</div>
+              <div style="flex:1;min-width:0">
+                <div class="ag-name">Acme Ltd — Emergency Lighting</div>
+                <div class="ag-ref">CFP-2025-0018</div>
+              </div>
+              <div style="text-align:right;flex-shrink:0">
+                <div class="ag-val">£1,440</div>
+                <div class="status-pill status-pending"><span class="status-dot"></span>Pending</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── How it works ───────────────────────────────────────────────────────── -->
+<section style="background: var(--surface);">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-label">How It Works</div>
+      <h2>From Sign-In to <span class="fire-text">Full Compliance</span></h2>
+      <p>Four simple steps to access and manage your fire safety agreements through the portal.</p>
+    </div>
+    <div class="steps-grid fade-in">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h4>Sign In</h4>
+        <p>Authenticate securely via OAuth. Your agreements are automatically filtered to your account email.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h4>View Dashboard</h4>
+        <p>See your live stats — active contracts, total value, and any renewals due within 60 days.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h4>Manage Agreements</h4>
+        <p>Browse all contracts, view full breakdowns, and get renewal alerts before they expire.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h4>Download &amp; Share</h4>
+        <p>One-click PDF download for every signed agreement. QR codes for instant mobile access.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Admin Dashboard ────────────────────────────────────────────────────── -->
+<section id="admin">
+  <div class="container">
+    <div class="split fade-in" style="margin-bottom:4rem">
+      <div class="split-text">
+        <div class="section-label">Admin Dashboard</div>
+        <h2>Total Portfolio <span class="fire-text">Visibility</span></h2>
+        <p>The enhanced admin dashboard gives your team a real-time view of every agreement across all clients — with analytics, alerts, and one-click actions.</p>
+        <div class="check-list">
+          <div class="check-item"><div class="check-icon">✓</div><span><strong>Bar chart</strong> — monthly contract value for the last 6 months</span></div>
+          <div class="check-item"><div class="check-icon">✓</div><span><strong>Pie chart</strong> — live status distribution (active, pending, draft…)</span></div>
+          <div class="check-item"><div class="check-icon">✓</div><span><strong>Renewal alerts</strong> — banner warnings for contracts expiring within 60 days</span></div>
+          <div class="check-item"><div class="check-icon">✓</div><span><strong>Status filters</strong> — filter table by all / active / pending / draft / completed / cancelled</span></div>
+          <div class="check-item"><div class="check-icon">✓</div><span><strong>QR codes</strong> — per-agreement QR code linking directly to the client portal</span></div>
+          <div class="check-item"><div class="check-icon">✓</div><span><strong>One-click actions</strong> — view details, download PDF, send confirmation email</span></div>
+        </div>
+      </div>
+      <div>
+        <!-- Admin mockup -->
+        <div class="admin-mockup">
+          <div class="admin-header">
+            <div class="admin-title">
+              🔥 Admin Dashboard
+              <span class="badge badge-fire" style="margin-left:.5rem">Core Fire</span>
+            </div>
+            <div class="admin-actions">
+              <button class="admin-btn">↻ Refresh</button>
+              <button class="admin-btn primary">+ New Agreement</button>
+            </div>
+          </div>
+
+          <!-- Renewal alert -->
+          <div style="padding:.75rem 1.25rem 0">
+            <div class="renewal-banner">⚠ 2 contracts renewing within 60 days &nbsp;·&nbsp; 1 active contract past end date</div>
+          </div>
+
+          <!-- KPIs -->
+          <div class="kpi-row">
+            <div class="kpi-box">
+              <div class="kpi-label">Total</div>
+              <div class="kpi-val">24</div>
+              <div class="kpi-sub">All time</div>
+            </div>
+            <div class="kpi-box">
+              <div class="kpi-label">Active</div>
+              <div class="kpi-val" style="color:#4ade80">18</div>
+              <div class="kpi-sub">Live</div>
+            </div>
+            <div class="kpi-box">
+              <div class="kpi-label">Pending</div>
+              <div class="kpi-val" style="color:#fbbf24">4</div>
+              <div class="kpi-sub">Awaiting</div>
+            </div>
+            <div class="kpi-box">
+              <div class="kpi-label">Renewals</div>
+              <div class="kpi-val" style="color:#fbbf24">2</div>
+              <div class="kpi-sub">60 days</div>
+            </div>
+            <div class="kpi-box">
+              <div class="kpi-label">Value</div>
+              <div class="kpi-val" style="color:var(--ember);font-size:1.1rem">£84k</div>
+              <div class="kpi-sub">Inc. VAT</div>
+            </div>
+          </div>
+
+          <!-- Charts -->
+          <div class="charts-row">
+            <div class="chart-box">
+              <div class="chart-title">📈 Monthly Contract Value</div>
+              <div class="bar-chart">
+                <div class="bar" style="height:40%"></div>
+                <div class="bar" style="height:55%"></div>
+                <div class="bar" style="height:35%"></div>
+                <div class="bar" style="height:75%"></div>
+                <div class="bar" style="height:60%"></div>
+                <div class="bar" style="height:90%"></div>
+              </div>
+              <div class="bar-labels">
+                <div class="bar-label">Nov</div>
+                <div class="bar-label">Dec</div>
+                <div class="bar-label">Jan</div>
+                <div class="bar-label">Feb</div>
+                <div class="bar-label">Mar</div>
+                <div class="bar-label">Apr</div>
+              </div>
+            </div>
+            <div class="chart-box">
+              <div class="chart-title">🥧 Status Split</div>
+              <div class="donut-wrap">
+                <svg class="donut-svg" viewBox="0 0 100 100">
+                  <!-- Active 75% -->
+                  <circle cx="50" cy="50" r="35" fill="none" stroke="#E8340A" stroke-width="14" stroke-dasharray="164.9 219.9" stroke-dashoffset="0" transform="rotate(-90 50 50)" />
+                  <!-- Pending 17% -->
+                  <circle cx="50" cy="50" r="35" fill="none" stroke="#FF6B35" stroke-width="14" stroke-dasharray="37.4 219.9" stroke-dashoffset="-164.9" transform="rotate(-90 50 50)" />
+                  <!-- Draft 8% -->
+                  <circle cx="50" cy="50" r="35" fill="none" stroke="#F5A623" stroke-width="14" stroke-dasharray="17.6 219.9" stroke-dashoffset="-202.3" transform="rotate(-90 50 50)" />
+                </svg>
+                <div class="donut-center">
+                  <div class="donut-center-val">24</div>
+                  <div class="donut-center-lbl">Total</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Table -->
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Ref</th>
+                  <th>Client</th>
+                  <th class="hide-sm">City</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                  <th style="text-align:right">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="ref-cell">CFP-2026-0042</td>
+                  <td style="font-weight:600">Acme Ltd</td>
+                  <td class="hide-sm" style="color:var(--muted)">Glasgow</td>
+                  <td class="val-cell">£3,120</td>
+                  <td><span class="status-pill status-active"><span class="status-dot"></span>Active</span></td>
+                  <td style="text-align:right;color:var(--muted)">👁 ⬇ ✉</td>
+                </tr>
+                <tr>
+                  <td class="ref-cell">CFP-2026-0039</td>
+                  <td style="font-weight:600">Strathclyde NHS</td>
+                  <td class="hide-sm" style="color:var(--muted)">Glasgow</td>
+                  <td class="val-cell">£7,440</td>
+                  <td><span class="status-pill status-active"><span class="status-dot"></span>Active</span></td>
+                  <td style="text-align:right;color:var(--muted)">👁 ⬇ ✉</td>
+                </tr>
+                <tr>
+                  <td class="ref-cell">CFP-2026-0035</td>
+                  <td style="font-weight:600">Clyde Retail Park</td>
+                  <td class="hide-sm" style="color:var(--muted)">Clydebank</td>
+                  <td class="val-cell">£2,160</td>
+                  <td><span class="status-pill status-pending"><span class="status-dot"></span>Pending</span></td>
+                  <td style="text-align:right;color:var(--muted)">👁 ⬇ ✉</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Documents ──────────────────────────────────────────────────────────── -->
+<section id="documents" style="background: var(--surface);">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-label">Documents</div>
+      <h2>Every Document, <span class="fire-text">One Click Away</span></h2>
+      <p>All signed agreements, certificates, and compliance reports are stored securely and available for instant download — retained for 7 years per UK GDPR.</p>
+    </div>
+    <div class="doc-grid fade-in">
+
+      <div class="doc-card">
+        <div class="doc-icon fire-grad" style="color:#fff">📄</div>
+        <div>
+          <div class="doc-title">Service Agreement PDF</div>
+          <div class="doc-desc">Full signed agreement including client details, service schedule, pricing breakdown, terms &amp; conditions, and digital signatures.</div>
+        </div>
+        <div class="doc-dl-btn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download PDF
+        </div>
+      </div>
+
+      <div class="doc-card">
+        <div class="doc-icon" style="background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2);font-size:1.3rem">🏅</div>
+        <div>
+          <div class="doc-title">Compliance Certificates</div>
+          <div class="doc-desc">BAFE SP203-1, NSI Gold, BS 5839-1:2025, EN 50131, BS EN 12845, and BS EN 62676 accreditation certificates on demand.</div>
+        </div>
+        <div class="doc-dl-btn" style="background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.25);color:#60a5fa">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download Certs
+        </div>
+      </div>
+
+      <div class="doc-card">
+        <div class="doc-icon" style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);font-size:1.3rem">📱</div>
+        <div>
+          <div class="doc-title">QR Code Access</div>
+          <div class="doc-desc">Each agreement generates a unique QR code that opens the agreement directly in the client portal — perfect for on-site access.</div>
+        </div>
+        <div class="doc-dl-btn" style="background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.25);color:#fbbf24">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="5" height="5"/><rect x="16" y="3" width="5" height="5"/><rect x="3" y="16" width="5" height="5"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><line x1="21" y1="21" x2="21" y2="21"/><path d="M16 16h.01"/></svg>
+          View QR Code
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Compliance strip -->
+    <div class="fade-in" style="margin-top:2.5rem;padding:1.5rem;background:rgba(232,52,10,.05);border:1px solid rgba(232,52,10,.15);border-radius:14px;display:flex;align-items:flex-start;gap:1rem">
+      <div style="font-size:1.5rem;flex-shrink:0">🛡️</div>
+      <div>
+        <div style="font-weight:700;margin-bottom:.35rem">Compliance Documentation Standards</div>
+        <div style="font-size:.85rem;color:var(--muted);line-height:1.7">All service agreements and certificates are stored securely and retained for 7 years in accordance with UK GDPR and BS 5839-1:2025 requirements. Contact us if you need additional compliance documentation for insurance, audit, or regulatory purposes.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.85rem">
+          <span class="badge badge-fire">BAFE SP203-1</span>
+          <span class="badge badge-fire">NSI Gold</span>
+          <span class="badge badge-fire">BS 5839-1:2025</span>
+          <span class="badge badge-fire">EN 50131</span>
+          <span class="badge badge-fire">BS EN 12845</span>
+          <span class="badge badge-fire">BS EN 62676</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SLA & Contact ───────────────────────────────────────────────────────── -->
+<section id="sla">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-label">Contact &amp; SLA</div>
+      <h2>24/7 Support &amp; <span class="fire-text">Guaranteed Response</span></h2>
+      <p>The portal's Contact tab puts emergency support, SLA commitments, and accreditation details front and centre for every client.</p>
+    </div>
+    <div class="sla-grid fade-in">
+
+      <!-- Emergency + SLA -->
+      <div class="sla-card highlight">
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem">
+          <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--fire),var(--ember));display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0">📞</div>
+          <div>
+            <div style="font-weight:700">Emergency Line</div>
+            <div style="font-size:.78rem;color:var(--muted)">24/7 · 365 days a year</div>
+          </div>
+        </div>
+        <div style="background:linear-gradient(135deg,var(--fire),var(--ember));border-radius:10px;padding:.85rem 1.25rem;text-align:center;font-size:1.3rem;font-weight:900;color:#fff;margin-bottom:1.25rem;letter-spacing:.02em">
+          0141 433 1934
+        </div>
+        <div style="font-size:.75rem;color:var(--muted);text-align:center;margin-bottom:1.5rem">Maximum 4-hour emergency response</div>
+        <div style="font-weight:700;font-size:.82rem;margin-bottom:.75rem">Service Level Agreement</div>
+        <div class="sla-row"><span class="sla-label">🚨 Emergency Response</span><span class="sla-val">Max 4 hours</span></div>
+        <div class="sla-row"><span class="sla-label">⚡ Priority Fault Attendance</span><span class="sla-val">Next business day</span></div>
+        <div class="sla-row"><span class="sla-label">📅 Routine PPM Notice</span><span class="sla-val">5 working days</span></div>
+        <div class="sla-row"><span class="sla-label">📋 Service Reports Issued</span><span class="sla-val">Within 5 days</span></div>
+        <div class="sla-row"><span class="sla-label">🔧 Minor Remedial Works</span><span class="sla-val">Same visit (&lt;£250)</span></div>
+      </div>
+
+      <!-- Accreditations -->
+      <div class="sla-card">
+        <div style="font-weight:700;font-size:1rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:.5rem">
+          ⭐ Accreditations &amp; Standards
+        </div>
+        <div class="cert-grid">
+          <div class="cert-item"><div class="cert-check">✓</div><div><div class="cert-name">BAFE SP203-1</div><div class="cert-desc">Fire Detection &amp; Alarm</div></div></div>
+          <div class="cert-item"><div class="cert-check">✓</div><div><div class="cert-name">NSI Gold</div><div class="cert-desc">Security Systems</div></div></div>
+          <div class="cert-item"><div class="cert-check">✓</div><div><div class="cert-name">BS 5839-1:2025</div><div class="cert-desc">Fire Alarm Standard</div></div></div>
+          <div class="cert-item"><div class="cert-check">✓</div><div><div class="cert-name">EN 50131</div><div class="cert-desc">Intruder Alarm</div></div></div>
+          <div class="cert-item"><div class="cert-check">✓</div><div><div class="cert-name">BS EN 12845</div><div class="cert-desc">Sprinkler Systems</div></div></div>
+          <div class="cert-item"><div class="cert-check">✓</div><div><div class="cert-name">BS EN 62676</div><div class="cert-desc">CCTV Surveillance</div></div></div>
+        </div>
+        <div style="margin-top:1.5rem;padding:1rem;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px">
+          <div style="font-size:.8rem;font-weight:700;margin-bottom:.5rem">Email Support</div>
+          <div style="font-size:.82rem;color:var(--muted);margin-bottom:.75rem">Reply within 1 business day</div>
+          <div style="font-size:.82rem;color:var(--ember);font-weight:600">info@corefireprotection.co.uk</div>
+        </div>
+        <div style="margin-top:.75rem;padding:1rem;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px">
+          <div style="font-size:.8rem;font-weight:700;margin-bottom:.35rem">Head Office</div>
+          <div style="font-size:.82rem;color:var(--muted)">Unit 4, 200 Woodville Street<br />Glasgow, G51 2RL</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ────────────────────────────────────────────────────────────────── -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-inner fade-in">
+      <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663328149057/NoaGItwgwFCzfCoG.png" alt="Core Fire Protection" style="height:64px;object-fit:contain;margin:0 auto 2rem;opacity:.9" />
+      <h2>Ready to Access Your <span class="fire-text">Client Portal?</span></h2>
+      <p>Sign in to view your agreements, download documents, and manage your fire safety compliance — all in one place.</p>
+      <div class="cta-btns">
+        <a href="https://github.com/Rallyeryan/core-fire-portal" target="_blank" class="btn-primary glow-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          View on GitHub
+        </a>
+        <a href="#portal" class="btn-outline">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 8 16 12 12 16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          Back to Top
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ─────────────────────────────────────────────────────────────── -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663328149057/JiTjkhwCQcNFndvg.png" alt="Core Fire Protection" class="footer-logo" />
+      <div class="footer-copy">© 2026 Core Fire Protection Ltd · Unit 4, 200 Woodville Street, Glasgow G51 2RL</div>
+      <div class="footer-certs">
+        <span class="footer-cert">BAFE SP203-1</span>
+        <span class="footer-cert">NSI Gold</span>
+        <span class="footer-cert">BSI Kitemark</span>
+        <span class="footer-cert">BS 5839-1:2025</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Scroll fade-in observer
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+</body>
+</html>
