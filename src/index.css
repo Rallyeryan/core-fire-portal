@@ -1,0 +1,227 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 96%;
+    --foreground: 0 0% 7%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 7%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 7%;
+
+    --primary: 0 0% 7%;
+    --primary-foreground: 0 0% 96%;
+
+    --secondary: 0 0% 92%;
+    --secondary-foreground: 0 0% 7%;
+
+    --muted: 0 0% 93%;
+    --muted-foreground: 0 0% 40%;
+
+    --accent: 0 0% 92%;
+    --accent-foreground: 0 0% 7%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 86%;
+    --input: 0 0% 86%;
+    --ring: 0 0% 7%;
+
+    --radius: 0.625rem;
+
+    --sidebar-background: 0 0% 2%;
+    --sidebar-foreground: 0 0% 96%;
+    --sidebar-primary: 0 0% 100%;
+    --sidebar-primary-foreground: 0 0% 2%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 96%;
+    --sidebar-border: 0 0% 14%;
+    --sidebar-ring: 0 0% 100%;
+
+    /* Custom tokens */
+    --success: 142 72% 29%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 5%;
+    --spec-header: 0 0% 7%;
+    --spec-section-bg: 0 0% 100%;
+    --spec-divider: 0 0% 82%;
+
+    --font-heading: 'Space Grotesk', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+
+  .dark {
+    --background: 0 0% 2%;
+    --foreground: 0 0% 96%;
+
+    --card: 0 0% 5%;
+    --card-foreground: 0 0% 96%;
+
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 96%;
+
+    --primary: 0 0% 96%;
+    --primary-foreground: 0 0% 2%;
+
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 96%;
+
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 60%;
+
+    --accent: 0 0% 12%;
+    --accent-foreground: 0 0% 96%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 14%;
+    --input: 0 0% 14%;
+    --ring: 0 0% 96%;
+
+    --sidebar-background: 0 0% 2%;
+    --sidebar-foreground: 0 0% 96%;
+    --sidebar-primary: 0 0% 100%;
+    --sidebar-primary-foreground: 0 0% 2%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 96%;
+    --sidebar-border: 0 0% 14%;
+    --sidebar-ring: 0 0% 100%;
+
+    --success: 142 72% 40%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 5%;
+    --spec-header: 0 0% 96%;
+    --spec-section-bg: 0 0% 5%;
+    --spec-divider: 0 0% 18%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+}
+
+@layer components {
+  .spec-section-title {
+    @apply text-lg font-semibold tracking-tight;
+    font-family: var(--font-heading);
+    color: hsl(var(--foreground));
+  }
+
+  .spec-card {
+    @apply rounded-xl border p-6 transition-colors;
+    background: hsl(var(--spec-section-bg));
+  }
+
+  .spec-card:hover {
+    border-color: hsl(var(--foreground) / 0.15);
+  }
+
+  .spec-checkbox-item {
+    @apply flex items-start gap-3 p-3 rounded-lg transition-colors;
+  }
+
+  .spec-checkbox-item:hover {
+    background: hsl(var(--muted));
+  }
+
+  .spec-badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider;
+    background: hsl(var(--foreground) / 0.08);
+    color: hsl(var(--foreground));
+  }
+
+  .spec-preview-header {
+    @apply px-8 py-4 border-b font-semibold text-sm tracking-widest uppercase;
+    font-family: var(--font-heading);
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+  }
+
+  .spec-preview-section {
+    @apply mb-6;
+  }
+
+  .spec-preview-section h3 {
+    @apply text-sm font-bold uppercase tracking-wider mb-2 pb-1 border-b;
+    color: hsl(var(--foreground));
+    border-color: hsl(var(--foreground) / 0.15);
+  }
+
+  .sidebar-step {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all cursor-pointer;
+  }
+
+  .sidebar-step:hover {
+    background: hsl(var(--sidebar-accent));
+  }
+
+  .sidebar-step-active {
+    background: hsl(var(--sidebar-accent));
+    color: hsl(var(--sidebar-primary));
+    font-weight: 600;
+  }
+
+  .sidebar-step-complete {
+    color: hsl(var(--success));
+  }
+
+  .step-number {
+    @apply w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0;
+    border: 1.5px solid currentColor;
+  }
+
+  .step-number-active {
+    background: hsl(var(--sidebar-primary));
+    color: hsl(var(--sidebar-primary-foreground));
+    border-color: hsl(var(--sidebar-primary));
+  }
+
+  .step-number-complete {
+    background: hsl(var(--success));
+    color: hsl(var(--success-foreground));
+    border-color: hsl(var(--success));
+  }
+
+  /* Monochrome card hover spotlight */
+  .mono-spotlight {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mono-spotlight::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      600px circle at var(--hero3-x, 50%) var(--hero3-y, 50%),
+      hsl(var(--foreground) / 0.04),
+      transparent 40%
+    );
+    pointer-events: none;
+    transition: opacity 0.3s;
+    opacity: 0;
+  }
+
+  .mono-spotlight:hover::before {
+    opacity: 1;
+  }
+}
