@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to Hard Refresh Your Browser Cache</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --accent: #4f6ef7;
+      --accent2: #7c3aed;
+      --text: #e8eaf6;
+      --muted: #8b90b8;
+      --kbd-bg: #2e3250;
+      --kbd-border: #4a5080;
+      --kbd-text: #c5caf0;
+      --win-color: #4f6ef7;
+      --mac-color: #a855f7;
+      --linux-color: #22c55e;
+      --radius: 14px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1040 50%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 72px 24px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(79,110,247,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 72px; height: 72px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      margin-bottom: 24px;
+      box-shadow: 0 0 40px rgba(79,110,247,0.4);
+    }
+    .hero-icon svg { width: 36px; height: 36px; color: #fff; }
+    .hero h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, #fff 30%, #a5b4fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* ── Layout ── */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* ── What is section ── */
+    .explainer {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin: 48px 0 40px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .explainer-icon {
+      flex-shrink: 0;
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      background: rgba(79,110,247,0.15);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent);
+    }
+    .explainer h2 { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; }
+    .explainer p { color: var(--muted); font-size: 0.95rem; }
+
+    /* ── OS badge filter ── */
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+    .filter-btn {
+      padding: 7px 18px;
+      border-radius: 99px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .filter-btn:hover { border-color: var(--accent); color: var(--text); }
+    .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    /* ── Section heading ── */
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    /* ── Browser cards ── */
+    .browser-grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .browser-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .browser-card:hover { border-color: rgba(79,110,247,0.5); }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      user-select: none;
+    }
+    .browser-logo {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 22px;
+    }
+    .card-header-text { flex: 1; }
+    .card-header-text h3 { font-size: 1rem; font-weight: 700; }
+    .card-header-text .subtitle { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+    .chevron {
+      color: var(--muted);
+      transition: transform 0.25s;
+      flex-shrink: 0;
+    }
+    .browser-card.open .chevron { transform: rotate(180deg); }
+
+    .card-body {
+      display: none;
+      padding: 24px;
+    }
+    .browser-card.open .card-body { display: block; }
+
+    /* ── OS tabs inside card ── */
+    .os-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .os-tab {
+      padding: 5px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: transparent;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--muted);
+      transition: all 0.15s;
+    }
+    .os-tab[data-os="windows"].active { background: rgba(79,110,247,0.15); border-color: var(--win-color); color: var(--win-color); }
+    .os-tab[data-os="mac"].active     { background: rgba(168,85,247,0.15); border-color: var(--mac-color); color: var(--mac-color); }
+    .os-tab[data-os="linux"].active   { background: rgba(34,197,94,0.15);  border-color: var(--linux-color); color: var(--linux-color); }
+
+    .os-panel { display: none; }
+    .os-panel.active { display: block; }
+
+    /* ── Steps ── */
+    .steps { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .step {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+    .step-text { font-size: 0.93rem; color: var(--text); padding-top: 3px; }
+    .step-text strong { color: #fff; }
+
+    /* ── Keyboard shortcut display ── */
+    .shortcut-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .shortcut-label { font-size: 0.8rem; color: var(--muted); font-weight: 600; flex-shrink: 0; }
+    .keys { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    kbd {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 10px;
+      background: var(--kbd-bg);
+      border: 1px solid var(--kbd-border);
+      border-bottom-width: 3px;
+      border-radius: 6px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--kbd-text);
+      white-space: nowrap;
+    }
+    .key-plus { color: var(--muted); font-size: 0.85rem; font-weight: 600; }
+
+    /* ── Note / tip ── */
+    .tip {
+      background: rgba(79,110,247,0.08);
+      border: 1px solid rgba(79,110,247,0.25);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      color: #a5b4fc;
+      margin-top: 16px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .tip-icon { flex-shrink: 0; margin-top: 1px; }
+
+    /* ── Quick reference table ── */
+    .quick-ref {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-top: 48px;
+    }
+    .quick-ref-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      font-weight: 700;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .quick-ref-header svg { color: var(--accent); }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      text-align: left;
+      padding: 12px 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+    }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--surface2); }
+    td { padding: 13px 20px; font-size: 0.88rem; vertical-align: middle; }
+    td:first-child { font-weight: 600; }
+    td .keys { gap: 4px; }
+    td kbd { font-size: 0.75rem; padding: 3px 8px; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 32px 24px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 600px) {
+      .explainer { flex-direction: column; }
+      .card-header { padding: 16px 18px; }
+      .card-body { padding: 18px; }
+      thead th, td { padding: 10px 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
+      <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+    </svg>
+  </div>
+  <h1>How to Hard Refresh<br>Your Browser Cache</h1>
+  <p>Force your browser to reload the latest version of a page by bypassing the local cache — step-by-step for every major browser.</p>
+</div>
+
+<div class="container">
+
+  <!-- What is a hard refresh -->
+  <div class="explainer">
+    <div class="explainer-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+    </div>
+    <div>
+      <h2>What is a hard refresh?</h2>
+      <p>A normal refresh reloads the page but may serve cached assets (CSS, JS, images) from your local disk. A <strong>hard refresh</strong> instructs the browser to ignore the cache entirely and download every resource fresh from the server — useful when a site has been updated but still appears to show an old version.</p>
+    </div>
+  </div>
+
+  <!-- Browser cards -->
+  <div class="section-label">Step-by-step instructions</div>
+
+  <div class="browser-grid">
+
+    <!-- Chrome -->
+    <div class="browser-card open" id="card-chrome">
+      <div class="card-header" onclick="toggleCard('card-chrome')">
+        <div class="browser-logo" style="background:#1e2a3a;">
+          <svg width="26" height="26" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="#4285F4"/><path d="M12 8h8.66a10 10 0 1 1-4.33-4" fill="none" stroke="#EA4335" stroke-width="2"/><path d="M12 8a4 4 0 0 0-4 4H2a10 10 0 0 1 10-10" fill="#FBBC05"/><path d="M8 12a4 4 0 0 0 4 4l-4.33 7.5A10 10 0 0 1 2 12" fill="#34A853"/></svg>
+        </div>
+        <div class="card-header-text">
+          <h3>Google Chrome</h3>
+          <div class="subtitle">Windows · macOS · Linux</div>
+        </div>
+        <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="os-tabs">
+          <button class="os-tab active" data-os="windows" onclick="switchOS(this, 'chrome')">Windows</button>
+          <button class="os-tab" data-os="mac" onclick="switchOS(this, 'chrome')">macOS</button>
+          <button class="os-tab" data-os="linux" onclick="switchOS(this, 'chrome')">Linux</button>
+        </div>
+
+        <div class="os-panel active" data-browser="chrome" data-os="windows">
+          <div class="shortcut-box">
+            <span class="shortcut-label">Keyboard shortcut</span>
+            <div class="keys">
+              <kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>Shift</kbd><span class="key-plus">+</span><kbd>R</kbd>
+            </div>
+            <span class="shortcut-label" style="margin-left:8px;">or</span>
+            <div class="keys">
+              <kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>F5</kbd>
+            </div>
+          </div>
+          <ol class="steps">
+            <li class="step"><div class="step-num">1</div><div class="step-text">Open the page you want to refresh in Chrome.</div></li>
+            <li class="step"><div class="step-num">2</div><div class="step-text">Hold <strong>Ctrl + Shift</strong> and press <strong>R</strong>, or simply press <strong>Ctrl + F5</strong>.</div></li>
+            <li class="step"><div class="step-num">3</div><div class="step-text">Chrome will reload the page, bypassing all cached resources.</div></li>
+          </ol>
+          <div class="tip"><span class="tip-icon">💡</span> You can also open <strong>DevTools</strong> (F12), then right-click the reload button and choose <em>"Empty Cache and Hard Reload"</em> for a thorough clear.</div>
+        </div>
+
+        <div class="os-panel" data-browser="chrome" data-os="mac">
+          <div class="shortcut-box">
+            <span class="shortcut-label">Keyboard shortcut</span>
+            <div class="keys">
+              <kbd>⌘ Cmd</kbd><span class="key-plus">+</span><kbd>Shift</kbd><span class="key-plus">+</span><kbd>R</kbd>
+            </div>
+          </div>
+          <ol class="steps">
+            <li class="step"><div class="step-num">1</div><div class="step-text">Open the page you want to refresh in Chrome.</div></li>
+            <li class="step"><div class="step-num">2</div><div class="step-text">Hold <strong>⌘ Cmd + Shift</strong> and press <strong>R</strong>.</div></li>
+            <li class="step"><div class="step-num">3</div><div class="step-text">Chrome will reload the page, bypassing all cached resources.</div></li>
+          </ol>
+          <div class="tip"><span class="tip-icon">💡</span> Open <strong>DevTools</strong> (⌘ + Option + I), then right-click the reload button and choose <em>"Empty Cache and Hard Reload"</em> for a full cache wipe.</div>
+        </div>
+
+        <div class="os-panel" data-browser="chrome" data-os="linux">
+          <div class="shortcut-box">
+            <span class="shortcut-label">Keyboard shortcut</span>
+            <div class="keys">
+              <kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>Shift</kbd><span class="key-plus">+</span><kbd>R</kbd>
+            </div>
+            <span class="shortcut-label" style="margin-left:8px;">or</span>
+            <div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>F5</kbd></div>
+          </div>
+          <ol class="steps">
+            <li class="step"><div class="step-num">1</div><div class="step-text">Open the page in Chrome.</div></li>
+            <li class="step"><div class="step-num">2</div><div class="step-text">Press <strong>Ctrl + Shift + R</strong> or <strong>Ctrl + F5</strong>.</div></li>
+            <li class="step"><div class="step-num">3</div><div class="step-text">Chrome bypasses the cache and fetches fresh resources.</div></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Firefox -->
+    <div class="browser-card" id="card-firefox">
+      <div class="card-header" onclick="toggleCard('card-firefox')">
+        <div class="browser-logo" style="background:#1e2a3a;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" fill="#FF6611"/>
+            <path d="M12 2C7 2 3 6 3 11c0 3 1.5 5.5 4 7 .5-2 1-3.5 3-4.5-1-1-1.5-2.5-1-4 1 1.5 2.5 2 4 2s3-.5 4-2c.5 1.5 0 3-1 4 2 1 2.5 2.5 3 4.5 2.5-1.5 4-4 4-7 0-5-4-9-9-9z" fill="#FF9500"/>
+          </svg>
+        </div>
+        <div class="card-header-text">
+          <h3>Mozilla Firefox</h3>
+          <div class="subtitle">Windows · macOS · Linux</div>
+        </div>
+        <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="os-tabs">
+          <button class="os-tab active" data-os="windows" onclick="switchOS(this, 'firefox')">Windows</button>
+          <button class="os-tab" data-os="mac" onclick="switchOS(this, 'firefox')">macOS</button>
+          <button class="os-tab" data-os="linux" onclick="switchOS(this, 'firefox')">Linux</button>
+        </div>
+
+        <div class="os-panel active" data-browser="firefox" data-os="windows">
+          <div class="shortcut-box">
+            <span class="shortcut-label">Keyboard shortcut</span>
+            <div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>Shift</kbd><span class="key-plus">+</span><kbd>R</kbd></div>
+            <span class="shortcut-label" style="margin-left:8px;">or</span>
+            <div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>F5</kbd></div>
+          </div>
+          <ol class="steps">
+            <li class="step"><div class="step-num">1</div><div class="step-text">Navigate to the page you want to reload in Firefox.</div></li>
+            <li class="step"><div class="step-num">2</div><div class="step-text">Press <strong>Ctrl + Shift + R</strong> or <strong>Ctrl + F5</strong>.</div></li>
+            <li class="step"><div class="step-num">3</div><div class="step-text">Firefox reloads the page and ignores all cached content.</div></li>
+          </ol>
+          <div class="tip"><span class="tip-icon">💡</span> For a full cache clear, go to <strong>Settings → Privacy & Security → Cookies and Site Data → Clear Data</strong>.</div>
+        </div>
+
+        <div class="os-panel" data-browser="firefox" data-os="mac">
+          <div class="shortcut-box">
+            <span class="shortcut-label">Keyboard shortcut</span>
+            <div class="keys"><kbd>⌘ Cmd</kbd><span class="key-plus">+</span><kbd>Shift</kbd><span class="key-plus">+</span><kbd>R</kbd></div>
+          </div>
+          <ol class="steps">
+            <li class="step"><div class="step-num">1</div><div class="step-text">Navigate to the page in Firefox.</div></li>
+            <li class="step"><div class="step-num">2</div><div class="step-text">Press <strong>⌘ Cmd + Shift + R</strong>.</div></li>
+            <li class="step"><div class="step-num">3</div><div class="step-text">Firefox reloads the page, bypassing cached content.</div></li>
+          </ol>
+        </div>
+
+        <div class="os-panel" data-browser="firefox" data-os="linux">
+          <div class="shortcut-box">
+            <span class="shortcut-label">Keyboard shortcut</span>
+            <div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>Shift</kbd><span class="key-plus">+</span><kbd>R</kbd></div>
+            <span class="shortcut-label" style="margin-left:8px;">or</span>
+            <div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>F5</kbd></div>
+          </div>
+          <ol class="steps">
+            <li class="step"><div class="step-num">1</div><div class="step-text">Navigate to the page in Firefox.</div></li>
+            <li class="step"><div class="step-num">2</div><div class="step-text">Press <strong>Ctrl + Shift + R</strong> or <strong>Ctrl + F5</strong>.</div></li>
+            <li class="step"><div class="step-num">3</div><div class="step-text">Firefox reloads the page without using cached resources.</div></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Safari -->
+    <div class="browser-card" id="card-safari">
+      <div class="card-header" onclick="toggleCard('card-safari')">
+        <div class="browser-logo" style="background:#1e2a3a;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" fill="#1C9BEF"/>
+            <circle cx="12" cy="12" r="10" fill="url(#sg)" opacity="0.5"/>
+            <line x1="12" y1="4" x2="12" y2="20" stroke="white" stroke-width="0.5" opacity="0.4"/>
+            <line x1="4" y1="12" x2="20" y2="12" stroke="white" stroke-width="0.5" opacity="0.4"/>
+            <polygon points="12,5 14.5,14.5 12,13 9.5,14.5" fill="white"/>
+            <polygon points="12,19 9.5,9.5 12,11 14.5,9.5" fill="rgba(255,255,255,0.4)"/>
+            <defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5AC8FA"/><stop offset="100%" stop-color="#007AFF"/></linearGradient></defs>
+          </svg>
+        </div>
+        <div class="card-header-text">
+          <h3>Apple Safari</h3>
+          <div class="subtitle">macOS · iOS / iPadOS</div>
+        </div>
+        <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="os-tabs">
+          <button class="os-tab active" data-os="mac" onclick="switchOS(this, 'safari')">macOS</button>
+          <button class="os-tab" data-os="ios" onclick="switchOS(this, 'safari')">iOS / iPadOS</button>
+        </div>
+
+        <div class="os-panel active" data-browser="safari" data-os="mac">
+          <div class="shortcut-box">
+            <span class="shortcut-label">Keyboard shortcut</span>
+            <div class="keys"><kbd>⌘ Cmd</kbd><span class="key-plus">+</span><kbd>Option</kbd><span class="key-plus">+</span><kbd>R</kbd></div>
+          </div>
+          <ol class="steps">
+            <li class="step"><div class="step-num">1</div><div class="step-text">Open the page in Safari.</div></li>
+            <li class="step"><div class="step-num">2</div><div class="step-text">Press <strong>⌘ Cmd + Option + R</strong> to perform a hard reload.</div></li>
+            <li class="step"><div class="step-num">3</div><div class="step-text">Alternatively, hold <strong>Shift</strong> and click the <strong>Reload</strong> button in the address bar.</div></li>
+          </ol>
+          <div class="tip"><span class="tip-icon">💡</span> To fully empty the cache, go to <strong>Develop → Empty Caches</strong> (enable the Develop menu in <em>Safari → Settings → Advanced → Show Develop menu</em>).</div>
+        </div>
+
+        <div class="os-panel" data-browser="safari" data-os="ios">
+          <ol class="steps">
+            <li class="step"><div class="step-num">1</div><div class="step-text">Open the <strong>Settings</strong> app on your iPhone or iPad.</div></li>
+            <li class="step"><div class="step-num">2</div><div class="step-text">Scroll down and tap <strong>Safari</strong>.</div></li>
+            <li class="step"><div class="step-num">3</div><div class="step-text">Tap <strong>Clear History and Website Data</strong>, then confirm.</div></li>
+            <li class="step"><div class="step-num">4</div><div class="step-text">Return to Safari and reload the page.</div></li>
+          </ol>
+          <div class="tip"><span class="tip-icon">💡</span> iOS Safari does not support a single-page hard refresh shortcut — clearing all website data is the recommended approach.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edge -->
+    <div class="browser-card" id="card-edge">
+      <div class="card-header" onclick="toggleCard('card-edge')">
+        <div class="browser-logo" style="background:#1e2a3a;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+            <path d="M21 12c0 4.97-4.03 9-9 9S3 16.97 3 12c0-2.76 1.24-5.23 3.2-6.9C7.5 3.9 9.67 3 12 3c2.5 0 4.8 1 6.5 2.7" stroke="#0078D4" stroke-width="2" stroke-linecap="round"/>
+            <path d="M8 12c0-2.21 1.79-4 4-4 1.5 0 2.8.82 3.5 2H12c-1.1 0-2 .9-2 2s.9 2 2 2h7c.55 0 1-.45 1-1v-1" stroke="#0078D4" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="card-header-text">
+          <h3>Microsoft Edge</h3>
+          <div class="subtitle">Windows · macOS</div>
+        </div>
+        <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="os-tabs">
+          <button class="os-tab active" data-os="windows" onclick="switchOS(this, 'edge')">Windows</button>
+          <button class="os-tab" data-os="mac" onclick="switchOS(this, 'edge')">macOS</button>
+        </div>
+
+        <div class="os-panel active" data-browser="edge" data-os="windows">
+          <div class="shortcut-box">
+            <span class="shortcut-label">Keyboard shortcut</span>
+            <div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>Shift</kbd><span class="key-plus">+</span><kbd>R</kbd></div>
+            <span class="shortcut-label" style="margin-left:8px;">or</span>
+            <div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>F5</kbd></div>
+          </div>
+          <ol class="steps">
+            <li class="step"><div class="step-num">1</div><div class="step-text">Open the page in Microsoft Edge.</div></li>
+            <li class="step"><div class="step-num">2</div><div class="step-text">Press <strong>Ctrl + Shift + R</strong> or <strong>Ctrl + F5</strong>.</div></li>
+            <li class="step"><div class="step-num">3</div><div class="step-text">Edge reloads the page without using any cached files.</div></li>
+          </ol>
+          <div class="tip"><span class="tip-icon">💡</span> With DevTools open (F12), right-click the reload button and select <em>"Empty Cache and Hard Refresh"</em>.</div>
+        </div>
+
+        <div class="os-panel" data-browser="edge" data-os="mac">
+          <div class="shortcut-box">
+            <span class="shortcut-label">Keyboard shortcut</span>
+            <div class="keys"><kbd>⌘ Cmd</kbd><span class="key-plus">+</span><kbd>Shift</kbd><span class="key-plus">+</span><kbd>R</kbd></div>
+          </div>
+          <ol class="steps">
+            <li class="step"><div class="step-num">1</div><div class="step-text">Open the page in Microsoft Edge.</div></li>
+            <li class="step"><div class="step-num">2</div><div class="step-text">Press <strong>⌘ Cmd + Shift + R</strong>.</div></li>
+            <li class="step"><div class="step-num">3</div><div class="step-text">Edge reloads the page without using any cached files.</div></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Opera -->
+    <div class="browser-card" id="card-opera">
+      <div class="card-header" onclick="toggleCard('card-opera')">
+        <div class="browser-logo" style="background:#1e2a3a;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" fill="#FF1B2D"/>
+            <ellipse cx="12" cy="12" rx="5" ry="8" fill="#FF1B2D" stroke="white" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="card-header-text">
+          <h3>Opera</h3>
+          <div class="subtitle">Windows · macOS · Linux</div>
+        </div>
+        <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="os-tabs">
+          <button class="os-tab active" data-os="windows" onclick="switchOS(this, 'opera')">Windows / Linux</button>
+          <button class="os-tab" data-os="mac" onclick="switchOS(this, 'opera')">macOS</button>
+        </div>
+
+        <div class="os-panel active" data-browser="opera" data-os="windows">
+          <div class="shortcut-box">
+            <span class="shortcut-label">Keyboard shortcut</span>
+            <div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>Shift</kbd><span class="key-plus">+</span><kbd>R</kbd></div>
+            <span class="shortcut-label" style="margin-left:8px;">or</span>
+            <div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>F5</kbd></div>
+          </div>
+          <ol class="steps">
+            <li class="step"><div class="step-num">1</div><div class="step-text">Open the page in Opera.</div></li>
+            <li class="step"><div class="step-num">2</div><div class="step-text">Press <strong>Ctrl + Shift + R</strong> or <strong>Ctrl + F5</strong>.</div></li>
+            <li class="step"><div class="step-num">3</div><div class="step-text">Opera fetches all resources fresh from the server.</div></li>
+          </ol>
+        </div>
+
+        <div class="os-panel" data-browser="opera" data-os="mac">
+          <div class="shortcut-box">
+            <span class="shortcut-label">Keyboard shortcut</span>
+            <div class="keys"><kbd>⌘ Cmd</kbd><span class="key-plus">+</span><kbd>Shift</kbd><span class="key-plus">+</span><kbd>R</kbd></div>
+          </div>
+          <ol class="steps">
+            <li class="step"><div class="step-num">1</div><div class="step-text">Open the page in Opera.</div></li>
+            <li class="step"><div class="step-num">2</div><div class="step-text">Press <strong>⌘ Cmd + Shift + R</strong>.</div></li>
+            <li class="step"><div class="step-num">3</div><div class="step-text">Opera fetches all resources fresh from the server.</div></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Brave -->
+    <div class="browser-card" id="card-brave">
+      <div class="card-header" onclick="toggleCard('card-brave')">
+        <div class="browser-logo" style="background:#1e2a3a;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2L4 6v6c0 4.4 3.4 8.5 8 9.5 4.6-1 8-5.1 8-9.5V6L12 2z" fill="#FB542B"/>
+            <path d="M12 6l-4 2v4c0 2.2 1.7 4.3 4 4.8 2.3-.5 4-2.6 4-4.8V8l-4-2z" fill="white" opacity="0.9"/>
+          </svg>
+        </div>
+        <div class="card-header-text">
+          <h3>Brave</h3>
+          <div class="subtitle">Windows · macOS · Linux</div>
+        </div>
+        <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="os-tabs">
+          <button class="os-tab active" data-os="windows" onclick="switchOS(this, 'brave')">Windows / Linux</button>
+          <button class="os-tab" data-os="mac" onclick="switchOS(this, 'brave')">macOS</button>
+        </div>
+
+        <div class="os-panel active" data-browser="brave" data-os="windows">
+          <div class="shortcut-box">
+            <span class="shortcut-label">Keyboard shortcut</span>
+            <div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>Shift</kbd><span class="key-plus">+</span><kbd>R</kbd></div>
+            <span class="shortcut-label" style="margin-left:8px;">or</span>
+            <div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>F5</kbd></div>
+          </div>
+          <ol class="steps">
+            <li class="step"><div class="step-num">1</div><div class="step-text">Open the page in Brave.</div></li>
+            <li class="step"><div class="step-num">2</div><div class="step-text">Press <strong>Ctrl + Shift + R</strong> or <strong>Ctrl + F5</strong>.</div></li>
+            <li class="step"><div class="step-num">3</div><div class="step-text">Brave (Chromium-based) reloads the page bypassing the cache.</div></li>
+          </ol>
+          <div class="tip"><span class="tip-icon">💡</span> Open DevTools (F12), right-click the reload button, and select <em>"Empty Cache and Hard Reload"</em> for a full wipe.</div>
+        </div>
+
+        <div class="os-panel" data-browser="brave" data-os="mac">
+          <div class="shortcut-box">
+            <span class="shortcut-label">Keyboard shortcut</span>
+            <div class="keys"><kbd>⌘ Cmd</kbd><span class="key-plus">+</span><kbd>Shift</kbd><span class="key-plus">+</span><kbd>R</kbd></div>
+          </div>
+          <ol class="steps">
+            <li class="step"><div class="step-num">1</div><div class="step-text">Open the page in Brave.</div></li>
+            <li class="step"><div class="step-num">2</div><div class="step-text">Press <strong>⌘ Cmd + Shift + R</strong>.</div></li>
+            <li class="step"><div class="step-num">3</div><div class="step-text">Brave reloads the page bypassing the cache.</div></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /browser-grid -->
+
+  <!-- Quick Reference Table -->
+  <div class="quick-ref">
+    <div class="quick-ref-header">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+      Quick Reference
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Browser</th>
+          <th>Windows / Linux</th>
+          <th>macOS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Chrome</td>
+          <td><div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>Shift</kbd><span class="key-plus">+</span><kbd>R</kbd></div></td>
+          <td><div class="keys"><kbd>⌘</kbd><span class="key-plus">+</span><kbd>Shift</kbd><span class="key-plus">+</span><kbd>R</kbd></div></td>
+        </tr>
+        <tr>
+          <td>Firefox</td>
+          <td><div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>Shift</kbd><span class="key-plus">+</span><kbd>R</kbd></div></td>
+          <td><div class="keys"><kbd>⌘</kbd><span class="key-plus">+</span><kbd>Shift</kbd><span class="key-plus">+</span><kbd>R</kbd></div></td>
+        </tr>
+        <tr>
+          <td>Safari</td>
+          <td><span style="color:var(--muted);font-size:0.82rem;">N/A</span></td>
+          <td><div class="keys"><kbd>⌘</kbd><span class="key-plus">+</span><kbd>Option</kbd><span class="key-plus">+</span><kbd>R</kbd></div></td>
+        </tr>
+        <tr>
+          <td>Edge</td>
+          <td><div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>Shift</kbd><span class="key-plus">+</span><kbd>R</kbd></div></td>
+          <td><div class="keys"><kbd>⌘</kbd><span class="key-plus">+</span><kbd>Shift</kbd><span class="key-plus">+</span><kbd>R</kbd></div></td>
+        </tr>
+        <tr>
+          <td>Opera</td>
+          <td><div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>Shift</kbd><span class="key-plus">+</span><kbd>R</kbd></div></td>
+          <td><div class="keys"><kbd>⌘</kbd><span class="key-plus">+</span><kbd>Shift</kbd><span class="key-plus">+</span><kbd>R</kbd></div></td>
+        </tr>
+        <tr>
+          <td>Brave</td>
+          <td><div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>Shift</kbd><span class="key-plus">+</span><kbd>R</kbd></div></td>
+          <td><div class="keys"><kbd>⌘</kbd><span class="key-plus">+</span><kbd>Shift</kbd><span class="key-plus">+</span><kbd>R</kbd></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- /container -->
+
+<footer>
+  Hard Refresh Guide &nbsp;·&nbsp; Works on all major desktop browsers &nbsp;·&nbsp; Last updated April 2026
+</footer>
+
+<script>
+  function toggleCard(id) {
+    const card = document.getElementById(id);
+    card.classList.toggle('open');
+  }
+
+  function switchOS(btn, browser) {
+    const os = btn.getAttribute('data-os');
+    // Update active tab button
+    const tabs = btn.closest('.os-tabs').querySelectorAll('.os-tab');
+    tabs.forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    // Show correct panel
+    const panels = btn.closest('.card-body').querySelectorAll('.os-panel');
+    panels.forEach(p => {
+      p.classList.toggle('active', p.getAttribute('data-os') === os);
+    });
+  }
+</script>
+</body>
+</html>
