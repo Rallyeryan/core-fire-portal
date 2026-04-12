@@ -3,7 +3,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
-import { createAgreement, createEquipment, getAllAgreements, getAgreementById, getEquipmentByAgreementId, searchAgreements, saveDraft, getDraftByToken, updateAgreementEmailStatus, updateAgreementPdfUrl } from "./db";
+import { createAgreement, createEquipment, getAllAgreements, getAgreementById, getEquipmentByAgreementId, searchAgreements, saveDraft, getDraftByToken, updateAgreementEmailStatus, updateAgreementPdfUrl, updateAgreementStatus } from "./db";
 import { sendEmail, generateClientEmail, generateCompanyEmail } from "./emailService";
 import { generateAgreementPDFBuffer } from "./pdfGeneratorEmail";
 import { downloadPDFProcedure } from "./pdfProcedure";
@@ -234,6 +234,68 @@ export const appRouter = router({
           equipment: equipmentList,
         };
       }),
+
+    updateStatus: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+        status: z.enum(["draft", "pending", "active", "completed", "cancelled"]),
+      }))
+      .mutation(async ({ input }) => {
+        await updateAgreementStatus(input.id, input.status);
+        return { success: true };
+      }),
+
+    getAnalytics: protectedProcedure.query(async () => {
+      const all = await getAllAgreements();
+      const now = new Date();
+      const active = all.filter(a => a.status === "active");
+      const pending = all.filter(a => a.status === "pending");
+      const completed = all.filter(a => a.status === "completed");
+      const cancelled = all.filter(a => a.status === "cancelled");
+      const draft = all.filter(a => a.status === "draft");
+      const totalValue = active.reduce((sum, a) => sum + parseFloat(a.total as string), 0);
+      const renewalDue = active.filter(a => {
+        if (!a.endDate) return false;
+        const days = Math.ceil((new Date(a.endDate).getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+        return days >= 0 && days <= 60;
+      });
+      // Monthly revenue by creation date (last 12 months)
+      const monthlyData: Record<string, number> = {};
+      for (let i = 11; i >= 0; i--) {
+        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const key = d.toLocaleString('en-GB', { month: 'short', year: '2-digit' });
+        monthlyData[key] = 0;
+      }
+      all.forEach(a => {
+        const d = new Date(a.createdAt);
+        const key = d.toLocaleString('en-GB', { month: 'short', year: '2-digit' });
+        if (key in monthlyData) {
+          monthlyData[key] += parseFloat(a.total as string);
+        }
+      });
+      const monthly = Object.entries(monthlyData).map(([month, value]) => ({ month, value }));
+      const statusBreakdown = [
+        { name: 'Active', value: active.length, color: '#22c55e' },
+        { name: 'Pending', value: pending.length, color: '#f59e0b' },
+        { name: 'Completed', value: completed.length, color: '#3b82f6' },
+        { name: 'Cancelled', value: cancelled.length, color: '#ef4444' },
+        { name: 'Draft', value: draft.length, color: '#6b7280' },
+      ].filter(s => s.value > 0);
+      const avgValue = all.length > 0 ? all.reduce((sum, a) => sum + parseFloat(a.total as string), 0) / all.length : 0;
+      return {
+        total: all.length,
+        active: active.length,
+        pending: pending.length,
+        completed: completed.length,
+        cancelled: cancelled.length,
+        draft: draft.length,
+        totalValue,
+        avgValue,
+        renewalDue: renewalDue.length,
+        monthly,
+        statusBreakdown,
+      };
+    }),
 
     sendEmails: protectedProcedure
       .input(z.object({ agreementId: z.number() }))

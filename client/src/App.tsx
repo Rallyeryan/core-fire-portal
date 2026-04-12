@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Agreement from "./pages/Agreement";
 import AdminDashboard from "./pages/AdminDashboard";
 import ClientPortal from "./pages/ClientPortal";
+import ServiceDashboard from "./pages/ServiceDashboard";
 
 function Router() {
   return (
@@ -16,6 +17,7 @@ function Router() {
       <Route path={"/agreement"} component={Agreement} />
       <Route path={"/admin"} component={AdminDashboard} />
       <Route path={"/portal"} component={ClientPortal} />
+      <Route path={"/dashboard"} component={ServiceDashboard} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>

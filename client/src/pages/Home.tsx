@@ -156,7 +156,7 @@ export default function Home() {
             <p className="text-xs font-bold uppercase tracking-widest text-[#FF6B35] mb-2">Portal Access</p>
             <h2 className="text-3xl font-bold">Your Fire Safety Hub</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {/* Client Portal */}
             <Link href="/portal">
               <Card className="border-border/60 hover:border-[#E8340A]/40 transition-all cursor-pointer group hover:shadow-lg hover:shadow-[#E8340A]/10">
@@ -188,6 +188,24 @@ export default function Home() {
                   </CardDescription>
                   <div className="flex items-center gap-1 text-xs text-amber-400 font-semibold mt-2">
                     Start Now <ArrowRight className="h-3.5 w-3.5" />
+                  </div>
+                </CardHeader>
+              </Card>
+            </Link>
+
+            {/* Service Dashboard */}
+            <Link href="/dashboard">
+              <Card className="border-border/60 hover:border-[#E8340A]/40 transition-all cursor-pointer group hover:shadow-lg hover:shadow-[#E8340A]/10">
+                <CardHeader>
+                  <div className="w-12 h-12 rounded-2xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
+                    <Flame className="h-6 w-6 text-orange-400" />
+                  </div>
+                  <CardTitle className="text-lg">Service Dashboard</CardTitle>
+                  <CardDescription>
+                    Unified hub for all service agreements — analytics, renewals tracking, service catalog, and status management.
+                  </CardDescription>
+                  <div className="flex items-center gap-1 text-xs text-orange-400 font-semibold mt-2">
+                    Open Dashboard <ArrowRight className="h-3.5 w-3.5" />
                   </div>
                 </CardHeader>
               </Card>
