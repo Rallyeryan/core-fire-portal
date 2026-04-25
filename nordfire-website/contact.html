@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact NORD Fire – Get in Touch</title>
+  <meta name="description" content="Contact NORD Fire for product enquiries, quotes, and technical advice. Phone: +44 (0)141 433 1934. Email: info@nordfire.co.uk." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Marcellus&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/shared.css" />
+  <style>
+    /* Contact page styles */
+    .contact-info-card {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 32px;
+      text-align: center;
+      transition: all 0.3s;
+      height: 100%;
+    }
+    .contact-info-card:hover {
+      border-color: var(--nord-red);
+      box-shadow: 0 12px 40px rgba(230,51,41,0.1);
+      transform: translateY(-4px);
+    }
+    .contact-info-card__icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(230,51,41,0.08);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin: 0 auto 20px;
+    }
+    .contact-info-card__title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--nord-navy);
+      margin-bottom: 8px;
+    }
+    .contact-info-card__value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px;
+      color: var(--nord-red);
+      font-weight: 600;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 8px;
+    }
+    .contact-info-card__note {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      color: #888;
+    }
+
+    /* Contact form */
+    .contact-form {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 48px;
+    }
+    @media (max-width: 767px) { .contact-form { padding: 28px; } }
+    .form-group { margin-bottom: 24px; }
+    .form-label {
+      display: block;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--nord-navy);
+      margin-bottom: 8px;
+    }
+    .form-label span { color: var(--nord-red); }
+    .form-control {
+      width: 100%;
+      padding: 14px 18px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px;
+      color: var(--nord-text);
+      background: #fff;
+      transition: border-color 0.3s;
+      outline: none;
+      box-sizing: border-box;
+    }
+    .form-control:focus { border-color: var(--nord-red); box-shadow: 0 0 0 3px rgba(230,51,41,0.08); }
+    textarea.form-control { resize: vertical; min-height: 140px; }
+    select.form-control { cursor: pointer; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 575px) { .form-row { grid-template-columns: 1fr; } }
+    .form-submit {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--nord-red);
+      color: #fff;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 16px 40px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .form-submit:hover { background: #c0281f; }
+    .form-note {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      color: #888;
+      margin-top: 12px;
+    }
+    .form-success {
+      display: none;
+      background: #f0faf5;
+      border: 1px solid #1a7a4a;
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      margin-top: 24px;
+    }
+    .form-success p {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px;
+      color: #1a7a4a;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER (shared) -->
+<div id="header-placeholder"></div>
+
+<!-- PAGE HEADER -->
+<section class="page-header">
+  <div class="container">
+    <h1 class="page-header__title">Contact Us</h1>
+    <p class="page-header__breadcrumb"><a href="index.html">Home</a> → Contact</p>
+  </div>
+</section>
+
+<!-- CONTACT INFO CARDS -->
+<section style="padding:80px 0;background:#f8f9fa;">
+  <div class="container">
+    <div class="text-center" style="margin-bottom:48px;">
+      <p class="section-title__tagline reveal">Get in Touch</p>
+      <h2 class="section-title__title reveal">We're Here to Help</h2>
+      <p class="section-title__text reveal" style="margin:0 auto;">Whether you need a quote, product advice, or technical support — our team is ready to help.</p>
+    </div>
+
+    <div class="grid-3" style="margin-bottom:60px;">
+      <div class="contact-info-card reveal">
+        <div class="contact-info-card__icon">📞</div>
+        <h3 class="contact-info-card__title">Phone</h3>
+        <a href="tel:+441414331934" class="contact-info-card__value">+44 (0)141 433 1934</a>
+        <p class="contact-info-card__note">Monday to Friday, 9am – 5pm</p>
+      </div>
+      <div class="contact-info-card reveal">
+        <div class="contact-info-card__icon">✉</div>
+        <h3 class="contact-info-card__title">Email</h3>
+        <a href="mailto:info@nordfire.co.uk" class="contact-info-card__value">info@nordfire.co.uk</a>
+        <p class="contact-info-card__note">We aim to respond within 1 business day</p>
+      </div>
+      <div class="contact-info-card reveal">
+        <div class="contact-info-card__icon">📷</div>
+        <h3 class="contact-info-card__title">Instagram</h3>
+        <a href="https://www.instagram.com/nordfire" target="_blank" rel="noopener" class="contact-info-card__value">@nordfire</a>
+        <p class="contact-info-card__note">Follow us for product updates</p>
+      </div>
+    </div>
+
+    <!-- CONTACT FORM + SIDEBAR -->
+    <div class="grid-2" style="align-items:start;gap:48px;">
+
+      <!-- Form -->
+      <div class="reveal">
+        <div class="contact-form">
+          <h3 style="font-family:'Marcellus',serif;font-size:28px;color:var(--nord-navy);margin-bottom:8px;">Send Us a Message</h3>
+          <p style="font-family:'Space Grotesk',sans-serif;font-size:15px;color:#666;margin-bottom:32px;">Fill in the form below and a member of our team will be in touch shortly.</p>
+
+          <form id="contactForm" onsubmit="handleContactForm(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="firstName">First Name <span>*</span></label>
+                <input type="text" id="firstName" name="firstName" class="form-control" placeholder="John" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="lastName">Last Name <span>*</span></label>
+                <input type="text" id="lastName" name="lastName" class="form-control" placeholder="Smith" required />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="email">Email Address <span>*</span></label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="john@company.co.uk" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" class="form-control" placeholder="+44 (0)..." />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="company">Company / Organisation</label>
+              <input type="text" id="company" name="company" class="form-control" placeholder="Your company name" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="subject">Subject <span>*</span></label>
+              <select id="subject" name="subject" class="form-control" required>
+                <option value="">— Please select —</option>
+                <option value="product-quote">Product Quote Request</option>
+                <option value="product-advice">Product / Technical Advice</option>
+                <option value="trade-account">Trade Account Enquiry</option>
+                <option value="order-enquiry">Order Enquiry</option>
+                <option value="general">General Enquiry</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="message">Message <span>*</span></label>
+              <textarea id="message" name="message" class="form-control" placeholder="Please describe your enquiry, including any specific products or quantities you need..." required></textarea>
+            </div>
+
+            <button type="submit" class="form-submit">Send Message →</button>
+            <p class="form-note">By submitting this form you agree to our <a href="privacy.html" style="color:var(--nord-red);">privacy policy</a>.</p>
+          </form>
+
+          <div class="form-success" id="formSuccess">
+            <p>✅ <strong>Thank you for your message.</strong> A member of our team will be in touch shortly.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar info -->
+      <div>
+        <div style="background:var(--nord-navy);border-radius:8px;padding:40px;margin-bottom:24px;" class="reveal">
+          <h3 style="font-family:'Marcellus',serif;font-size:24px;color:#fff;margin-bottom:24px;">About NORD Fire</h3>
+          <ul style="list-style:none;padding:0;margin:0;">
+            <li style="display:flex;gap:12px;margin-bottom:16px;font-family:'Space Grotesk',sans-serif;font-size:15px;color:rgba(255,255,255,0.7);">
+              <span style="color:var(--nord-red);flex-shrink:0;">📞</span>
+              <span><a href="tel:+441414331934" style="color:rgba(255,255,255,0.7);text-decoration:none;">+44 (0)141 433 1934</a></span>
+            </li>
+            <li style="display:flex;gap:12px;margin-bottom:16px;font-family:'Space Grotesk',sans-serif;font-size:15px;color:rgba(255,255,255,0.7);">
+              <span style="color:var(--nord-red);flex-shrink:0;">✉</span>
+              <span><a href="mailto:info@nordfire.co.uk" style="color:rgba(255,255,255,0.7);text-decoration:none;">info@nordfire.co.uk</a></span>
+            </li>
+            <li style="display:flex;gap:12px;margin-bottom:16px;font-family:'Space Grotesk',sans-serif;font-size:15px;color:rgba(255,255,255,0.7);">
+              <span style="color:var(--nord-red);flex-shrink:0;">🌐</span>
+              <span>nordfire.co.uk</span>
+            </li>
+            <li style="display:flex;gap:12px;margin-bottom:16px;font-family:'Space Grotesk',sans-serif;font-size:15px;color:rgba(255,255,255,0.7);">
+              <span style="color:var(--nord-red);flex-shrink:0;">🇬🇧</span>
+              <span>Registered in Scotland, United Kingdom</span>
+            </li>
+          </ul>
+        </div>
+
+        <div style="background:#fff;border:1px solid #eee;border-radius:8px;padding:32px;" class="reveal">
+          <h4 style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;color:var(--nord-navy);margin-bottom:16px;">Trade Accounts</h4>
+          <p style="font-family:'Space Grotesk',sans-serif;font-size:15px;color:#666;line-height:1.7;margin-bottom:20px;">Are you a contractor, engineer, or facilities manager looking to set up a trade account? Contact us to discuss pricing, credit terms, and account management.</p>
+          <a href="mailto:info@nordfire.co.uk?subject=Trade Account Enquiry" class="btn-nord" style="width:100%;justify-content:center;padding:12px 20px;font-size:14px;">Enquire About Trade Account →</a>
+        </div>
+
+        <div style="background:#f8f9fa;border:1px solid #eee;border-radius:8px;padding:32px;margin-top:24px;" class="reveal">
+          <h4 style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;color:var(--nord-navy);margin-bottom:16px;">Response Times</h4>
+          <table style="width:100%;border-collapse:collapse;font-family:'Space Grotesk',sans-serif;font-size:14px;">
+            <tr style="border-bottom:1px solid #eee;">
+              <td style="padding:10px 0;color:#555;">Email enquiries</td>
+              <td style="padding:10px 0;color:var(--nord-navy);font-weight:600;text-align:right;">Within 1 business day</td>
+            </tr>
+            <tr style="border-bottom:1px solid #eee;">
+              <td style="padding:10px 0;color:#555;">Quote requests</td>
+              <td style="padding:10px 0;color:var(--nord-navy);font-weight:600;text-align:right;">Within 2 business days</td>
+            </tr>
+            <tr>
+              <td style="padding:10px 0;color:#555;">Technical advice</td>
+              <td style="padding:10px 0;color:var(--nord-navy);font-weight:600;text-align:right;">Same or next day</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER (shared) -->
+<div id="footer-placeholder"></div>
+
+<script src="assets/js/shared.js"></script>
+<script>
+  function handleContactForm(e) {
+    e.preventDefault();
+    const form = document.getElementById('contactForm');
+    const success = document.getElementById('formSuccess');
+    const btn = form.querySelector('.form-submit');
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+    // Simulate submission
+    setTimeout(() => {
+      form.style.display = 'none';
+      success.style.display = 'block';
+    }, 1200);
+  }
+</script>
+</body>
+</html>

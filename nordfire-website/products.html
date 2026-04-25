@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Products – NORD Fire | Specialist Fire Safety Solutions</title>
+  <meta name="description" content="Browse NORD Fire's specialist product range: extinguishers, fire detection, signage, storage, ancillaries, specialist equipment, and MAUS suppression systems. All UK compliant." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Marcellus&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/shared.css" />
+  <style>
+    /* ─── Products page specific styles ─── */
+    .products-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+    @media (max-width: 991px) {
+      .products-layout { grid-template-columns: 1fr; }
+      .products-sidebar { display: none; }
+    }
+
+    /* Sidebar */
+    .products-sidebar {
+      position: sticky;
+      top: 120px;
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .sidebar-header {
+      background: var(--nord-navy);
+      padding: 20px 24px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .sidebar-nav { list-style: none; padding: 0; margin: 0; }
+    .sidebar-nav li { border-bottom: 1px solid #f0f0f0; }
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 24px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--nord-text);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .sidebar-nav a:hover,
+    .sidebar-nav a.active { color: var(--nord-red); background: rgba(230,51,41,0.04); padding-left: 28px; }
+    .sidebar-nav a .count {
+      margin-left: auto;
+      font-size: 12px;
+      background: #f0f0f0;
+      color: #888;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+    .sidebar-nav a:hover .count,
+    .sidebar-nav a.active .count { background: rgba(230,51,41,0.1); color: var(--nord-red); }
+
+    /* Category section */
+    .category-section {
+      margin-bottom: 80px;
+      scroll-margin-top: 120px;
+    }
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 32px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #eee;
+    }
+    .category-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(230,51,41,0.08);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+    .category-title {
+      font-family: 'Marcellus', serif;
+      font-size: 32px;
+      color: var(--nord-navy);
+      margin: 0 0 4px;
+    }
+    .category-subtitle {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px;
+      color: #666;
+      margin: 0;
+    }
+    .category-count {
+      margin-left: auto;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--nord-red);
+      background: rgba(230,51,41,0.08);
+      padding: 6px 14px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    /* Product cards */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 1200px) { .products-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 575px) { .products-grid { grid-template-columns: 1fr; } }
+
+    .product-card {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+    .product-card:hover {
+      border-color: var(--nord-red);
+      box-shadow: 0 8px 32px rgba(230,51,41,0.1);
+      transform: translateY(-2px);
+    }
+    .product-card__badge {
+      background: var(--nord-red);
+      color: #fff;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      display: inline-block;
+    }
+    .product-card__body { padding: 20px; }
+    .product-card__type {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--nord-red);
+      margin-bottom: 8px;
+    }
+    .product-card__name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--nord-navy);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+    .product-card__desc {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .product-card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid #f0f0f0;
+    }
+    .product-card__compliance {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 12px;
+      color: #888;
+    }
+    .product-card__cta {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--nord-red);
+      text-decoration: none;
+    }
+    .product-card__cta:hover { text-decoration: underline; }
+
+    /* Subcategory tags */
+    .subcategory-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+    .subcategory-tag {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--nord-navy);
+      background: #f0f4f8;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid #e0e8f0;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .subcategory-tag:hover { background: var(--nord-red); color: #fff; border-color: var(--nord-red); }
+
+    /* Info band */
+    .info-band {
+      background: #f8f9fa;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .info-band__icon { font-size: 24px; flex-shrink: 0; }
+    .info-band__text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px;
+      color: #555;
+      line-height: 1.6;
+    }
+    .info-band__text strong { color: var(--nord-navy); }
+    .info-band__cta {
+      margin-left: auto;
+      flex-shrink: 0;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--nord-red);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    @media (max-width: 767px) {
+      .info-band { flex-direction: column; align-items: flex-start; }
+      .info-band__cta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER (shared) -->
+<div id="header-placeholder"></div>
+
+<!-- PAGE HEADER -->
+<section class="page-header">
+  <div class="container">
+    <h1 class="page-header__title">Product Range</h1>
+    <p class="page-header__breadcrumb"><a href="index.html">Home</a> → Products</p>
+  </div>
+</section>
+
+<!-- INTRO BAND -->
+<div style="background:#fff;border-bottom:1px solid #eee;padding:24px 0;">
+  <div class="container">
+    <div class="d-flex align-center justify-between" style="flex-wrap:wrap;gap:16px;">
+      <div>
+        <p style="font-family:'Space Grotesk',sans-serif;font-size:16px;color:#555;margin:0;">
+          <strong style="color:var(--nord-navy);">8,354 specialist products</strong> across 7 categories — all UK compliant, all properly specified.
+        </p>
+      </div>
+      <a href="contact.html" class="btn-nord" style="padding:10px 24px;font-size:14px;">Request a Quote →</a>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<section style="padding:60px 0 100px;background:#f8f9fa;">
+  <div class="container">
+    <div class="products-layout">
+
+      <!-- ─── SIDEBAR ─── -->
+      <aside class="products-sidebar">
+        <div class="sidebar-header">Product Categories</div>
+        <ul class="sidebar-nav">
+          <li><a href="#extinguishers"><span>🔴</span> Extinguishers <span class="count">231</span></a></li>
+          <li><a href="#detection"><span>📡</span> Detection <span class="count">2,484</span></a></li>
+          <li><a href="#signage"><span>🪧</span> Signage <span class="count">443</span></a></li>
+          <li><a href="#storage"><span>🗄</span> Storage <span class="count">208</span></a></li>
+          <li><a href="#ancillaries"><span>🔩</span> Ancillaries <span class="count">566</span></a></li>
+          <li><a href="#specialist"><span>🔧</span> Specialist <span class="count">53</span></a></li>
+          <li><a href="#maus"><span>⚡</span> MAUS Suppression <span class="count">—</span></a></li>
+        </ul>
+        <div style="padding:20px 24px;border-top:1px solid #eee;">
+          <p style="font-family:'Space Grotesk',sans-serif;font-size:13px;color:#888;margin:0 0 12px;">Need a quote or specification advice?</p>
+          <a href="contact.html" class="btn-nord" style="width:100%;justify-content:center;padding:12px 20px;font-size:14px;">Contact Us →</a>
+        </div>
+      </aside>
+
+      <!-- ─── MAIN PRODUCT SECTIONS ─── -->
+      <main>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- EXTINGUISHERS -->
+        <!-- ═══════════════════════════════════════════════ -->
+        <div class="category-section" id="extinguishers">
+          <div class="category-header">
+            <div class="category-icon">🔴</div>
+            <div>
+              <h2 class="category-title">Extinguishers</h2>
+              <p class="category-subtitle">BS EN3 compliant. Kitemarked. Professionally specified.</p>
+            </div>
+            <span class="category-count">231 products</span>
+          </div>
+
+          <div class="subcategory-tags">
+            <span class="subcategory-tag">Powder (75)</span>
+            <span class="subcategory-tag">CO₂ (49)</span>
+            <span class="subcategory-tag">Foam (37)</span>
+            <span class="subcategory-tag">Water (33)</span>
+            <span class="subcategory-tag">Wet Chemical (15)</span>
+            <span class="subcategory-tag">Water Mist (12)</span>
+            <span class="subcategory-tag">Lithium (7)</span>
+            <span class="subcategory-tag">Clean Agent (3)</span>
+          </div>
+
+          <div class="products-grid">
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">CO₂</p>
+                <h3 class="product-card__name">CO₂ Fire Extinguisher — 2kg</h3>
+                <p class="product-card__desc">Ideal for electrical hazards. Clean discharge leaves no residue. Suitable for offices, server rooms, and workshops.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">BS EN3 · Kitemarked</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">CO₂</p>
+                <h3 class="product-card__name">CO₂ Fire Extinguisher — 5kg</h3>
+                <p class="product-card__desc">High-capacity CO₂ for larger electrical risk areas. Wall bracket or floor stand mounting. Pressure gauge included.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">BS EN3 · Kitemarked</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Powder</p>
+                <h3 class="product-card__name">ABC Dry Powder — 6kg</h3>
+                <p class="product-card__desc">Multi-purpose ABC powder for Class A, B, and C fires. Suitable for vehicles, plant rooms, and outdoor applications.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">BS EN3 · Kitemarked</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Foam</p>
+                <h3 class="product-card__name">AFFF Foam Extinguisher — 6 Litre</h3>
+                <p class="product-card__desc">Class A and B fire coverage. Aqueous film-forming foam creates a seal over flammable liquid surfaces. Frost-free to -20°C.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">BS EN3 · Kitemarked</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Wet Chemical</p>
+                <h3 class="product-card__name">Wet Chemical Extinguisher — 6 Litre</h3>
+                <p class="product-card__desc">Specifically designed for Class F cooking oil fires. Saponification action cools and seals. Essential for commercial kitchens.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">BS EN3 · Class F</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Water Mist</p>
+                <h3 class="product-card__name">Water Mist Extinguisher — 6 Litre</h3>
+                <p class="product-card__desc">Safe on live electrical equipment up to 1000V. Effective on Class A, B, C, and F fires. No chemical residue.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">BS EN3 · Multi-class</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-band">
+            <div class="info-band__icon">ℹ️</div>
+            <div class="info-band__text"><strong>231 extinguisher products</strong> available including CO₂, powder, foam, water, wet chemical, water mist, lithium, and clean agent types. All BS EN3 compliant and Kitemarked.</div>
+            <a href="contact.html" class="info-band__cta">Request Full Catalogue →</a>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- DETECTION -->
+        <!-- ═══════════════════════════════════════════════ -->
+        <div class="category-section" id="detection">
+          <div class="category-header">
+            <div class="category-icon">📡</div>
+            <div>
+              <h2 class="category-title">Detection</h2>
+              <p class="category-subtitle">FireClass bundles, addressable systems, panels, detectors, and sounders.</p>
+            </div>
+            <span class="category-count">2,484 products</span>
+          </div>
+
+          <div class="subcategory-tags">
+            <span class="subcategory-tag">Apollo Fire Detectors</span>
+            <span class="subcategory-tag">Hochiki Europe</span>
+            <span class="subcategory-tag">Morley ZXSe Panels</span>
+            <span class="subcategory-tag">Vigilon Plus</span>
+            <span class="subcategory-tag">Wagner Detection</span>
+            <span class="subcategory-tag">VESDA VEA</span>
+            <span class="subcategory-tag">Gas Detection</span>
+            <span class="subcategory-tag">Linear Heat Detection</span>
+            <span class="subcategory-tag">Carbon Monoxide</span>
+          </div>
+
+          <div class="products-grid">
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">FireClass Bundle</p>
+                <h3 class="product-card__name">FireClass FC501 Control Panel Bundle</h3>
+                <p class="product-card__desc">Complete addressable fire detection system. Panel, detectors, call points, and sounders. Simple to install and commission.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">EN54 Certified</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Apollo</p>
+                <h3 class="product-card__name">Apollo XP95 Optical Smoke Detector</h3>
+                <p class="product-card__desc">Industry-standard addressable optical detector. Compatible with most major panels. Low false alarm rate.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">EN54-7</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Hochiki</p>
+                <h3 class="product-card__name">Hochiki ESP Optical Detector</h3>
+                <p class="product-card__desc">High-performance addressable optical smoke detector. Drift compensation built in. Wide operating temperature range.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">EN54-7</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Morley</p>
+                <h3 class="product-card__name">Morley ZXSe Addressable Panel — 2 Loop</h3>
+                <p class="product-card__desc">Scalable 2-loop addressable fire alarm control panel. Up to 126 devices per loop. Network-ready with graphical display.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">EN54-2 / EN54-4</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">VESDA</p>
+                <h3 class="product-card__name">VESDA VEA Air Sampling Detector</h3>
+                <p class="product-card__desc">Very Early Smoke Detection Apparatus for high-value environments. Aspirating system detects smoke at sub-visible levels.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">EN54-20</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Gas Detection</p>
+                <h3 class="product-card__name">Carbon Monoxide Detector — Standalone</h3>
+                <p class="product-card__desc">Electrochemical CO sensor. Audible and visual alarm. Suitable for boiler rooms, car parks, and enclosed spaces.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">EN50291</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-band">
+            <div class="info-band__icon">ℹ️</div>
+            <div class="info-band__text"><strong>2,484 detection products</strong> including Apollo, Hochiki, Morley, VESDA, Wagner, and FireClass ranges. Panels, detectors, call points, sounders, and accessories.</div>
+            <a href="contact.html" class="info-band__cta">Request Full Catalogue →</a>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- SIGNAGE -->
+        <!-- ═══════════════════════════════════════════════ -->
+        <div class="category-section" id="signage">
+          <div class="category-header">
+            <div class="category-icon">🪧</div>
+            <div>
+              <h2 class="category-title">Signage</h2>
+              <p class="category-subtitle">BS EN ISO 7010 compliant fire safety signs. Photoluminescent, rigid, and self-adhesive.</p>
+            </div>
+            <span class="category-count">443 products</span>
+          </div>
+
+          <div class="subcategory-tags">
+            <span class="subcategory-tag">Fire Exit (83)</span>
+            <span class="subcategory-tag">Fire Action Notices (32)</span>
+            <span class="subcategory-tag">Fire Door (22)</span>
+            <span class="subcategory-tag">Fire Blanket Signs (21)</span>
+            <span class="subcategory-tag">Emergency Door (17)</span>
+            <span class="subcategory-tag">Fire Point Management (16)</span>
+            <span class="subcategory-tag">CO₂ Signs (37)</span>
+            <span class="subcategory-tag">Powder Signs (46)</span>
+            <span class="subcategory-tag">Foam Signs (40)</span>
+            <span class="subcategory-tag">Water Signs (43)</span>
+            <span class="subcategory-tag">Wet Chemical Signs (27)</span>
+            <span class="subcategory-tag">Water Mist Signs (17)</span>
+          </div>
+
+          <div class="products-grid">
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Fire Exit</p>
+                <h3 class="product-card__name">Fire Exit Running Man Sign — Photoluminescent</h3>
+                <p class="product-card__desc">Glow-in-the-dark fire exit sign. Charges in normal light and remains visible for hours in darkness. Multiple sizes available.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">BS EN ISO 7010 E001</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Extinguisher ID</p>
+                <h3 class="product-card__name">CO₂ Extinguisher Identification Sign</h3>
+                <p class="product-card__desc">Rigid PVC identification sign for CO₂ extinguishers. Clear pictogram and text. Self-adhesive or screw-fix options.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">BS EN ISO 7010</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Fire Action</p>
+                <h3 class="product-card__name">Fire Action Notice — Standard</h3>
+                <p class="product-card__desc">Standard fire action notice with "What to do if you discover a fire" instructions. A4 and A5 sizes. Rigid and self-adhesive.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">BS 5499</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Fire Door</p>
+                <h3 class="product-card__name">Fire Door Keep Shut Sign</h3>
+                <p class="product-card__desc">Compliant fire door signage. "Fire Door Keep Shut" in standard format. Self-adhesive vinyl or rigid PVC.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">BS EN ISO 7010</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Fire Point</p>
+                <h3 class="product-card__name">Fire Point Management Sign</h3>
+                <p class="product-card__desc">Fire point identification and management signs. Suitable for extinguisher locations, hose reels, and fire points.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">BS EN ISO 7010</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Wet Chemical</p>
+                <h3 class="product-card__name">Wet Chemical Extinguisher ID Sign</h3>
+                <p class="product-card__desc">Identification sign for wet chemical extinguishers. Yellow band with pictogram. Essential for commercial kitchen installations.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">BS EN ISO 7010</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-band">
+            <div class="info-band__icon">ℹ️</div>
+            <div class="info-band__text"><strong>443 signage products</strong> including fire exit, extinguisher identification, fire action notices, fire door, emergency door operation, and fire point management signs.</div>
+            <a href="contact.html" class="info-band__cta">Request Full Catalogue →</a>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- STORAGE -->
+        <!-- ═══════════════════════════════════════════════ -->
+        <div class="category-section" id="storage">
+          <div class="category-header">
+            <div class="category-icon">🗄</div>
+            <div>
+              <h2 class="category-title">Storage</h2>
+              <p class="category-subtitle">Extinguisher stands, cabinets, trolleys, and mounting solutions.</p>
+            </div>
+            <span class="category-count">208 products</span>
+          </div>
+
+          <div class="subcategory-tags">
+            <span class="subcategory-tag">Extinguisher Stands (79)</span>
+            <span class="subcategory-tag">Extinguisher Cabinets (32)</span>
+            <span class="subcategory-tag">Trolley Bundles (20)</span>
+            <span class="subcategory-tag">Extinguisher Trolleys (19)</span>
+            <span class="subcategory-tag">Trolley Covers (12)</span>
+            <span class="subcategory-tag">Extinguisher Points (11)</span>
+            <span class="subcategory-tag">Stand Bundles (8)</span>
+            <span class="subcategory-tag">Document Boxes (4)</span>
+          </div>
+
+          <div class="products-grid">
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Stand</p>
+                <h3 class="product-card__name">Single Extinguisher Floor Stand</h3>
+                <p class="product-card__desc">Powder-coated steel floor stand for single extinguisher. Suitable for most standard extinguisher sizes. Stable base design.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">UK Standard</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Stand</p>
+                <h3 class="product-card__name">Twin Extinguisher Floor Stand</h3>
+                <p class="product-card__desc">Heavy-duty twin stand for two extinguishers side by side. Ideal for fire points. Powder-coated steel with red finish.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">UK Standard</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Cabinet</p>
+                <h3 class="product-card__name">Extinguisher Safety Cabinet — Single</h3>
+                <p class="product-card__desc">Lockable steel cabinet for extinguisher storage and protection. Suitable for outdoor and indoor use. Viewing window.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">Weather Resistant</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Trolley Bundle</p>
+                <h3 class="product-card__name">Extinguisher Trolley Bundle — Twin CO₂</h3>
+                <p class="product-card__desc">Mobile trolley bundle with twin CO₂ extinguishers. Ideal for server rooms and electrical switch rooms. Wheeled for easy deployment.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">BS EN3</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Bracket</p>
+                <h3 class="product-card__name">Wall Bracket — J-Type Universal</h3>
+                <p class="product-card__desc">Universal J-type wall bracket for extinguisher mounting. Adjustable for most extinguisher diameters. Powder-coated steel.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">UK Standard</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Document Box</p>
+                <h3 class="product-card__name">Fire Safety Document Box</h3>
+                <p class="product-card__desc">Weatherproof document box for fire safety records, service logs, and risk assessments. Wall-mounted with lock.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">Weatherproof</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-band">
+            <div class="info-band__icon">ℹ️</div>
+            <div class="info-band__text"><strong>208 storage products</strong> including floor stands, wall brackets, safety cabinets, trolleys, trolley covers, extinguisher points, and document boxes.</div>
+            <a href="contact.html" class="info-band__cta">Request Full Catalogue →</a>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- ANCILLARIES -->
+        <!-- ═══════════════════════════════════════════════ -->
+        <div class="category-section" id="ancillaries">
+          <div class="category-header">
+            <div class="category-icon">🔩</div>
+            <div>
+              <h2 class="category-title">Ancillaries</h2>
+              <p class="category-subtitle">Service parts, refills, tools, fire blankets, and maintenance accessories.</p>
+            </div>
+            <span class="category-count">566 products</span>
+          </div>
+
+          <div class="subcategory-tags">
+            <span class="subcategory-tag">O Rings (75)</span>
+            <span class="subcategory-tag">Extinguisher Refills (56)</span>
+            <span class="subcategory-tag">Extinguisher Pins (51)</span>
+            <span class="subcategory-tag">Tamper Seals (44)</span>
+            <span class="subcategory-tag">Tools (42)</span>
+            <span class="subcategory-tag">Fire Blankets (40)</span>
+            <span class="subcategory-tag">Extinguisher Brackets (36)</span>
+            <span class="subcategory-tag">Gauge Dots (31)</span>
+            <span class="subcategory-tag">Site Alarms (28)</span>
+            <span class="subcategory-tag">Extinguisher Indicators (27)</span>
+            <span class="subcategory-tag">High Visibility (14)</span>
+          </div>
+
+          <div class="products-grid">
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Fire Blanket</p>
+                <h3 class="product-card__name">Fire Blanket — 1.0m × 1.0m</h3>
+                <p class="product-card__desc">Woven glass fibre fire blanket for smothering small fires. Quick-release packaging. Suitable for kitchens and workshops.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">BS EN 1869</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Fire Blanket</p>
+                <h3 class="product-card__name">Fire Blanket — 1.2m × 1.8m</h3>
+                <p class="product-card__desc">Large format fire blanket for commercial kitchens and industrial applications. Soft case with quick-release tabs.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">BS EN 1869</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Service</p>
+                <h3 class="product-card__name">Tamper Seal Kit — 100 Pack</h3>
+                <p class="product-card__desc">Numbered tamper-evident seals for extinguisher service records. Colour-coded by year. Pack of 100.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">BS 5306</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Service</p>
+                <h3 class="product-card__name">Extinguisher Service Pin — Pack of 50</h3>
+                <p class="product-card__desc">Standard extinguisher safety pins for service and maintenance. Stainless steel with pull ring. Pack of 50.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">BS 5306</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Site Alarm</p>
+                <h3 class="product-card__name">Site Alarm — Battery Operated</h3>
+                <p class="product-card__desc">Portable battery-operated site alarm for construction sites and temporary buildings. 110dB output. No wiring required.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">UK Standard</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Gauge Dots</p>
+                <h3 class="product-card__name">Pressure Gauge Indicator Dots</h3>
+                <p class="product-card__desc">Self-adhesive gauge indicator dots for extinguisher service records. Green/red colour coding. Pack of 100.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">BS 5306</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-band">
+            <div class="info-band__icon">ℹ️</div>
+            <div class="info-band__text"><strong>566 ancillary products</strong> including fire blankets, service parts, tamper seals, O rings, extinguisher pins, tools, gauge dots, site alarms, and high-visibility accessories.</div>
+            <a href="contact.html" class="info-band__cta">Request Full Catalogue →</a>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- SPECIALIST -->
+        <!-- ═══════════════════════════════════════════════ -->
+        <div class="category-section" id="specialist">
+          <div class="category-header">
+            <div class="category-icon">🔧</div>
+            <div>
+              <h2 class="category-title">Specialist</h2>
+              <p class="category-subtitle">Hose reels, evacuation equipment, dry risers, and specialist fire safety products.</p>
+            </div>
+            <span class="category-count">53 products</span>
+          </div>
+
+          <div class="subcategory-tags">
+            <span class="subcategory-tag">Hose Reels (39)</span>
+            <span class="subcategory-tag">Evacuation (7)</span>
+            <span class="subcategory-tag">Dry Riser (119)</span>
+            <span class="subcategory-tag">Cylinders (3)</span>
+            <span class="subcategory-tag">Water Inlets (2)</span>
+            <span class="subcategory-tag">Ladders (2)</span>
+          </div>
+
+          <div class="products-grid">
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Hose Reel</p>
+                <h3 class="product-card__name">Fixed Hose Reel — 30m</h3>
+                <p class="product-card__desc">Fixed installation hose reel with 30m of 19mm hose. Swivel bracket for 180° rotation. Suitable for most commercial premises.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">BS EN 671-1</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Hose Reel</p>
+                <h3 class="product-card__name">Recessed Hose Reel Cabinet</h3>
+                <p class="product-card__desc">Recessed wall-mounted hose reel cabinet. Powder-coated steel with glazed door. For concealed hose reel installations.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">BS EN 671-1</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Evacuation</p>
+                <h3 class="product-card__name">Evacuation Chair — Stairway Model</h3>
+                <p class="product-card__desc">Stairway evacuation chair for mobility-impaired building users. Tracked descent system. Folds flat for storage.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">BS 9999</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Dry Riser</p>
+                <h3 class="product-card__name">Dry Riser Inlet Box — Recessed</h3>
+                <p class="product-card__desc">Recessed dry riser inlet box for building facade installation. Stainless steel door with break glass. Twin inlet.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">BS 9990</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Dry Riser</p>
+                <h3 class="product-card__name">Dry Riser Landing Valve — 65mm</h3>
+                <p class="product-card__desc">65mm instantaneous coupling landing valve for dry riser systems. Brass body with cap and chain. BS Instantaneous coupling.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">BS 9990</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Hose Reel</p>
+                <h3 class="product-card__name">Hose Reel Nozzle — Jet/Spray</h3>
+                <p class="product-card__desc">Dual-function jet and spray nozzle for hose reel systems. Shut-off valve. Compatible with 19mm hose.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">BS EN 671-1</span>
+                  <a href="contact.html" class="product-card__cta">Get Price →</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-band">
+            <div class="info-band__icon">ℹ️</div>
+            <div class="info-band__text"><strong>172 specialist products</strong> including hose reels, dry riser equipment, evacuation chairs, cylinders, and water inlet systems. All professionally specified.</div>
+            <a href="contact.html" class="info-band__cta">Request Full Catalogue →</a>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- MAUS SUPPRESSION -->
+        <!-- ═══════════════════════════════════════════════ -->
+        <div class="category-section" id="maus">
+          <div class="category-header">
+            <div class="category-icon">⚡</div>
+            <div>
+              <h2 class="category-title">MAUS Suppression</h2>
+              <p class="category-subtitle">Automatic fire suppression for small spaces. No power required.</p>
+            </div>
+            <span class="category-count">Specialist Range</span>
+          </div>
+
+          <div style="background:var(--nord-navy);border-radius:8px;padding:40px;margin-bottom:28px;" class="reveal">
+            <div class="grid-2" style="gap:32px;align-items:center;">
+              <div>
+                <p style="font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--nord-red);margin-bottom:12px;">Featured Product</p>
+                <h3 style="font-family:'Marcellus',serif;font-size:32px;color:#fff;margin-bottom:16px;">MAUS Stixx Pro</h3>
+                <p style="font-family:'Space Grotesk',sans-serif;font-size:16px;color:rgba(255,255,255,0.8);line-height:1.7;margin-bottom:24px;">Small space automatic fire suppression. Fast activation at 170°C. No power required. Ideal for server rooms, plant rooms, vehicles, and electrical cabinets.</p>
+                <ul style="list-style:none;padding:0;margin:0 0 28px;">
+                  <li style="font-family:'Space Grotesk',sans-serif;font-size:15px;color:rgba(255,255,255,0.7);padding:6px 0;display:flex;align-items:center;gap:10px;"><span style="color:var(--nord-red);">✓</span> Activates automatically at 170°C</li>
+                  <li style="font-family:'Space Grotesk',sans-serif;font-size:15px;color:rgba(255,255,255,0.7);padding:6px 0;display:flex;align-items:center;gap:10px;"><span style="color:var(--nord-red);">✓</span> No power or wiring required</li>
+                  <li style="font-family:'Space Grotesk',sans-serif;font-size:15px;color:rgba(255,255,255,0.7);padding:6px 0;display:flex;align-items:center;gap:10px;"><span style="color:var(--nord-red);">✓</span> Compact — fits in tight spaces</li>
+                  <li style="font-family:'Space Grotesk',sans-serif;font-size:15px;color:rgba(255,255,255,0.7);padding:6px 0;display:flex;align-items:center;gap:10px;"><span style="color:var(--nord-red);">✓</span> Suitable for unattended areas</li>
+                  <li style="font-family:'Space Grotesk',sans-serif;font-size:15px;color:rgba(255,255,255,0.7);padding:6px 0;display:flex;align-items:center;gap:10px;"><span style="color:var(--nord-red);">✓</span> No maintenance between replacements</li>
+                </ul>
+                <a href="contact.html" class="btn-nord" style="background:#fff;color:var(--nord-red);border-color:#fff;">Get a Quote for MAUS Stixx Pro →</a>
+              </div>
+              <div style="text-align:center;">
+                <div style="background:rgba(230,51,41,0.15);border-radius:12px;padding:40px;display:inline-block;">
+                  <div style="font-size:80px;line-height:1;">⚡</div>
+                  <p style="font-family:'Marcellus',serif;font-size:24px;color:#fff;margin:16px 0 4px;">MAUS Stixx Pro</p>
+                  <p style="font-family:'Space Grotesk',sans-serif;font-size:14px;color:rgba(255,255,255,0.6);margin:0;">Automatic Suppression</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="products-grid">
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Application</p>
+                <h3 class="product-card__name">Server Room Protection</h3>
+                <p class="product-card__desc">MAUS Stixx Pro for server room and data cabinet protection. Activates before significant damage occurs. No downtime from false activations.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">Automatic</span>
+                  <a href="contact.html" class="product-card__cta">Enquire →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Application</p>
+                <h3 class="product-card__name">Vehicle Protection</h3>
+                <p class="product-card__desc">Engine bay and cab fire suppression for commercial vehicles, plant, and specialist vehicles. Compact and self-contained.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">Automatic</span>
+                  <a href="contact.html" class="product-card__cta">Enquire →</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-card reveal">
+              <div class="product-card__body">
+                <p class="product-card__type">Application</p>
+                <h3 class="product-card__name">Plant Room Protection</h3>
+                <p class="product-card__desc">Unattended plant room and electrical switch room protection. Operates without power or monitoring. Ideal for remote locations.</p>
+                <div class="product-card__footer">
+                  <span class="product-card__compliance">Automatic</span>
+                  <a href="contact.html" class="product-card__cta">Enquire →</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-band">
+            <div class="info-band__icon">💬</div>
+            <div class="info-band__text">MAUS suppression is a specialist product range. <strong>Contact our team</strong> for application-specific advice, pricing, and technical specifications.</div>
+            <a href="contact.html" class="info-band__cta">Contact Us →</a>
+          </div>
+        </div>
+
+        <!-- ─── BOTTOM CTA ─── -->
+        <div style="background:var(--nord-red);border-radius:8px;padding:40px;text-align:center;" class="reveal">
+          <h3 style="font-family:'Marcellus',serif;font-size:28px;color:#fff;margin-bottom:12px;">Can't Find What You're Looking For?</h3>
+          <p style="font-family:'Space Grotesk',sans-serif;font-size:16px;color:rgba(255,255,255,0.85);margin-bottom:24px;">Our team can help you specify the right product for your application. Get in touch for technical advice and pricing.</p>
+          <a href="contact.html" class="cta-one__btn">Contact Our Team →</a>
+        </div>
+
+      </main>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER (shared) -->
+<div id="footer-placeholder"></div>
+
+<script src="assets/js/shared.js"></script>
+<script>
+  // Sidebar active state on scroll
+  const sections = document.querySelectorAll('.category-section');
+  const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        sidebarLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+
+  sections.forEach(s => sectionObserver.observe(s));
+</script>
+</body>
+</html>
