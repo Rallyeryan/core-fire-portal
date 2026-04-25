@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trade Portal – NORD Fire | Professional Trade Accounts</title>
+  <meta name="description" content="Apply for a NORD Fire trade account. Access 8,354 products at your assigned pricing band, build branded PDF quotes, manage orders and payments through the client portal." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/shared.css" />
+  <style>
+    /* ─── Portal page-specific styles ─── */
+    body { background: #fff; }
+
+    /* Hero */
+    .portal-hero {
+      padding: 160px 0 100px;
+      background: var(--nord-navy);
+      position: relative;
+      overflow: hidden;
+    }
+    .portal-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('assets/images/backgrounds/page-header-bg.jpg') center/cover no-repeat;
+      opacity: 0.08;
+    }
+    .portal-hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 120px;
+      background: linear-gradient(to bottom, transparent, #fff);
+    }
+    .portal-hero__inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .portal-hero__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(230,51,41,0.15);
+      border: 1px solid rgba(230,51,41,0.3);
+      color: #ff6b63;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+    .portal-hero__title {
+      font-family: 'Marcellus', serif;
+      font-size: clamp(32px, 4.5vw, 58px);
+      color: #fff;
+      line-height: 1.15;
+      margin: 0 0 20px;
+    }
+    .portal-hero__title span { color: var(--nord-red); }
+    .portal-hero__text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 17px;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.8;
+      margin-bottom: 36px;
+    }
+    .portal-hero__actions { display: flex; gap: 16px; flex-wrap: wrap; }
+    .portal-hero__card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      padding: 36px;
+      backdrop-filter: blur(8px);
+    }
+    .portal-hero__stat {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .portal-hero__stat:last-child { border-bottom: none; }
+    .portal-hero__stat-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(230,51,41,0.15);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .portal-hero__stat-num {
+      font-family: 'Marcellus', serif;
+      font-size: 28px;
+      color: #fff;
+      line-height: 1;
+    }
+    .portal-hero__stat-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+    }
+    @media (max-width: 991px) {
+      .portal-hero__inner { grid-template-columns: 1fr; gap: 40px; }
+      .portal-hero__card { display: none; }
+    }
+
+    /* Features grid */
+    .portal-features { padding: 100px 0; background: #fff; }
+    .feature-card {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 12px;
+      padding: 36px 28px;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--nord-red);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    .feature-card:hover { box-shadow: 0 20px 60px rgba(0,0,0,0.1); transform: translateY(-4px); border-color: transparent; }
+    .feature-card:hover::before { transform: scaleX(1); }
+    .feature-card__icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(230,51,41,0.08);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      margin-bottom: 20px;
+    }
+    .feature-card__title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--nord-navy);
+      margin-bottom: 10px;
+    }
+    .feature-card__text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      color: #666;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+    .feature-card__tag {
+      display: inline-block;
+      background: rgba(230,51,41,0.08);
+      color: var(--nord-red);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 3px;
+      margin-right: 6px;
+      margin-bottom: 6px;
+    }
+    .features-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    @media (max-width: 991px) { .features-grid-3 { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 575px) { .features-grid-3 { grid-template-columns: 1fr; } }
+
+    /* Onboarding steps */
+    .onboarding { padding: 100px 0; background: var(--nord-grey); }
+    .step-row {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 28px;
+      align-items: flex-start;
+      padding: 36px;
+      background: #fff;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      border: 1px solid #eee;
+      transition: all 0.3s;
+    }
+    .step-row:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.08); border-color: var(--nord-red); }
+    .step-num {
+      font-family: 'Marcellus', serif;
+      font-size: 52px;
+      color: rgba(230,51,41,0.15);
+      line-height: 1;
+      text-align: center;
+    }
+    .step-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--nord-navy);
+      margin-bottom: 8px;
+    }
+    .step-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px;
+      color: #666;
+      line-height: 1.7;
+      margin: 0;
+    }
+    .step-tags { margin-top: 14px; }
+    @media (max-width: 575px) { .step-row { grid-template-columns: 1fr; } .step-num { font-size: 36px; } }
+
+    /* Pricing bands */
+    .pricing-bands { padding: 100px 0; background: #fff; }
+    .bands-table-wrap { overflow-x: auto; }
+    .bands-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .bands-table th {
+      background: var(--nord-navy);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 16px 20px;
+      text-align: left;
+    }
+    .bands-table td {
+      padding: 16px 20px;
+      font-size: 15px;
+      color: var(--nord-text);
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .bands-table tr:last-child td { border-bottom: none; }
+    .bands-table tr:nth-child(even) td { background: #fafafa; }
+    .band-pill {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .band-a { background: rgba(230,51,41,0.1); color: var(--nord-red); }
+    .band-b { background: rgba(201,168,76,0.12); color: #b8860b; }
+    .band-c { background: rgba(34,197,94,0.1); color: #166534; }
+    .band-d { background: rgba(59,130,246,0.1); color: #1d4ed8; }
+
+    /* Feature deep-dive sections */
+    .feature-section {
+      padding: 100px 0;
+    }
+    .feature-section--alt { background: var(--nord-grey); }
+    .feature-section__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .feature-section__grid--reverse { direction: rtl; }
+    .feature-section__grid--reverse > * { direction: ltr; }
+    @media (max-width: 991px) {
+      .feature-section__grid { grid-template-columns: 1fr; gap: 40px; }
+      .feature-section__grid--reverse { direction: ltr; }
+    }
+    .feature-section__eyebrow {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--nord-red);
+      margin-bottom: 12px;
+    }
+    .feature-section__title {
+      font-family: 'Marcellus', serif;
+      font-size: clamp(26px, 3.5vw, 42px);
+      color: var(--nord-navy);
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+    .feature-section__text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px;
+      color: #555;
+      line-height: 1.8;
+      margin-bottom: 28px;
+    }
+    .feature-list { list-style: none; padding: 0; margin: 0 0 32px; }
+    .feature-list li {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px;
+      color: #444;
+      padding: 10px 0;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .feature-list li::before {
+      content: '✓';
+      color: var(--nord-red);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .feature-section__visual {
+      background: var(--nord-navy);
+      border-radius: 16px;
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-section__visual::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 200px;
+      height: 200px;
+      background: rgba(230,51,41,0.08);
+      border-radius: 50%;
+    }
+    .mock-ui {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+    }
+    .mock-ui__bar {
+      background: rgba(255,255,255,0.06);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .mock-ui__dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .mock-ui__content { padding: 20px; }
+    .mock-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .mock-row:last-child { border-bottom: none; }
+    .mock-swatch {
+      width: 8px;
+      height: 36px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .mock-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 12px;
+      color: rgba(255,255,255,0.7);
+      flex: 1;
+    }
+    .mock-price {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .mock-badge {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 3px;
+      background: rgba(230,51,41,0.2);
+      color: #ff6b63;
+    }
+
+    /* Portal CTA */
+    .portal-cta {
+      padding: 100px 0;
+      background: var(--nord-navy);
+      position: relative;
+      overflow: hidden;
+    }
+    .portal-cta::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 500px;
+      height: 500px;
+      background: rgba(230,51,41,0.06);
+      border-radius: 50%;
+    }
+    .portal-cta__inner {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .portal-cta__title {
+      font-family: 'Marcellus', serif;
+      font-size: clamp(28px, 4vw, 52px);
+      color: #fff;
+      margin-bottom: 20px;
+    }
+    .portal-cta__text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 17px;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.8;
+      margin-bottom: 40px;
+    }
+    .portal-cta__actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-white {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #fff;
+      color: var(--nord-navy);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 16px 36px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: all 0.3s;
+      border: 2px solid #fff;
+    }
+    .btn-white:hover { background: transparent; color: #fff; }
+
+    /* Testimonials */
+    .portal-testimonials { padding: 100px 0; background: #fff; }
+    .testimonial-card {
+      background: var(--nord-grey);
+      border-radius: 12px;
+      padding: 36px;
+      border-left: 4px solid var(--nord-red);
+    }
+    .testimonial-card__stars { color: #f59e0b; font-size: 18px; margin-bottom: 16px; }
+    .testimonial-card__text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px;
+      color: #444;
+      line-height: 1.8;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+    .testimonial-card__author {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--nord-navy);
+    }
+    .testimonial-card__role {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      color: #888;
+    }
+
+    /* FAQ */
+    .portal-faq { padding: 100px 0; background: var(--nord-grey); }
+    .faq-item {
+      background: #fff;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      border: 1px solid #eee;
+      overflow: hidden;
+    }
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--nord-navy);
+      text-align: left;
+      transition: background 0.2s;
+    }
+    .faq-question:hover { background: #fafafa; }
+    .faq-question.open { color: var(--nord-red); }
+    .faq-icon { font-size: 20px; flex-shrink: 0; transition: transform 0.3s; }
+    .faq-question.open .faq-icon { transform: rotate(45deg); }
+    .faq-answer {
+      display: none;
+      padding: 0 24px 20px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px;
+      color: #555;
+      line-height: 1.8;
+    }
+    .faq-answer.open { display: block; }
+  </style>
+</head>
+<body>
+
+  <div id="header-placeholder"></div>
+
+  <!-- ─── Hero ─── -->
+  <section class="portal-hero">
+    <div class="container">
+      <div class="portal-hero__inner">
+        <div>
+          <div class="portal-hero__badge">🏢 NORD Fire Trade Portal</div>
+          <h1 class="portal-hero__title">Your Professional<br /><span>Trade Account</span><br />Platform</h1>
+          <p class="portal-hero__text">Access 8,354 specialist fire safety products at your assigned pricing band. Build branded PDF quotes, manage orders, track payments, and download compliance resources — all in one place.</p>
+          <div class="portal-hero__actions">
+            <a href="portal.html#apply" class="btn-nord">Apply for Trade Account →</a>
+            <a href="https://nordquote-jrbfpxgk.manus.space/" target="_blank" rel="noopener" class="btn-nord-outline">Login to Portal ↗</a>
+          </div>
+        </div>
+        <div class="portal-hero__card">
+          <div class="portal-hero__stat">
+            <div class="portal-hero__stat-icon">📦</div>
+            <div>
+              <div class="portal-hero__stat-num">8,354</div>
+              <div class="portal-hero__stat-label">Products in the trade catalogue</div>
+            </div>
+          </div>
+          <div class="portal-hero__stat">
+            <div class="portal-hero__stat-icon">💷</div>
+            <div>
+              <div class="portal-hero__stat-num">4 Bands</div>
+              <div class="portal-hero__stat-label">Tiered pricing applied server-side</div>
+            </div>
+          </div>
+          <div class="portal-hero__stat">
+            <div class="portal-hero__stat-icon">📄</div>
+            <div>
+              <div class="portal-hero__stat-num">PDF Quotes</div>
+              <div class="portal-hero__stat-label">NORD-branded, VAT-itemised exports</div>
+            </div>
+          </div>
+          <div class="portal-hero__stat">
+            <div class="portal-hero__stat-icon">✅</div>
+            <div>
+              <div class="portal-hero__stat-num">Dual Approval</div>
+              <div class="portal-hero__stat-label">Rep + Director credit sign-off</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Feature Overview Cards ─── -->
+  <section class="portal-features" id="features">
+    <div class="container">
+      <div class="text-center" style="margin-bottom:60px;">
+        <p class="section-title__tagline">What's Included</p>
+        <h2 class="section-title__title">Everything a Trade Account Needs</h2>
+        <p class="section-title__text" style="margin:0 auto;">From application to active account, the NORD portal covers the full trade lifecycle — pricing, quoting, ordering, and account management.</p>
+      </div>
+      <div class="features-grid-3">
+        <div class="feature-card reveal">
+          <div class="feature-card__icon">📋</div>
+          <div class="feature-card__title">Trade Account Application</div>
+          <p class="feature-card__text">A structured credit application form captures your business details, financials, and trade references. Digital signature and dual-approval workflow built in.</p>
+          <span class="feature-card__tag">Online Form</span>
+          <span class="feature-card__tag">Digital Signature</span>
+          <span class="feature-card__tag">Dual Approval</span>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-card__icon">📦</div>
+          <div class="feature-card__title">Trade Catalogue</div>
+          <p class="feature-card__text">Browse all 8,354 products filtered and priced at your assigned band. Three-level category tree, product images, SKU/UPC chips, datasheet links, and stocked indicators.</p>
+          <span class="feature-card__tag">Band Pricing</span>
+          <span class="feature-card__tag">3-Level Filter</span>
+          <span class="feature-card__tag">Product Images</span>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-card__icon">📄</div>
+          <div class="feature-card__title">Quote Builder</div>
+          <p class="feature-card__text">Add products to a basket, set quantities, and export a NORD-branded PDF quote with line items, VAT breakdown, and totals. Assign quotes directly to client accounts.</p>
+          <span class="feature-card__tag">PDF Export</span>
+          <span class="feature-card__tag">VAT Itemised</span>
+          <span class="feature-card__tag">Client Assignment</span>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-card__icon">👤</div>
+          <div class="feature-card__title">Client Portal</div>
+          <p class="feature-card__text">Clients log in to view their account summary, browse the catalogue at their band price, track orders with live status timelines, and download invoices and resources.</p>
+          <span class="feature-card__tag">Order Tracking</span>
+          <span class="feature-card__tag">Payment History</span>
+          <span class="feature-card__tag">Resources</span>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-card__icon">💳</div>
+          <div class="feature-card__title">Credit &amp; Payments</div>
+          <p class="feature-card__text">Credit limits and payment terms are set per account. Clients see their outstanding balance, credit utilisation, and full payment history. Directors record payments directly.</p>
+          <span class="feature-card__tag">Credit Limits</span>
+          <span class="feature-card__tag">Payment Terms</span>
+          <span class="feature-card__tag">Balance Tracking</span>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-card__icon">🗂</div>
+          <div class="feature-card__title">Resources &amp; Documents</div>
+          <p class="feature-card__text">Upload and share compliance certificates, product datasheets, terms and conditions, and installation guides. Clients download directly from their portal dashboard.</p>
+          <span class="feature-card__tag">File Upload</span>
+          <span class="feature-card__tag">Compliance Docs</span>
+          <span class="feature-card__tag">Datasheets</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Onboarding Steps ─── -->
+  <section class="onboarding" id="apply">
+    <div class="container">
+      <div class="text-center" style="margin-bottom:60px;">
+        <p class="section-title__tagline">How It Works</p>
+        <h2 class="section-title__title">From Application to Active Account</h2>
+        <p class="section-title__text" style="margin:0 auto;">A structured three-step process ensures every trade account is properly vetted and set up with the right pricing band before access is granted.</p>
+      </div>
+      <div style="max-width:860px;margin:0 auto;">
+        <div class="step-row reveal">
+          <div class="step-num">01</div>
+          <div>
+            <div class="step-title">Complete the Credit Application</div>
+            <p class="step-text">Fill in the online trade account application with your business name, registered address, Companies House number, annual turnover, and two trade references. Review and sign the NORD Fire Terms &amp; Conditions digitally before submitting.</p>
+            <div class="step-tags">
+              <span class="feature-card__tag">Business Details</span>
+              <span class="feature-card__tag">Trade References</span>
+              <span class="feature-card__tag">Digital Signature</span>
+              <span class="feature-card__tag">T&amp;Cs Agreement</span>
+            </div>
+          </div>
+        </div>
+        <div class="step-row reveal">
+          <div class="step-num">02</div>
+          <div>
+            <div class="step-title">Dual-Approval Review</div>
+            <p class="step-text">Your assigned NORD Sales Representative reviews the application and routes it to a Director for final approval via a secure, single-use approval link. The Director sets your pricing band (A–D) and credit limit. You receive your login credentials by email once approved.</p>
+            <div class="step-tags">
+              <span class="feature-card__tag">Rep Review</span>
+              <span class="feature-card__tag">Director Sign-Off</span>
+              <span class="feature-card__tag">Band Assignment</span>
+              <span class="feature-card__tag">Credit Limit Set</span>
+            </div>
+          </div>
+        </div>
+        <div class="step-row reveal">
+          <div class="step-num">03</div>
+          <div>
+            <div class="step-title">Browse, Quote &amp; Order</div>
+            <p class="step-text">Log in to the trade portal to access the full catalogue at your assigned band price. Build quotes, export branded PDFs, convert quotes to orders, and manage your account. Your client portal gives you real-time visibility of orders, payments, and outstanding balance.</p>
+            <div class="step-tags">
+              <span class="feature-card__tag">Catalogue Access</span>
+              <span class="feature-card__tag">Quote Builder</span>
+              <span class="feature-card__tag">Order Management</span>
+              <span class="feature-card__tag">Client Dashboard</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center" style="margin-top:48px;">
+        <a href="https://nordquote-jrbfpxgk.manus.space/apply" target="_blank" rel="noopener" class="btn-nord">Start Your Application →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Pricing Bands ─── -->
+  <section class="pricing-bands" id="pricing">
+    <div class="container">
+      <div class="text-center" style="margin-bottom:60px;">
+        <p class="section-title__tagline">Pricing Structure</p>
+        <h2 class="section-title__title">Tiered Pricing Bands</h2>
+        <p class="section-title__text" style="margin:0 auto;">Pricing bands are assigned during the approval process and applied server-side to every product in the catalogue. Your band is always accurate — no manual calculations required.</p>
+      </div>
+      <div class="bands-table-wrap reveal">
+        <table class="bands-table">
+          <thead>
+            <tr>
+              <th>Band</th>
+              <th>Account Type</th>
+              <th>Typical Discount</th>
+              <th>Credit Terms</th>
+              <th>Suitable For</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="band-pill band-a">Band A</span></td>
+              <td>Premium Trade</td>
+              <td>Maximum discount tier</td>
+              <td>30–60 day credit</td>
+              <td>High-volume contractors, national accounts</td>
+            </tr>
+            <tr>
+              <td><span class="band-pill band-b">Band B</span></td>
+              <td>Established Trade</td>
+              <td>Mid-high discount</td>
+              <td>30 day credit</td>
+              <td>Regional contractors, systems integrators</td>
+            </tr>
+            <tr>
+              <td><span class="band-pill band-c">Band C</span></td>
+              <td>Standard Trade</td>
+              <td>Standard trade discount</td>
+              <td>30 day credit / proforma</td>
+              <td>Facilities managers, smaller contractors</td>
+            </tr>
+            <tr>
+              <td><span class="band-pill band-d">Band D</span></td>
+              <td>New Account</td>
+              <td>Entry-level trade discount</td>
+              <td>Proforma / card</td>
+              <td>New trade customers, sole traders</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-family:'Space Grotesk',sans-serif;font-size:14px;color:#888;text-align:center;margin-top:20px;">Exact discount percentages are commercially sensitive and communicated directly during the approval process. Band upgrades are reviewed annually or on request.</p>
+    </div>
+  </section>
+
+  <!-- ─── Catalogue Feature Deep-Dive ─── -->
+  <section class="feature-section feature-section--alt" id="catalogue">
+    <div class="container">
+      <div class="feature-section__grid">
+        <div class="reveal">
+          <p class="feature-section__eyebrow">Trade Catalogue</p>
+          <h2 class="feature-section__title">8,354 Products at Your Band Price</h2>
+          <p class="feature-section__text">The full NORD Fire product range is available in the trade catalogue, filtered and priced at your assigned band. A three-level category tree (Category → Subcategory → NORD Sub-Category) makes it fast to find exactly what you need for any job.</p>
+          <ul class="feature-list">
+            <li>Product images, supplier badges, and category breadcrumbs on every card</li>
+            <li>SKU and UPC chips for quick reference and ordering</li>
+            <li>Stocked indicator and datasheet download link per product</li>
+            <li>Band price displayed prominently — no guesswork</li>
+            <li>Hover to add to basket with inline quantity selector</li>
+            <li>Keyboard shortcut: Enter on search to add first result instantly</li>
+          </ul>
+          <a href="https://nordquote-jrbfpxgk.manus.space/" target="_blank" rel="noopener" class="btn-nord">Access Catalogue →</a>
+        </div>
+        <div class="reveal">
+          <div class="feature-section__visual">
+            <div class="mock-ui">
+              <div class="mock-ui__bar">
+                <div class="mock-ui__dot" style="background:#e63329;"></div>
+                <div class="mock-ui__dot" style="background:#f59e0b;"></div>
+                <div class="mock-ui__dot" style="background:#22c55e;"></div>
+                <span style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);margin-left:8px;">Trade Catalogue — Band B</span>
+              </div>
+              <div class="mock-ui__content">
+                <div class="mock-row">
+                  <div class="mock-swatch" style="background:#e63329;"></div>
+                  <div class="mock-label">CO₂ Fire Extinguisher — 2kg<br /><span style="font-size:10px;color:rgba(255,255,255,0.35);">SKU: EXT-CO2-2KG · BS EN3</span></div>
+                  <div>
+                    <div class="mock-price">£18.40</div>
+                    <div class="mock-badge">Band B</div>
+                  </div>
+                </div>
+                <div class="mock-row">
+                  <div class="mock-swatch" style="background:#3b82f6;"></div>
+                  <div class="mock-label">FireClass FC501 Bundle<br /><span style="font-size:10px;color:rgba(255,255,255,0.35);">SKU: FC-501-BDL · EN54</span></div>
+                  <div>
+                    <div class="mock-price">£284.00</div>
+                    <div class="mock-badge">Band B</div>
+                  </div>
+                </div>
+                <div class="mock-row">
+                  <div class="mock-swatch" style="background:#22c55e;"></div>
+                  <div class="mock-label">Fire Exit Sign — Photoluminescent<br /><span style="font-size:10px;color:rgba(255,255,255,0.35);">SKU: SGN-EXIT-PL · BS EN ISO 7010</span></div>
+                  <div>
+                    <div class="mock-price">£4.20</div>
+                    <div class="mock-badge">Band B</div>
+                  </div>
+                </div>
+                <div class="mock-row">
+                  <div class="mock-swatch" style="background:#f59e0b;"></div>
+                  <div class="mock-label">Twin Extinguisher Floor Stand<br /><span style="font-size:10px;color:rgba(255,255,255,0.35);">SKU: STG-STD-TWN · UK Standard</span></div>
+                  <div>
+                    <div class="mock-price">£22.50</div>
+                    <div class="mock-badge">Band B</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Quote Builder Deep-Dive ─── -->
+  <section class="feature-section" id="quote-builder">
+    <div class="container">
+      <div class="feature-section__grid feature-section__grid--reverse">
+        <div class="reveal">
+          <p class="feature-section__eyebrow">Quote Builder</p>
+          <h2 class="feature-section__title">Build &amp; Export Branded PDF Quotes</h2>
+          <p class="feature-section__text">The quote builder lets you assemble a basket of products, assign it to a client account, and export a professional NORD-branded PDF quote with full line items, VAT breakdown, and totals. Quotes can be converted directly to orders once accepted.</p>
+          <ul class="feature-list">
+            <li>Rich product cards with inline quantity stepper and line totals</li>
+            <li>Running subtotal, VAT, and gross footer always visible in the basket</li>
+            <li>Assign quotes to client accounts with band auto-fill</li>
+            <li>Select-all and bulk-add products from search results</li>
+            <li>Clear basket or remove individual items in one click</li>
+            <li>Export NORD-branded PDF with all line items and VAT itemisation</li>
+            <li>Convert accepted quotes to orders directly from the portal</li>
+          </ul>
+          <a href="https://nordquote-jrbfpxgk.manus.space/proposals" target="_blank" rel="noopener" class="btn-nord">Open Quote Builder →</a>
+        </div>
+        <div class="reveal">
+          <div class="feature-section__visual">
+            <div class="mock-ui">
+              <div class="mock-ui__bar">
+                <div class="mock-ui__dot" style="background:#e63329;"></div>
+                <div class="mock-ui__dot" style="background:#f59e0b;"></div>
+                <div class="mock-ui__dot" style="background:#22c55e;"></div>
+                <span style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);margin-left:8px;">Quote Builder — Draft QT-0042</span>
+              </div>
+              <div class="mock-ui__content">
+                <div class="mock-row">
+                  <div class="mock-label" style="flex:2;">CO₂ Extinguisher 2kg × 4</div>
+                  <div class="mock-price">£73.60</div>
+                </div>
+                <div class="mock-row">
+                  <div class="mock-label" style="flex:2;">FireClass FC501 Bundle × 1</div>
+                  <div class="mock-price">£284.00</div>
+                </div>
+                <div class="mock-row">
+                  <div class="mock-label" style="flex:2;">Fire Exit Signs × 12</div>
+                  <div class="mock-price">£50.40</div>
+                </div>
+                <div class="mock-row">
+                  <div class="mock-label" style="flex:2;">Twin Floor Stand × 2</div>
+                  <div class="mock-price">£45.00</div>
+                </div>
+                <div style="border-top:1px solid rgba(255,255,255,0.1);margin-top:8px;padding-top:12px;">
+                  <div class="mock-row"><div class="mock-label">Subtotal</div><div class="mock-price">£453.00</div></div>
+                  <div class="mock-row"><div class="mock-label">VAT (20%)</div><div class="mock-price">£90.60</div></div>
+                  <div class="mock-row"><div class="mock-label" style="font-weight:700;color:#fff;">Total</div><div class="mock-price" style="color:#e63329;">£543.60</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Client Portal Deep-Dive ─── -->
+  <section class="feature-section feature-section--alt" id="client-portal">
+    <div class="container">
+      <div class="feature-section__grid">
+        <div class="reveal">
+          <p class="feature-section__eyebrow">Client Portal</p>
+          <h2 class="feature-section__title">Full Account Visibility for Your Clients</h2>
+          <p class="feature-section__text">Trade account holders get their own client portal with a dedicated dashboard showing account summary, credit status, recent orders, and outstanding balance. Everything they need to manage their NORD Fire account without picking up the phone.</p>
+          <ul class="feature-list">
+            <li>Dashboard with account summary, credit utilisation, and recent activity</li>
+            <li>Browse the catalogue at their assigned band price (read-only)</li>
+            <li>Request quotes and view quote history with status badges</li>
+            <li>Order list with live status tracking timeline (placed → dispatched → delivered)</li>
+            <li>Payment history table with outstanding balance and credit terms summary</li>
+            <li>Download compliance certificates, datasheets, and T&amp;Cs from Resources</li>
+            <li>Email notifications on order status changes and new invoices</li>
+          </ul>
+          <a href="https://nordquote-jrbfpxgk.manus.space/portal" target="_blank" rel="noopener" class="btn-nord">View Client Portal →</a>
+        </div>
+        <div class="reveal">
+          <div class="feature-section__visual">
+            <div class="mock-ui">
+              <div class="mock-ui__bar">
+                <div class="mock-ui__dot" style="background:#e63329;"></div>
+                <div class="mock-ui__dot" style="background:#f59e0b;"></div>
+                <div class="mock-ui__dot" style="background:#22c55e;"></div>
+                <span style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);margin-left:8px;">Client Portal — Dashboard</span>
+              </div>
+              <div class="mock-ui__content">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+                  <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px;">
+                    <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:4px;">CREDIT LIMIT</div>
+                    <div style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;color:#fff;">£5,000</div>
+                    <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(255,255,255,0.35);">£1,240 outstanding</div>
+                  </div>
+                  <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px;">
+                    <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:4px;">OPEN ORDERS</div>
+                    <div style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;color:#fff;">3</div>
+                    <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(255,255,255,0.35);">1 dispatched today</div>
+                  </div>
+                </div>
+                <div class="mock-row">
+                  <div class="mock-label">ORD-0018 — Extinguisher Kit</div>
+                  <div class="mock-badge" style="background:rgba(34,197,94,0.2);color:#4ade80;">Dispatched</div>
+                </div>
+                <div class="mock-row">
+                  <div class="mock-label">ORD-0017 — Detection Bundle</div>
+                  <div class="mock-badge" style="background:rgba(245,158,11,0.2);color:#fbbf24;">Processing</div>
+                </div>
+                <div class="mock-row">
+                  <div class="mock-label">ORD-0016 — Signage Pack</div>
+                  <div class="mock-badge" style="background:rgba(59,130,246,0.2);color:#60a5fa;">Delivered</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Testimonials ─── -->
+  <section class="portal-testimonials">
+    <div class="container">
+      <div class="text-center" style="margin-bottom:60px;">
+        <p class="section-title__tagline">What Trade Customers Say</p>
+        <h2 class="section-title__title">Built Around How Professionals Work</h2>
+      </div>
+      <div class="grid-3">
+        <div class="testimonial-card reveal">
+          <div class="testimonial-card__stars">★★★★★</div>
+          <p class="testimonial-card__text">"The quote builder saves me hours on every job. I can build a complete basket for a detection installation, assign it to my client, and export a professional PDF in minutes."</p>
+          <div class="testimonial-card__author">James M.</div>
+          <div class="testimonial-card__role">Fire Systems Engineer</div>
+        </div>
+        <div class="testimonial-card reveal">
+          <div class="testimonial-card__stars">★★★★★</div>
+          <p class="testimonial-card__text">"Having my pricing band applied automatically means I never have to second-guess what I'm paying. The catalogue is clear, the products are right, and the portal just works."</p>
+          <div class="testimonial-card__author">Sarah K.</div>
+          <div class="testimonial-card__role">Facilities Manager</div>
+        </div>
+        <div class="testimonial-card reveal">
+          <div class="testimonial-card__stars">★★★★★</div>
+          <p class="testimonial-card__text">"The dual-approval process gave me confidence that my account was properly set up. The client portal means I can check my orders and balance any time, without calling anyone."</p>
+          <div class="testimonial-card__author">David R.</div>
+          <div class="testimonial-card__role">Fire Safety Contractor</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FAQ ─── -->
+  <section class="portal-faq">
+    <div class="container">
+      <div class="text-center" style="margin-bottom:60px;">
+        <p class="section-title__tagline">Common Questions</p>
+        <h2 class="section-title__title">Trade Account FAQs</h2>
+      </div>
+      <div style="max-width:800px;margin:0 auto;">
+        <div class="faq-item">
+          <button class="faq-question">Who can apply for a NORD Fire trade account? <span class="faq-icon">+</span></button>
+          <div class="faq-answer">Trade accounts are available to fire safety contractors, systems engineers, facilities managers, electrical contractors, and distributors or wholesalers operating in the UK. Sole traders and limited companies are both eligible to apply.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">How long does the approval process take? <span class="faq-icon">+</span></button>
+          <div class="faq-answer">Most applications are reviewed by a NORD Sales Representative within one business day and routed to a Director for final approval. You will typically receive your login credentials within 2–3 business days of submitting a complete application.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">How is my pricing band determined? <span class="faq-icon">+</span></button>
+          <div class="faq-answer">Your pricing band (A–D) is assigned by a NORD Director during the approval process, based on your business type, expected order volume, and trading history. Band upgrades can be requested at any time and are reviewed annually as standard.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Can I access the portal on behalf of my clients? <span class="faq-icon">+</span></button>
+          <div class="faq-answer">Yes. NORD Sales Representatives and Directors can access client accounts within the portal to build quotes, manage orders, and update account details on behalf of clients. Clients also have their own login to the client-facing portal.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">What happens when a quote is accepted? <span class="faq-icon">+</span></button>
+          <div class="faq-answer">Accepted quotes can be converted to orders directly within the portal. A NORD team member will confirm the order, update the status, and add tracking events as the order progresses through to dispatch and delivery. The client receives email notifications at each stage.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">How are payments recorded? <span class="faq-icon">+</span></button>
+          <div class="faq-answer">Payments are recorded by NORD Directors within the admin portal against the relevant client account. Clients can view their full payment history, outstanding balance, and credit utilisation in real time through their client portal dashboard.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Portal CTA ─── -->
+  <section class="portal-cta">
+    <div class="container">
+      <div class="portal-cta__inner">
+        <h2 class="portal-cta__title">Ready to Open Your Trade Account?</h2>
+        <p class="portal-cta__text">Apply online in minutes. Once approved, you'll have instant access to 8,354 products at your assigned pricing band, the quote builder, and the full client portal.</p>
+        <div class="portal-cta__actions">
+          <a href="https://nordquote-jrbfpxgk.manus.space/apply" target="_blank" rel="noopener" class="btn-nord">Apply for Trade Account →</a>
+          <a href="https://nordquote-jrbfpxgk.manus.space/" target="_blank" rel="noopener" class="btn-white">Login to Portal ↗</a>
+          <a href="contact.html" class="btn-nord-outline">Contact Us First</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="assets/js/shared.js"></script>
+  <script>
+    /* FAQ accordion */
+    document.querySelectorAll('.faq-question').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const answer = btn.nextElementSibling;
+        const isOpen = btn.classList.contains('open');
+        /* Close all */
+        document.querySelectorAll('.faq-question').forEach(function (b) {
+          b.classList.remove('open');
+          b.nextElementSibling.classList.remove('open');
+        });
+        /* Toggle clicked */
+        if (!isOpen) {
+          btn.classList.add('open');
+          answer.classList.add('open');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

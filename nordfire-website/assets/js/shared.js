@@ -17,6 +17,7 @@
         </div>
         <div class="header-topbar__info">
           <a href="https://www.instagram.com/nordfire" target="_blank" rel="noopener">Instagram</a>
+          <a href="portal.html" style="background:rgba(230,51,41,0.15);color:#e63329;padding:3px 10px;border-radius:3px;font-weight:700;">Trade Portal ↗</a>
         </div>
       </div>
     </div>
@@ -33,6 +34,54 @@
           <a href="products.html#detection">Detection</a>
           <a href="products.html#specialist">Specialist</a>
           <a href="products.html#maus">MAUS</a>
+          <div class="nav-dropdown" id="portalDropdown">
+            <button class="nav-dropdown__trigger" id="portalTrigger">Trade Portal ▾</button>
+            <div class="nav-dropdown__menu" id="portalMenu">
+              <a href="portal.html" class="nav-dropdown__item">
+                <span class="nav-dropdown__icon">🏢</span>
+                <span>
+                  <strong>Trade Portal Overview</strong>
+                  <small>Features, pricing bands &amp; how it works</small>
+                </span>
+              </a>
+              <a href="portal.html#apply" class="nav-dropdown__item">
+                <span class="nav-dropdown__icon">📋</span>
+                <span>
+                  <strong>Apply for Trade Account</strong>
+                  <small>Credit application with dual approval</small>
+                </span>
+              </a>
+              <a href="portal.html#catalogue" class="nav-dropdown__item">
+                <span class="nav-dropdown__icon">📦</span>
+                <span>
+                  <strong>Trade Catalogue</strong>
+                  <small>8,354 products at your band price</small>
+                </span>
+              </a>
+              <a href="portal.html#quote-builder" class="nav-dropdown__item">
+                <span class="nav-dropdown__icon">📄</span>
+                <span>
+                  <strong>Quote Builder</strong>
+                  <small>Build &amp; export branded PDF quotes</small>
+                </span>
+              </a>
+              <a href="portal.html#client-portal" class="nav-dropdown__item">
+                <span class="nav-dropdown__icon">👤</span>
+                <span>
+                  <strong>Client Portal</strong>
+                  <small>Orders, payments &amp; resources</small>
+                </span>
+              </a>
+              <div class="nav-dropdown__divider"></div>
+              <a href="https://nordquote-jrbfpxgk.manus.space/" target="_blank" rel="noopener" class="nav-dropdown__item nav-dropdown__item--cta">
+                <span class="nav-dropdown__icon">🔑</span>
+                <span>
+                  <strong>Login to Portal →</strong>
+                  <small>Access your trade account</small>
+                </span>
+              </a>
+            </div>
+          </div>
           <a href="contact.html" class="header-cta">Get a Quote →</a>
         </nav>
         <button class="hamburger" id="hamburger" aria-label="Toggle menu">
@@ -65,7 +114,7 @@
 
 <footer class="site-footer">
   <div class="container">
-    <div class="grid-4">
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:40px;" class="footer-grid-5">
       <div>
         <a href="index.html" class="nord-logo-text" style="font-size:24px;display:block;margin-bottom:20px;">NORD<span>●</span>FIRE</a>
         <p class="footer-widget__text">Specialist fire safety solutions for professionals. On demand. Without endless choice.</p>
@@ -85,6 +134,17 @@
           <li><a href="products.html#detection">Detection</a></li>
           <li><a href="products.html#specialist">Specialist</a></li>
           <li><a href="products.html#maus">MAUS</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-widget__title">Trade Portal</h4>
+        <ul class="footer-widget__links">
+          <li><a href="portal.html">Portal Overview</a></li>
+          <li><a href="portal.html#apply">Apply for Account</a></li>
+          <li><a href="portal.html#catalogue">Trade Catalogue</a></li>
+          <li><a href="portal.html#quote-builder">Quote Builder</a></li>
+          <li><a href="portal.html#client-portal">Client Portal</a></li>
+          <li><a href="https://nordquote-jrbfpxgk.manus.space/" target="_blank" rel="noopener" style="color:#e63329;">Login →</a></li>
         </ul>
       </div>
       <div>
@@ -147,6 +207,22 @@
       });
     }
 
+    /* Portal dropdown toggle */
+    const portalTrigger = document.getElementById('portalTrigger');
+    const portalMenu = document.getElementById('portalMenu');
+    if (portalTrigger && portalMenu) {
+      portalTrigger.addEventListener('click', function (e) {
+        e.stopPropagation();
+        portalMenu.classList.toggle('open');
+        portalTrigger.classList.toggle('active');
+      });
+      document.addEventListener('click', function () {
+        portalMenu.classList.remove('open');
+        portalTrigger.classList.remove('active');
+      });
+      portalMenu.addEventListener('click', function (e) { e.stopPropagation(); });
+    }
+
     /* Newsletter form */
     const newsletterForm = document.getElementById('newsletterForm');
     if (newsletterForm) {
@@ -187,6 +263,22 @@
         a.style.color = '#e63329';
       }
     });
+
+    /* Footer 5-col responsive */
+    const footerGrid = document.querySelector('.footer-grid-5');
+    if (footerGrid) {
+      function updateFooterGrid() {
+        if (window.innerWidth < 992) {
+          footerGrid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+        } else if (window.innerWidth < 1200) {
+          footerGrid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+        } else {
+          footerGrid.style.gridTemplateColumns = 'repeat(5, 1fr)';
+        }
+      }
+      updateFooterGrid();
+      window.addEventListener('resize', updateFooterGrid);
+    }
   }
 
   if (document.readyState === 'loading') {
