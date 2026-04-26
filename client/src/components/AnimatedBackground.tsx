@@ -7,6 +7,7 @@ interface Particle {
   speedX: number;
   speedY: number;
   opacity: number;
+  hue: number;
 }
 
 export default function AnimatedBackground() {
@@ -27,18 +28,19 @@ export default function AnimatedBackground() {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // Create particles
+    // Create fire/ember particles
     const particles: Particle[] = [];
-    const particleCount = 50;
+    const particleCount = 60;
 
     for (let i = 0; i < particleCount; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        size: Math.random() * 3 + 1,
-        speedX: (Math.random() - 0.5) * 0.5,
-        speedY: (Math.random() - 0.5) * 0.5,
-        opacity: Math.random() * 0.5 + 0.2,
+        size: Math.random() * 2.5 + 0.5,
+        speedX: (Math.random() - 0.5) * 0.4,
+        speedY: -(Math.random() * 0.5 + 0.05), // slight upward drift like embers
+        opacity: Math.random() * 0.35 + 0.08,
+        hue: Math.random() * 50, // 0-50: deep red to amber/orange
       });
     }
 
@@ -58,18 +60,26 @@ export default function AnimatedBackground() {
         if (particle.y < 0) particle.y = canvas.height;
         if (particle.y > canvas.height) particle.y = 0;
 
-        // Draw particle with green glow
+        // Slowly shift hue for flickering effect
+        particle.hue = (particle.hue + 0.25) % 55;
+
+        // Fire color: from deep red to amber
+        const r = particle.hue < 20 ? 232 : 255;
+        const g = Math.floor(particle.hue * 2.4);
+        const b = 10;
+
+        // Draw particle with fire glow
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        
-        // Create gradient for glow effect
+
         const gradient = ctx.createRadialGradient(
           particle.x, particle.y, 0,
-          particle.x, particle.y, particle.size * 3
+          particle.x, particle.y, particle.size * 4
         );
-        gradient.addColorStop(0, `rgba(0, 255, 136, ${particle.opacity})`);
-        gradient.addColorStop(1, 'rgba(0, 255, 136, 0)');
-        
+        gradient.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${particle.opacity})`);
+        gradient.addColorStop(0.5, `rgba(${r}, ${Math.floor(g * 0.6)}, ${b}, ${particle.opacity * 0.5})`);
+        gradient.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+
         ctx.fillStyle = gradient;
         ctx.fill();
       });
@@ -89,7 +99,7 @@ export default function AnimatedBackground() {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 pointer-events-none"
-      style={{ opacity: 0.4 }}
+      style={{ opacity: 0.35 }}
     />
   );
 }

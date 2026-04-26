@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTheme } from "@/contexts/ThemeContext";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,7 +14,7 @@ import {
   AlertCircle, CheckCircle2, Shield, Bell, Phone, Mail, MapPin,
   Clock, TrendingUp, ChevronRight, ExternalLink, LogOut,
   Building2, ClipboardList, BarChart3, Settings, Menu, X,
-  Flame, Star, AlertTriangle, RefreshCw, Eye
+  Flame, Star, AlertTriangle, RefreshCw, Eye, Sun, Moon
 } from "lucide-react";
 import { toast } from "sonner";
 import { format, differenceInDays } from "date-fns";
@@ -63,6 +64,7 @@ function RenewalBanner({ endDate }: { endDate: Date }) {
 
 export default function ClientPortal() {
   const { user, loading } = useAuth();
+  const { theme, toggleTheme, switchable } = useTheme();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedAgreementId, setSelectedAgreementId] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
@@ -232,6 +234,11 @@ export default function ClientPortal() {
               New Agreement
             </button>
           </Link>
+          {switchable && toggleTheme && (
+            <button onClick={toggleTheme} className="portal-nav-item w-full">
+              {theme === "dark" ? <><Sun className="h-4 w-4 flex-shrink-0" />Light Mode</> : <><Moon className="h-4 w-4 flex-shrink-0" />Dark Mode</>}
+            </button>
+          )}
           <a href="/api/auth/logout">
             <button className="portal-nav-item w-full text-red-400 hover:text-red-300">
               <LogOut className="h-4 w-4 flex-shrink-0" />

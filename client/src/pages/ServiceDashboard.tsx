@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
+import { useTheme } from "@/contexts/ThemeContext";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,7 +22,7 @@ import {
   FileCheck, Layers, ChevronDown, ChevronUp, Info,
   Bell as BellIcon, Droplets, DoorClosed, ClipboardCheck,
   ShieldAlert, Camera, KeyRound, Radio, Siren, Compass,
-  Lightbulb, Flashlight
+  Lightbulb, Flashlight, Sun, Moon
 } from "lucide-react";
 import { toast } from "sonner";
 import { format, differenceInDays } from "date-fns";
@@ -455,6 +456,7 @@ function ServiceCatalogCard({ category }: { category: typeof SERVICE_SCHEDULE[0]
 // ── Main Dashboard ────────────────────────────────────────────────────────────
 export default function ServiceDashboard() {
   const { user, loading: authLoading } = useAuth({ redirectOnUnauthenticated: true });
+  const { theme, toggleTheme, switchable } = useTheme();
   const [activeTab, setActiveTab] = useState("overview");
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -608,6 +610,15 @@ export default function ServiceDashboard() {
 
         {/* User footer */}
         <div className="p-3 border-t border-border">
+          {switchable && toggleTheme && (
+            <button
+              onClick={toggleTheme}
+              className="flex items-center gap-2 w-full px-2 py-2 rounded-lg hover:bg-accent/50 transition-colors text-xs text-muted-foreground hover:text-foreground mb-2"
+              aria-label="Toggle theme"
+            >
+              {theme === "dark" ? <><Sun className="h-3.5 w-3.5" /><span>Light Mode</span></> : <><Moon className="h-3.5 w-3.5" /><span>Dark Mode</span></>}
+            </button>
+          )}
           <div className="flex items-center gap-3 px-2 py-2">
             <div className="h-8 w-8 rounded-full fire-gradient flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
               {user?.name?.charAt(0)?.toUpperCase() ?? "A"}

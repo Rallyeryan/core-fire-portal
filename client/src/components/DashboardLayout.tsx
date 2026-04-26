@@ -4,6 +4,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -21,14 +22,15 @@ import {
 } from "@/components/ui/sidebar";
 import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
-import { LayoutDashboard, LogOut, PanelLeft, Users, FileText, Shield, BarChart3, Flame } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
+import { LayoutDashboard, LogOut, PanelLeft, FileText, Shield, BarChart3, Flame, Sun, Moon, Home } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
 import { Button } from "./ui/button";
 
 const menuItems = [
-  { icon: LayoutDashboard, label: "Home", path: "/" },
+  { icon: Home, label: "Home", path: "/" },
   { icon: Flame, label: "Service Dashboard", path: "/dashboard" },
   { icon: FileText, label: "New Agreement", path: "/agreement" },
   { icon: Shield, label: "Client Portal", path: "/portal" },
@@ -61,14 +63,17 @@ export default function DashboardLayout({
 
   if (!user) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-background">
         <div className="flex flex-col items-center gap-8 p-8 max-w-md w-full">
-          <div className="flex flex-col items-center gap-6">
-            <h1 className="text-2xl font-semibold tracking-tight text-center">
+          <div className="w-16 h-16 rounded-2xl fire-gradient flex items-center justify-center fire-glow">
+            <Flame className="h-8 w-8 text-white" />
+          </div>
+          <div className="flex flex-col items-center gap-3 text-center">
+            <h1 className="text-2xl font-bold tracking-tight">
               Sign in to continue
             </h1>
-            <p className="text-sm text-muted-foreground text-center max-w-sm">
-              Access to this dashboard requires authentication. Continue to launch the login flow.
+            <p className="text-sm text-muted-foreground max-w-sm">
+              Access to this dashboard requires authentication. Sign in to manage your fire and security agreements.
             </p>
           </div>
           <Button
@@ -76,10 +81,13 @@ export default function DashboardLayout({
               window.location.href = getLoginUrl();
             }}
             size="lg"
-            className="w-full shadow-lg hover:shadow-xl transition-all"
+            className="w-full fire-gradient fire-glow text-white font-semibold shadow-lg hover:shadow-xl transition-all"
           >
-            Sign in
+            Sign in to Dashboard
           </Button>
+          <a href="/" className="text-sm text-muted-foreground hover:text-[#FF6B35] transition-colors">
+            ← Back to Home
+          </a>
         </div>
       </div>
     );
@@ -117,6 +125,7 @@ function DashboardLayoutContent({
   const sidebarRef = useRef<HTMLDivElement>(null);
   const activeMenuItem = menuItems.find(item => item.path === location);
   const isMobile = useIsMobile();
+  const { theme, toggleTheme, switchable } = useTheme();
 
   useEffect(() => {
     if (isCollapsed) {
@@ -162,6 +171,9 @@ function DashboardLayoutContent({
           className="border-r-0"
           disableTransition={isResizing}
         >
+          {/* Accent bar at top of sidebar */}
+          <div className="h-0.5 w-full fire-gradient" />
+
           <SidebarHeader className="h-16 justify-center">
             <div className="flex items-center gap-3 px-2 transition-all w-full">
               <button
@@ -173,11 +185,20 @@ function DashboardLayoutContent({
               </button>
               {!isCollapsed ? (
                 <div className="flex items-center gap-2 min-w-0">
-                  <span className="font-semibold tracking-tight truncate">
-                    Navigation
-                  </span>
+                  <img
+                    src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663328149057/JiTjkhwCQcNFndvg.png"
+                    alt="Core Fire Protection"
+                    className="h-7 w-auto object-contain"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = 'none';
+                    }}
+                  />
                 </div>
-              ) : null}
+              ) : (
+                <div className="w-6 h-6 rounded-md fire-gradient flex items-center justify-center shrink-0">
+                  <Flame className="h-3.5 w-3.5 text-white" />
+                </div>
+              )}
             </div>
           </SidebarHeader>
 
@@ -191,10 +212,10 @@ function DashboardLayoutContent({
                       isActive={isActive}
                       onClick={() => setLocation(item.path)}
                       tooltip={item.label}
-                      className={`h-10 transition-all font-normal`}
+                      className={`h-10 transition-all font-normal ${isActive ? "text-[#FF6B35]" : ""}`}
                     >
                       <item.icon
-                        className={`h-4 w-4 ${isActive ? "text-primary" : ""}`}
+                        className={`h-4 w-4 ${isActive ? "text-[#FF6B35]" : ""}`}
                       />
                       <span>{item.label}</span>
                     </SidebarMenuButton>
@@ -205,11 +226,34 @@ function DashboardLayoutContent({
           </SidebarContent>
 
           <SidebarFooter className="p-3">
+            {/* Theme toggle in sidebar footer */}
+            {switchable && toggleTheme && !isCollapsed && (
+              <button
+                onClick={toggleTheme}
+                className="flex items-center gap-2 w-full px-2 py-2 rounded-lg hover:bg-accent/50 transition-colors text-sm text-muted-foreground hover:text-foreground mb-2"
+                aria-label="Toggle theme"
+              >
+                {theme === "dark" ? (
+                  <><Sun className="h-4 w-4" /><span>Light Mode</span></>
+                ) : (
+                  <><Moon className="h-4 w-4" /><span>Dark Mode</span></>
+                )}
+              </button>
+            )}
+            {switchable && toggleTheme && isCollapsed && (
+              <button
+                onClick={toggleTheme}
+                className="flex items-center justify-center w-full p-2 rounded-lg hover:bg-accent/50 transition-colors text-muted-foreground hover:text-foreground mb-2"
+                aria-label="Toggle theme"
+              >
+                {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              </button>
+            )}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button className="flex items-center gap-3 rounded-lg px-1 py-1 hover:bg-accent/50 transition-colors w-full text-left group-data-[collapsible=icon]:justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-                  <Avatar className="h-9 w-9 border shrink-0">
-                    <AvatarFallback className="text-xs font-medium">
+                  <Avatar className="h-9 w-9 border border-border/60 shrink-0">
+                    <AvatarFallback className="text-xs font-medium bg-[#E8340A]/10 text-[#FF6B35]">
                       {user?.name?.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
@@ -224,6 +268,11 @@ function DashboardLayoutContent({
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
+                <div className="px-2 py-1.5">
+                  <p className="text-xs font-medium">{user?.name}</p>
+                  <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+                </div>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={logout}
                   className="cursor-pointer text-destructive focus:text-destructive"
@@ -247,20 +296,30 @@ function DashboardLayoutContent({
 
       <SidebarInset>
         {isMobile && (
-          <div className="flex border-b h-14 items-center justify-between bg-background/95 px-2 backdrop-blur supports-[backdrop-filter]:backdrop-blur sticky top-0 z-40">
+          <div className="flex border-b h-14 items-center justify-between bg-background/95 px-3 backdrop-blur supports-[backdrop-filter]:backdrop-blur sticky top-0 z-40">
             <div className="flex items-center gap-2">
               <SidebarTrigger className="h-9 w-9 rounded-lg bg-background" />
-              <div className="flex items-center gap-3">
-                <div className="flex flex-col gap-1">
-                  <span className="tracking-tight text-foreground">
-                    {activeMenuItem?.label ?? "Menu"}
-                  </span>
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 rounded fire-gradient flex items-center justify-center">
+                  <Flame className="h-3 w-3 text-white" />
                 </div>
+                <span className="text-sm font-semibold tracking-tight text-foreground">
+                  {activeMenuItem?.label ?? "Core Fire Portal"}
+                </span>
               </div>
             </div>
+            {switchable && toggleTheme && (
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-lg hover:bg-secondary transition-colors text-muted-foreground"
+                aria-label="Toggle theme"
+              >
+                {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              </button>
+            )}
           </div>
         )}
-        <main className="flex-1 p-4">{children}</main>
+        <main className="flex-1 p-4 md:p-6">{children}</main>
       </SidebarInset>
     </>
   );

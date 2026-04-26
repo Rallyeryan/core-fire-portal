@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { trpc } from "@/lib/trpc";
 import { useState, useEffect } from "react";
 import {
@@ -79,6 +80,10 @@ export default function AdminDashboard() {
   const sendEmailsMutation = trpc.agreements.sendEmails.useMutation({
     onSuccess: () => toast.success("Confirmation emails sent successfully!"),
     onError: (error) => toast.error(`Failed to send emails: ${error.message}`),
+  });
+  const updateStatusMutation = trpc.agreements.updateStatus.useMutation({
+    onSuccess: () => { toast.success("Agreement status updated"); refetch(); },
+    onError: (error) => toast.error(`Failed to update status: ${error.message}`),
   });
 
   // ── Analytics ──────────────────────────────────────────────────────────────
@@ -506,7 +511,23 @@ export default function AdminDashboard() {
 
               {/* Status banner */}
               <div className="flex items-center justify-between p-4 rounded-xl bg-secondary/40 border border-border/60">
-                <StatusBadge status={agreementDetail.agreement.status} />
+                <div className="flex items-center gap-3">
+                  <StatusBadge status={agreementDetail.agreement.status} />
+                  <Select
+                    value={agreementDetail.agreement.status}
+                    onValueChange={(val) => selectedAgreementId && updateStatusMutation.mutate({ id: selectedAgreementId, status: val as "draft" | "pending" | "active" | "completed" | "cancelled" })}
+                  >
+                    <SelectTrigger className="h-7 text-xs w-32 border-border/60">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {["draft", "pending", "active", "completed", "cancelled"].map((s) => (
+                        <SelectItem key={s} value={s} className="text-xs">{s.charAt(0).toUpperCase() + s.slice(1)}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {updateStatusMutation.isPending && <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground" />}
+                </div>
                 <div className="text-right">
                   <p className="text-xs text-muted-foreground">Contract Value</p>
                   <p className="text-2xl font-bold text-[#FF6B35]">

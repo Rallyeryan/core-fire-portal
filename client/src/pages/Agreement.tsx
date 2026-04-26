@@ -916,23 +916,30 @@ export default function Agreement() {
       <div className="relative z-10">
         {/* Header */}
         <header className="sticky top-0 z-50 w-full border-b bg-black backdrop-blur supports-[backdrop-filter]:bg-black/95">
-          <div className="container flex h-24 items-center justify-between px-6">
+          <div className="accent-bar" />
+          <div className="container flex h-20 items-center justify-between px-6">
             <div className="flex items-center gap-4">
+              <Link href="/">
+                <button className="flex items-center gap-1 text-white/60 hover:text-white text-xs transition-colors mr-1 border border-white/20 rounded-lg px-2 py-1.5 hover:border-white/40">
+                  <ChevronUp className="h-3.5 w-3.5 -rotate-90" />
+                  Home
+                </button>
+              </Link>
               <img
                 src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663328149057/NmCmIuyeVycFeWJg.png"
                 alt="Core Fire Protection"
-                className="h-16 w-auto"
+                className="h-14 w-auto"
               />
-              <span className="font-bold text-2xl text-white">Core Fire Protection</span>
+              <span className="hidden sm:block font-bold text-xl text-white">Core Fire Protection</span>
             </div>
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" onClick={() => setIsGuidedMode(true)} className="text-white hover:bg-white/10">
-                <Navigation className="h-4 w-4 mr-2" />
-                Guided Mode
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" size="sm" onClick={() => setIsGuidedMode(true)} className="text-white hover:bg-white/10">
+                <Navigation className="h-4 w-4 mr-1.5" />
+                <span className="hidden sm:inline">Guided Mode</span>
               </Button>
-              <Button variant="ghost" onClick={handlePrint} className="text-white hover:bg-white/10">
-                <Printer className="h-4 w-4 mr-2" />
-                Print / PDF
+              <Button variant="ghost" size="sm" onClick={handlePrint} className="text-white hover:bg-white/10">
+                <Printer className="h-4 w-4 mr-1.5" />
+                <span className="hidden sm:inline">Print / PDF</span>
               </Button>
             </div>
           </div>
