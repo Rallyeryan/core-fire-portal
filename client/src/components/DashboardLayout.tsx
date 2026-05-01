@@ -85,7 +85,7 @@ export default function DashboardLayout({
           >
             Sign in to Dashboard
           </Button>
-          <a href="/" className="text-sm text-muted-foreground hover:text-[#FF6B35] transition-colors">
+          <a href="/" className="text-sm text-muted-foreground hover:text-ember transition-colors">
             ← Back to Home
           </a>
         </div>
@@ -171,8 +171,8 @@ function DashboardLayoutContent({
           className="border-r-0"
           disableTransition={isResizing}
         >
-          {/* Accent bar at top of sidebar */}
-          <div className="h-0.5 w-full fire-gradient" />
+          {/* Nord accent bar at top of sidebar */}
+          <div className="h-px w-full" style={{ background: 'linear-gradient(90deg, transparent, hsl(29 99% 50% / .5), transparent)' }} />
 
           <SidebarHeader className="h-16 justify-center">
             <div className="flex items-center gap-3 px-2 transition-all w-full">
@@ -185,18 +185,16 @@ function DashboardLayoutContent({
               </button>
               {!isCollapsed ? (
                 <div className="flex items-center gap-2 min-w-0">
-                  <img
-                    src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663328149057/JiTjkhwCQcNFndvg.png"
-                    alt="Core Fire Protection"
-                    className="h-7 w-auto object-contain"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = 'none';
-                    }}
-                  />
+                  <span className="font-display text-base font-bold tracking-[0.15em] uppercase leading-none text-foreground">
+                    Core
+                    <span className="ml-1 text-[0.55em] font-mono font-normal tracking-widest align-middle text-ember">
+                      FIRE
+                    </span>
+                  </span>
                 </div>
               ) : (
-                <div className="w-6 h-6 rounded-md fire-gradient flex items-center justify-center shrink-0">
-                  <Flame className="h-3.5 w-3.5 text-white" />
+                <div className="w-6 h-6 rounded-sm bg-[#E8340A]/10 border border-[#E8340A]/20 flex items-center justify-center shrink-0">
+                  <Flame className="h-3.5 w-3.5 text-[#E8340A]" />
                 </div>
               )}
             </div>
@@ -212,10 +210,10 @@ function DashboardLayoutContent({
                       isActive={isActive}
                       onClick={() => setLocation(item.path)}
                       tooltip={item.label}
-                      className={`h-10 transition-all font-normal ${isActive ? "text-[#FF6B35]" : ""}`}
+                      className={`h-10 transition-all font-normal ${isActive ? "text-ember" : ""}`}
                     >
                       <item.icon
-                        className={`h-4 w-4 ${isActive ? "text-[#FF6B35]" : ""}`}
+                        className={`h-4 w-4 ${isActive ? "text-ember" : ""}`}
                       />
                       <span>{item.label}</span>
                     </SidebarMenuButton>
@@ -253,7 +251,7 @@ function DashboardLayoutContent({
               <DropdownMenuTrigger asChild>
                 <button className="flex items-center gap-3 rounded-lg px-1 py-1 hover:bg-accent/50 transition-colors w-full text-left group-data-[collapsible=icon]:justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                   <Avatar className="h-9 w-9 border border-border/60 shrink-0">
-                    <AvatarFallback className="text-xs font-medium bg-[#E8340A]/10 text-[#FF6B35]">
+                    <AvatarFallback className="text-xs font-medium bg-ember/10 text-ember">
                       {user?.name?.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
@@ -300,8 +298,8 @@ function DashboardLayoutContent({
             <div className="flex items-center gap-2">
               <SidebarTrigger className="h-9 w-9 rounded-lg bg-background" />
               <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded fire-gradient flex items-center justify-center">
-                  <Flame className="h-3 w-3 text-white" />
+                <div className="w-5 h-5 rounded-sm bg-[#E8340A]/10 border border-[#E8340A]/20 flex items-center justify-center">
+                  <Flame className="h-3 w-3 text-[#E8340A]" />
                 </div>
                 <span className="text-sm font-semibold tracking-tight text-foreground">
                   {activeMenuItem?.label ?? "Core Fire Portal"}

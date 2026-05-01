@@ -17,7 +17,7 @@
         </div>
         <div class="header-topbar__info">
           <a href="https://www.instagram.com/nordfire" target="_blank" rel="noopener">Instagram</a>
-          <a href="portal.html" style="background:rgba(230,51,41,0.15);color:#e63329;padding:3px 10px;border-radius:3px;font-weight:700;">Trade Portal ↗</a>
+          <a href="portal.html" style="background:rgba(254,123,2,0.15);color:#FE7B02;padding:3px 10px;border-radius:3px;font-weight:700;">Trade Portal ↗</a>
         </div>
       </div>
     </div>
@@ -144,7 +144,7 @@
           <li><a href="portal.html#catalogue">Trade Catalogue</a></li>
           <li><a href="portal.html#quote-builder">Quote Builder</a></li>
           <li><a href="portal.html#client-portal">Client Portal</a></li>
-          <li><a href="https://nordquote-jrbfpxgk.manus.space/" target="_blank" rel="noopener" style="color:#e63329;">Login →</a></li>
+          <li><a href="https://nordquote-jrbfpxgk.manus.space/" target="_blank" rel="noopener" style="color:#FE7B02;">Login →</a></li>
         </ul>
       </div>
       <div>
@@ -260,7 +260,7 @@
     document.querySelectorAll('.header-nav a').forEach(function (a) {
       const href = a.getAttribute('href') || '';
       if (href === path || (path === '' && href === 'index.html')) {
-        a.style.color = '#e63329';
+        a.style.color = '#FE7B02';
       }
     });
 

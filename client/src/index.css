@@ -40,94 +40,160 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  /* Core Fire custom colors */
+  /* Nord custom colors */
   --color-fire: var(--fire);
   --color-ember: var(--ember);
-  --color-gold: var(--gold);
+  --color-ink: var(--ink);
 }
 
-/* ── Core Fire Protection Brand Palette ─────────────────────────── */
+/* ── Nord Design System — Core Fire Portal ─────────────────────── */
+/* Based on nordfire-forge-bliss.lovable.app                        */
 :root {
-  /* Brand */
+  /* Brand accent */
   --fire: #E8340A;
-  --ember: #FF6B35;
-  --gold: #F5A623;
+  --ember: #FE7B02;
+  --ember-hsl: 29 99% 50%;
 
-  /* Light mode */
-  --radius: 0.75rem;
-  --background: oklch(0.97 0.004 30);
-  --foreground: oklch(0.15 0.02 30);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.15 0.02 30);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.15 0.02 30);
-  --primary: oklch(0.52 0.22 28);       /* fire red */
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.93 0.01 30);
-  --secondary-foreground: oklch(0.25 0.015 30);
-  --muted: oklch(0.94 0.008 30);
-  --muted-foreground: oklch(0.50 0.012 30);
-  --accent: oklch(0.93 0.01 30);
-  --accent-foreground: oklch(0.20 0.015 30);
-  --destructive: oklch(0.52 0.22 28);
-  --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.88 0.008 30);
-  --input: oklch(0.88 0.008 30);
-  --ring: oklch(0.52 0.22 28);
-  --chart-1: oklch(0.52 0.22 28);
-  --chart-2: oklch(0.65 0.18 50);
-  --chart-3: oklch(0.75 0.15 80);
-  --chart-4: oklch(0.60 0.12 200);
-  --chart-5: oklch(0.55 0.10 260);
-  --sidebar: oklch(1 0 0);
-  --sidebar-foreground: oklch(0.15 0.02 30);
-  --sidebar-primary: oklch(0.52 0.22 28);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.94 0.008 30);
-  --sidebar-accent-foreground: oklch(0.20 0.015 30);
-  --sidebar-border: oklch(0.88 0.008 30);
-  --sidebar-ring: oklch(0.52 0.22 28);
+  /* Nord dark canvas (always dark — matches Nord's pure dark aesthetic) */
+  --radius: 1.25rem;                        /* 20px — Nord uses 1.25rem */
+
+  /* Surfaces — Nord uses near-black */
+  --background: hsl(0 0% 11%);             /* #1c1c1c */
+  --foreground: hsl(0 0% 96%);             /* #f5f5f5 */
+  --card: hsl(0 0% 15%);                   /* #262626 */
+  --card-foreground: hsl(0 0% 96%);
+  --popover: hsl(0 0% 15%);
+  --popover-foreground: hsl(0 0% 96%);
+
+  /* Primary = off-white (Nord uses white as primary, ember as accent) */
+  --primary: hsl(0 0% 96%);
+  --primary-foreground: hsl(0 0% 11%);
+
+  /* Secondary = slightly lighter surface */
+  --secondary: hsl(0 0% 18%);
+  --secondary-foreground: hsl(0 0% 96%);
+
+  /* Muted */
+  --muted: hsl(0 0% 18%);
+  --muted-foreground: hsl(0 0% 56%);
+
+  /* Accent = ember orange (used sparingly — only on the FIRE word) */
+  --accent: hsl(29 99% 50%);               /* #FE7B02 */
+  --accent-foreground: hsl(0 0% 11%);
+  --accent-glow: hsl(0 0% 88%);
+
+  /* Destructive */
+  --destructive: hsl(0 70% 55%);
+  --destructive-foreground: hsl(0 0% 100%);
+
+  /* Borders & inputs */
+  --border: hsl(0 0% 22%);
+  --input: hsl(0 0% 22%);
+  --ring: hsl(0 0% 96%);
+
+  /* Charts */
+  --chart-1: hsl(29 99% 50%);             /* ember */
+  --chart-2: hsl(0 70% 55%);              /* red */
+  --chart-3: hsl(0 0% 70%);
+  --chart-4: hsl(200 60% 50%);
+  --chart-5: hsl(260 50% 60%);
+
+  /* Ink surface (topbar / footer) */
+  --ink: hsl(0 0% 9%);
+  --ink-foreground: hsl(0 0% 96%);
+
+  /* Sidebar */
+  --sidebar: hsl(0 0% 11%);
+  --sidebar-foreground: hsl(0 0% 70%);
+  --sidebar-primary: hsl(0 0% 96%);
+  --sidebar-primary-foreground: hsl(0 0% 11%);
+  --sidebar-accent: hsl(0 0% 18%);
+  --sidebar-accent-foreground: hsl(0 0% 96%);
+  --sidebar-border: hsl(0 0% 22%);
+  --sidebar-ring: hsl(0 0% 96%);
+
+  /* Nord gradient & shadow tokens */
+  --gradient-card: linear-gradient(160deg, hsl(0 0% 17%), hsl(0 0% 13%));
+  --gradient-ink: linear-gradient(180deg, hsl(0 0% 13%), hsl(0 0% 9%));
+  --gradient-glow: radial-gradient(ellipse at top, hsl(0 0% 100% / .04), transparent 60%);
+  --shadow-card: 0 1px 0 0 hsl(0 0% 100% / .04) inset, 0 0 0 1px hsl(0 0% 100% / .03), 0 24px 48px -16px hsl(0 0% 0% / .6);
+  --shadow-elevated: 0 1px 0 0 hsl(0 0% 100% / .06) inset, 0 0 0 1px hsl(0 0% 100% / .05), 0 32px 64px -20px hsl(0 0% 0% / .75);
+  --transition-base: .2s cubic-bezier(.4, 0, .2, 1);
+  --transition-elastic: .4s cubic-bezier(.34, 1.56, .64, 1);
 }
 
+/* Dark class — same tokens (Nord is always dark) */
 .dark {
-  /* Brand */
   --fire: #E8340A;
-  --ember: #FF6B35;
-  --gold: #F5A623;
+  --ember: #FE7B02;
+  --background: hsl(0 0% 11%);
+  --foreground: hsl(0 0% 96%);
+  --card: hsl(0 0% 15%);
+  --card-foreground: hsl(0 0% 96%);
+  --popover: hsl(0 0% 15%);
+  --popover-foreground: hsl(0 0% 96%);
+  --primary: hsl(0 0% 96%);
+  --primary-foreground: hsl(0 0% 11%);
+  --secondary: hsl(0 0% 18%);
+  --secondary-foreground: hsl(0 0% 96%);
+  --muted: hsl(0 0% 18%);
+  --muted-foreground: hsl(0 0% 56%);
+  --accent: hsl(29 99% 50%);
+  --accent-foreground: hsl(0 0% 11%);
+  --destructive: hsl(0 70% 55%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(0 0% 22%);
+  --input: hsl(0 0% 22%);
+  --ring: hsl(0 0% 96%);
+  --chart-1: hsl(29 99% 50%);
+  --chart-2: hsl(0 70% 55%);
+  --chart-3: hsl(0 0% 70%);
+  --chart-4: hsl(200 60% 50%);
+  --chart-5: hsl(260 50% 60%);
+  --ink: hsl(0 0% 9%);
+  --ink-foreground: hsl(0 0% 96%);
+  --sidebar: hsl(0 0% 11%);
+  --sidebar-foreground: hsl(0 0% 70%);
+  --sidebar-primary: hsl(0 0% 96%);
+  --sidebar-primary-foreground: hsl(0 0% 11%);
+  --sidebar-accent: hsl(0 0% 18%);
+  --sidebar-accent-foreground: hsl(0 0% 96%);
+  --sidebar-border: hsl(0 0% 22%);
+  --sidebar-ring: hsl(0 0% 96%);
+}
 
-  /* Dark mode — matches the original HTML dark theme */
-  --background: oklch(0.11 0.018 240);   /* #0D1117 */
-  --foreground: oklch(0.88 0.01 220);    /* #E4ECF4 */
-  --card: oklch(0.14 0.02 240);          /* #161B22 */
-  --card-foreground: oklch(0.88 0.01 220);
-  --popover: oklch(0.14 0.02 240);
-  --popover-foreground: oklch(0.88 0.01 220);
-  --primary: oklch(0.60 0.24 28);        /* ember/fire */
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.18 0.025 240);    /* #1E2530 */
-  --secondary-foreground: oklch(0.85 0.01 220);
-  --muted: oklch(0.20 0.025 240);
-  --muted-foreground: oklch(0.55 0.012 220);
-  --accent: oklch(0.20 0.025 240);
-  --accent-foreground: oklch(0.95 0.008 220);
-  --destructive: oklch(0.60 0.24 28);
-  --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.88 0.01 220 / 10%);
-  --input: oklch(0.88 0.01 220 / 10%);
-  --ring: oklch(0.60 0.24 28);
-  --chart-1: oklch(0.60 0.24 28);        /* fire */
-  --chart-2: oklch(0.65 0.20 50);        /* ember */
-  --chart-3: oklch(0.72 0.16 80);        /* gold */
-  --chart-4: oklch(0.65 0.16 200);       /* teal */
-  --chart-5: oklch(0.60 0.14 260);       /* blue */
-  --sidebar: oklch(0.13 0.02 240);
-  --sidebar-foreground: oklch(0.88 0.01 220);
-  --sidebar-primary: oklch(0.60 0.24 28);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.20 0.025 240);
-  --sidebar-accent-foreground: oklch(0.95 0.008 220);
-  --sidebar-border: oklch(0.88 0.01 220 / 12%);
-  --sidebar-ring: oklch(0.60 0.24 28);
+/* Light mode — slightly lighter surfaces, same Nord feel */
+.light {
+  --background: hsl(0 0% 96%);
+  --foreground: hsl(0 0% 9%);
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(0 0% 9%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(0 0% 9%);
+  --primary: hsl(0 0% 9%);
+  --primary-foreground: hsl(0 0% 96%);
+  --secondary: hsl(0 0% 92%);
+  --secondary-foreground: hsl(0 0% 9%);
+  --muted: hsl(0 0% 92%);
+  --muted-foreground: hsl(0 0% 44%);
+  --accent: hsl(29 99% 50%);
+  --accent-foreground: hsl(0 0% 100%);
+  --border: hsl(0 0% 85%);
+  --input: hsl(0 0% 85%);
+  --ring: hsl(0 0% 9%);
+  --ink: hsl(0 0% 9%);
+  --ink-foreground: hsl(0 0% 96%);
+  --sidebar: hsl(0 0% 96%);
+  --sidebar-foreground: hsl(0 0% 44%);
+  --sidebar-primary: hsl(0 0% 9%);
+  --sidebar-primary-foreground: hsl(0 0% 96%);
+  --sidebar-accent: hsl(0 0% 92%);
+  --sidebar-accent-foreground: hsl(0 0% 9%);
+  --sidebar-border: hsl(0 0% 85%);
+  --sidebar-ring: hsl(0 0% 9%);
+  --gradient-card: linear-gradient(160deg, hsl(0 0% 100%), hsl(0 0% 97%));
+  --shadow-card: 0 1px 0 0 hsl(0 0% 0% / .04) inset, 0 0 0 1px hsl(0 0% 0% / .06), 0 24px 48px -16px hsl(0 0% 0% / .12);
+  --shadow-elevated: 0 1px 0 0 hsl(0 0% 0% / .06) inset, 0 0 0 1px hsl(0 0% 0% / .08), 0 32px 64px -20px hsl(0 0% 0% / .18);
 }
 
 @layer base {
@@ -136,7 +202,9 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: 'Space Grotesk', Inter, system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
@@ -148,6 +216,16 @@
   input[type="checkbox"]:not(:disabled),
   input[type="radio"]:not(:disabled) {
     @apply cursor-pointer;
+  }
+  /* Nord display font — used for large headings */
+  .font-display {
+    font-family: 'Space Grotesk', Inter, sans-serif;
+  }
+  .font-serif-display {
+    font-family: 'Marcellus', Georgia, serif;
+  }
+  .font-mono-nord {
+    font-family: 'DM Mono', 'Courier New', monospace;
   }
 }
 
@@ -180,12 +258,77 @@
     }
   }
 
-  /* ── Core Fire brand utilities ───────────────────────────── */
+  /* ── Nord bento-card ─────────────────────────────────────────── */
+  .bento-card {
+    position: relative;
+    background: var(--gradient-card);
+    border: 1px solid hsl(0 0% 100% / .06);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    opacity: .92;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base), opacity var(--transition-base);
+  }
+  .bento-card::before {
+    content: "";
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(120% 80% at 50% 0%, hsl(0 0% 100% / .05), transparent 60%);
+  }
+  .bento-card:hover {
+    border-color: hsl(0 0% 100% / .14);
+    box-shadow: var(--shadow-elevated);
+    opacity: 1;
+  }
+
+  /* ── Nord bento-pill ─────────────────────────────────────────── */
+  .bento-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    height: 2.25rem;
+    padding: 0 1rem;
+    border-radius: 9999px;
+    background: hsl(0 0% 100% / .06);
+    border: 1px solid hsl(0 0% 100% / .08);
+    color: hsl(var(--foreground));
+    font-size: .75rem;
+    font-weight: 500;
+    letter-spacing: .02em;
+    transition: background var(--transition-base), border-color var(--transition-base), transform var(--transition-base);
+    text-decoration: none;
+  }
+  .bento-pill:hover {
+    background: hsl(0 0% 100% / .12);
+    border-color: hsl(0 0% 100% / .16);
+  }
+
+  /* ── Nord ink surface (topbar / footer) ─────────────────────── */
+  .bg-ink {
+    background-color: var(--ink);
+  }
+  .text-ink-foreground {
+    color: var(--ink-foreground);
+  }
+
+  /* ── Nord ember accent ───────────────────────────────────────── */
+  .text-ember {
+    color: var(--ember);
+  }
+  .bg-ember {
+    background-color: var(--ember);
+  }
+
+  /* ── Fire gradient (kept for CTA buttons) ────────────────────── */
   .fire-gradient {
-    background: linear-gradient(135deg, #E8340A, #FF6B35 60%, #F5A623);
+    background: linear-gradient(135deg, #E8340A, #FE7B02 60%, #ff9b35);
   }
   .fire-gradient-text {
-    background: linear-gradient(135deg, #E8340A, #FF6B35 60%, #F5A623);
+    background: linear-gradient(135deg, #E8340A, #FE7B02 60%, #ff9b35);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -196,39 +339,31 @@
   .fire-glow:hover {
     box-shadow: 0 8px 30px rgba(232, 52, 10, 0.45);
   }
-  .accent-bar {
-    height: 3px;
-    background: linear-gradient(90deg, #E8340A, #FF6B35, #F5A623);
+
+  /* ── Nord nav pill links ─────────────────────────────────────── */
+  .nord-nav-pill {
+    @apply px-4 py-2 text-sm font-medium rounded-full border transition-colors;
+    border-color: hsl(0 0% 100% / .10);
+    background: hsl(0 0% 100% / .03);
+    color: hsl(0 0% 96% / .80);
+  }
+  .nord-nav-pill:hover {
+    background: hsl(0 0% 100% / .08);
+    border-color: hsl(0 0% 100% / .20);
+    color: hsl(0 0% 96%);
   }
 
-  /* ── Noise overlay ───────────────────────────────────────── */
-  .noise-overlay::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.025'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.4;
-  }
-
-  /* ── Status badge colours ────────────────────────────────── */
-  .status-active    { @apply bg-green-500/10 text-green-400 border border-green-500/25; }
-  .status-pending   { @apply bg-amber-500/10 text-amber-400 border border-amber-500/25; }
-  .status-draft     { @apply bg-slate-500/10 text-slate-400 border border-slate-500/25; }
-  .status-cancelled { @apply bg-red-500/10 text-red-400 border border-red-500/25; }
-  .status-completed { @apply bg-blue-500/10 text-blue-400 border border-blue-500/25; }
-
-  /* ── Stat card hover ─────────────────────────────────────── */
+  /* ── Stat card hover ─────────────────────────────────────────── */
   .stat-card {
     @apply rounded-xl border bg-card p-5 transition-all duration-200;
+    border-color: hsl(0 0% 100% / .06);
   }
   .stat-card:hover {
     @apply shadow-lg;
-    border-color: rgba(232, 52, 10, 0.3);
+    border-color: hsl(0 0% 100% / .14);
   }
 
-  /* ── Portal nav ──────────────────────────────────────────── */
+  /* ── Portal nav ──────────────────────────────────────────────── */
   .portal-nav-item {
     @apply flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150;
     color: var(--muted-foreground);
@@ -238,36 +373,60 @@
     color: var(--foreground);
   }
   .portal-nav-item.active {
-    background: rgba(232, 52, 10, 0.1);
-    border: 1px solid rgba(232, 52, 10, 0.25);
-    color: #FF6B35;
+    background: hsl(29 99% 50% / .10);
+    border: 1px solid hsl(29 99% 50% / .25);
+    color: var(--ember);
   }
 
-  /* ── Glass card ──────────────────────────────────────────── */
+  /* ── Glass card ──────────────────────────────────────────────── */
   .glass-card {
-    background: rgba(22, 27, 34, 0.6);
+    background: hsl(0 0% 17% / .60);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid hsl(0 0% 100% / .06);
   }
 
-  /* ── Skeleton loading ────────────────────────────────────── */
+  /* ── Status badge colours ────────────────────────────────────── */
+  .status-active    { @apply bg-green-500/10 text-green-400 border border-green-500/25; }
+  .status-pending   { @apply bg-amber-500/10 text-amber-400 border border-amber-500/25; }
+  .status-draft     { @apply bg-slate-500/10 text-slate-400 border border-slate-500/25; }
+  .status-cancelled { @apply bg-red-500/10 text-red-400 border border-red-500/25; }
+  .status-completed { @apply bg-blue-500/10 text-blue-400 border border-blue-500/25; }
+
+  /* ── Skeleton loading ────────────────────────────────────────── */
   .skeleton {
-    background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+    background: linear-gradient(90deg, hsl(0 0% 100% / .05) 25%, hsl(0 0% 100% / .10) 50%, hsl(0 0% 100% / .05) 75%);
     background-size: 200% 100%;
     animation: skeleton-loading 1.5s infinite;
     border-radius: 4px;
   }
+
+  /* ── Nord section tag ────────────────────────────────────────── */
+  .nord-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: .375rem;
+    font-family: 'Space Grotesk', monospace;
+    font-size: .6875rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: hsl(0 0% 56%);
+  }
+  .nord-tag::before {
+    content: '';
+    display: inline-block;
+    width: .375rem;
+    height: .375rem;
+    border-radius: 9999px;
+    background: currentColor;
+    animation: pulse-signal 2s ease-out infinite;
+  }
 }
 
-/* ── Keyframe animations (global) ───────────────────────────────── */
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.3; }
-}
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* ── Keyframe animations ─────────────────────────────────────────── */
+@keyframes fade-up {
+  0%   { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeIn {
@@ -290,32 +449,39 @@
   100% { background-position: -200% 0; }
 }
 
-@keyframes slide-in-right {
-  from { opacity: 0; transform: translateX(20px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-
 @keyframes scale-in {
   from { opacity: 0; transform: scale(0.95); }
   to   { opacity: 1; transform: scale(1); }
 }
 
+@keyframes pulse-signal {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(0 0% 100% / .40); }
+  50%       { box-shadow: 0 0 0 6px hsl(0 0% 100% / .00); }
+}
+
+@keyframes marquee {
+  0%   { transform: translate(0); }
+  100% { transform: translate(-50%); }
+}
+
 /* ── Animation utility classes ──────────────────────────────────── */
-.blink              { animation: blink 2s infinite; }
-.animate-fade-in-up { animation: fadeInUp 0.5s ease-out both; }
-.animate-fade-in    { animation: fadeIn 0.4s ease-out both; }
-.animate-float      { animation: float 6s ease-in-out infinite; }
-.animate-scale-in   { animation: scale-in 0.3s ease-out both; }
-.pulse-fire         { animation: pulse-fire 2s ease-in-out infinite; }
+.animate-fade-up      { animation: fade-up .6s cubic-bezier(.16, 1, .3, 1) both; }
+.animate-fade-in-up   { animation: fade-up 0.5s ease-out both; }
+.animate-fade-in      { animation: fadeIn 0.4s ease-out both; }
+.animate-float        { animation: float 6s ease-in-out infinite; }
+.animate-scale-in     { animation: scale-in 0.3s ease-out both; }
+.pulse-fire           { animation: pulse-fire 2s ease-in-out infinite; }
+.animate-marquee      { animation: marquee 30s linear infinite; }
+.pulse-signal         { animation: pulse-signal 2s ease-out infinite; }
 
 /* ── Scrollbar styling ──────────────────────────────────────────── */
 ::-webkit-scrollbar       { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(232, 52, 10, 0.35); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(232, 52, 10, 0.6); }
+::-webkit-scrollbar-thumb { background: hsl(0 0% 100% / .15); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: hsl(0 0% 100% / .30); }
 
 /* ── Text selection ─────────────────────────────────────────────── */
-::selection { background: rgba(232, 52, 10, 0.25); color: #FF6B35; }
+::selection { background: hsl(29 99% 50% / .25); color: var(--ember); }
 
 /* ── Smooth scroll ──────────────────────────────────────────────── */
 html { scroll-behavior: smooth; }

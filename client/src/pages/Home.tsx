@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  CheckCircle2, FileText, Shield, Zap, Clock, Users, ChevronDown,
-  Flame, Bell, Phone, Mail, ExternalLink, ArrowRight,
+  CheckCircle2, FileText, Shield, Zap, Clock, Users,
+  Flame, Bell, Phone, Mail, ExternalLink, ArrowRight, ArrowUpRight,
   BarChart3, Building2, Menu, X, ChevronUp, Star, Award,
   Wrench, Radio, Camera, KeyRound, Lightbulb, Droplets,
-  Sun, Moon, Lock, Pen, QrCode, Download
+  Sun, Moon, Lock, Pen, QrCode, Download, Search, ShoppingCart
 } from "lucide-react";
 import { Link } from "wouter";
 import AnimatedBackground from "@/components/AnimatedBackground";
@@ -38,110 +37,111 @@ export default function Home() {
   };
 
   const navLinks = [
-    { label: "Home", id: "home" },
     { label: "Features", id: "features" },
     { label: "Services", id: "services" },
     { label: "Why Us", id: "why-us" },
+    { label: "About", id: "about" },
   ];
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation */}
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? "bg-background/95 backdrop-blur-xl border-b border-border/80 shadow-lg shadow-black/10"
-            : "bg-background/85 backdrop-blur-xl border-b border-border/60"
+
+      {/* ── Top announcement bar (Nord ink strip) ─────────────────── */}
+      <div className="bg-ink text-ink-foreground">
+        <div className="container flex h-8 items-center justify-between text-[11px] font-mono uppercase tracking-widest">
+          <span className="opacity-70">Fire &amp; Security Systems — Scotland &amp; UK</span>
+          <span className="opacity-70 hidden sm:inline">Trade enquiries: info@corefireprotection.co.uk</span>
+        </div>
+      </div>
+
+      {/* ── Navigation ───────────────────────────────────────────── */}
+      <header
+        className={`sticky top-0 z-50 w-full border-b border-border bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70 transition-all duration-300 ${
+          scrolled ? "shadow-lg shadow-black/20" : ""
         }`}
       >
-        <div className="accent-bar" />
-        <div className="container mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
-            {/* Logo */}
-            <div className="flex items-center gap-3">
-              <img
-                src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663328149057/JiTjkhwCQcNFndvg.png"
-                alt="Core Fire Protection"
-                className="h-10 w-auto object-contain"
-              />
+        <div className="container flex h-16 items-center gap-6">
+          {/* Logo */}
+          <Link href="/" aria-label="Core Fire Protection home">
+            <div className="flex items-center gap-2.5">
+              <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded-sm bg-[#E8340A]/10 flex items-center justify-center">
+                <Flame className="h-5 w-5 text-[#E8340A]" />
+              </div>
+              <span className="font-display text-xl font-bold tracking-[0.15em] uppercase leading-none text-foreground">
+                Core
+                <span className="ml-1 text-[0.55em] font-mono font-normal tracking-widest align-middle text-ember">
+                  FIRE
+                </span>
+              </span>
             </div>
+          </Link>
 
-            {/* Desktop nav */}
-            <div className="hidden md:flex items-center gap-6">
-              {navLinks.map((link) => (
-                <button
-                  key={link.id}
-                  onClick={() => scrollToSection(link.id)}
-                  className="text-sm hover:text-[#FF6B35] transition-colors font-medium text-muted-foreground"
-                >
-                  {link.label}
-                </button>
-              ))}
-              <Link href="/portal">
-                <button className="text-sm hover:text-[#FF6B35] transition-colors font-medium text-muted-foreground">
-                  Client Portal
-                </button>
-              </Link>
-
-              {/* Theme toggle */}
-              {switchable && toggleTheme && (
-                <button
-                  onClick={toggleTheme}
-                  className="p-2 rounded-lg hover:bg-secondary transition-colors text-muted-foreground hover:text-foreground"
-                  aria-label="Toggle theme"
-                >
-                  {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                </button>
-              )}
-
-              <Link href="/agreement">
-                <Button size="sm" className="fire-gradient fire-glow text-white font-semibold">
-                  <FileText className="mr-1.5 h-3.5 w-3.5" />
-                  Start Agreement
-                </Button>
-              </Link>
-            </div>
-
-            {/* Mobile controls */}
-            <div className="md:hidden flex items-center gap-2">
-              {switchable && toggleTheme && (
-                <button
-                  onClick={toggleTheme}
-                  className="p-2 rounded-lg hover:bg-secondary transition-colors text-muted-foreground"
-                  aria-label="Toggle theme"
-                >
-                  {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                </button>
-              )}
+          {/* Desktop nav */}
+          <nav className="hidden lg:flex items-center gap-2 ml-4">
+            {navLinks.map((link) => (
               <button
-                className="p-2 rounded-lg hover:bg-secondary transition-colors"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                aria-label="Toggle navigation menu"
+                key={link.id}
+                onClick={() => scrollToSection(link.id)}
+                className="nord-nav-pill"
               >
-                {mobileMenuOpen ? (
-                  <X className="h-5 w-5 text-foreground" />
-                ) : (
-                  <Menu className="h-5 w-5 text-foreground" />
-                )}
+                {link.label}
               </button>
-            </div>
-          </div>
+            ))}
+            <Link href="/portal">
+              <span className="nord-nav-pill">Client Portal</span>
+            </Link>
+          </nav>
 
-          {/* Mobile menu */}
-          {mobileMenuOpen && (
-            <div className="md:hidden mt-3 pb-4 border-t border-border/60 pt-4 space-y-1 animate-fade-in">
+          {/* Right side actions */}
+          <div className="ml-auto flex items-center gap-2">
+            {/* Theme toggle */}
+            {switchable && toggleTheme && (
+              <button
+                onClick={toggleTheme}
+                className="h-9 w-9 flex items-center justify-center rounded-full border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] hover:border-white/20 transition-colors text-foreground/70 hover:text-foreground"
+                aria-label="Toggle theme"
+              >
+                {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              </button>
+            )}
+            <Link href="/agreement">
+              <Button size="sm" className="fire-gradient fire-glow text-white font-semibold rounded-full">
+                <FileText className="mr-1.5 h-3.5 w-3.5" />
+                Start Agreement
+              </Button>
+            </Link>
+
+            {/* Mobile menu toggle */}
+            <button
+              className="lg:hidden h-9 w-9 flex items-center justify-center rounded-full border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] transition-colors"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle navigation menu"
+            >
+              {mobileMenuOpen ? (
+                <X className="h-4 w-4 text-foreground" />
+              ) : (
+                <Menu className="h-4 w-4 text-foreground" />
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile menu */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden border-t border-border/60 bg-background/95 backdrop-blur-xl animate-fade-in">
+            <div className="container py-4 space-y-1">
               {navLinks.map((link) => (
                 <button
                   key={link.id}
                   onClick={() => scrollToSection(link.id)}
-                  className="w-full text-left px-3 py-2.5 text-sm font-medium text-muted-foreground hover:text-[#FF6B35] hover:bg-secondary rounded-lg transition-colors"
+                  className="w-full text-left px-4 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary rounded-full transition-colors"
                 >
                   {link.label}
                 </button>
               ))}
               <Link href="/portal">
                 <button
-                  className="w-full text-left px-3 py-2.5 text-sm font-medium text-muted-foreground hover:text-[#FF6B35] hover:bg-secondary rounded-lg transition-colors"
+                  className="w-full text-left px-4 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary rounded-full transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Client Portal
@@ -150,7 +150,7 @@ export default function Home() {
               <div className="pt-2">
                 <Link href="/agreement">
                   <Button
-                    className="w-full fire-gradient fire-glow text-white font-semibold"
+                    className="w-full fire-gradient fire-glow text-white font-semibold rounded-full"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <FileText className="mr-2 h-4 w-4" />
@@ -159,470 +159,589 @@ export default function Home() {
                 </Link>
               </div>
             </div>
-          )}
-        </div>
-      </nav>
+          </div>
+        )}
+      </header>
 
-      {/* Hero Section */}
-      <section id="home" className="relative pt-28 pb-20 px-4 overflow-hidden min-h-screen flex items-center">
-        <AnimatedBackground />
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-background/95 to-[#E8340A]/5 pointer-events-none" />
-        <div className="container mx-auto max-w-7xl relative z-10 w-full">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#E8340A]/10 border border-[#E8340A]/30 rounded-full text-sm font-medium text-[#FF6B35] animate-fade-in-up">
-                <Zap className="h-4 w-4" />
-                Fire &amp; Security Systems Business Service Agreement Portal
+      {/* ── Main bento-grid layout ────────────────────────────────── */}
+      <main className="container py-8">
+
+        {/* ── Hero bento grid ───────────────────────────────────── */}
+        <section
+          id="home"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 auto-rows-[minmax(220px,auto)] gap-6 mb-6"
+        >
+          {/* Hero card — spans 2 cols × 2 rows */}
+          <article className="bento-card md:col-span-2 lg:row-span-2 p-8 lg:p-10 flex flex-col gap-6 min-h-[440px] relative overflow-hidden">
+            <AnimatedBackground />
+            <div className="relative z-10 flex flex-col gap-6 h-full">
+              <div className="nord-tag">
+                <span className="h-1.5 w-1.5 rounded-full bg-foreground pulse-signal inline-block" />
+                Fire &amp; Security Systems — Scotland
               </div>
-              <h1 className="text-5xl md:text-7xl font-bold leading-tight animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
-                PROTECT.{" "}
-                <span className="fire-gradient-text">COMPLY.</span>
+              <h1 className="font-display text-7xl lg:text-[9rem] font-bold tracking-tight leading-[0.95] text-balance">
+                CORE
                 <br />
-                MANAGE{" "}
-                <span className="fire-gradient-text">DIGITALLY.</span>
+                <span className="text-xl lg:text-2xl font-semibold tracking-tight block mt-3 text-foreground/80">
+                  Protect. Comply. Manage Digitally.
+                </span>
               </h1>
-              <p className="text-xl text-muted-foreground leading-relaxed animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-                Create comprehensive fire and security systems maintenance contracts digitally.
-                Select from 76+ services across 14 categories, sign electronically, and ensure
-                compliance with all applicable British Standards.
-              </p>
-              <div className="grid grid-cols-3 gap-6 py-4 border-y border-border/40 animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
-                {[
-                  { value: "76+", label: "Services Available" },
-                  { value: "14", label: "Service Categories" },
-                  { value: "10+", label: "Years Experience" },
-                ].map(({ value, label }) => (
-                  <div key={label}>
-                    <div className="text-4xl font-bold fire-gradient-text">{value}</div>
-                    <div className="text-sm text-muted-foreground">{label}</div>
-                  </div>
-                ))}
+              <div className="space-y-3 text-base text-muted-foreground max-w-md text-pretty leading-relaxed">
+                <p>
+                  Create comprehensive fire and security systems maintenance contracts digitally.
+                  Select from 76+ services across 14 categories, sign electronically, and ensure
+                  compliance with all applicable British Standards.
+                </p>
               </div>
-              <div className="flex flex-wrap gap-2 animate-fade-in-up" style={{ animationDelay: "0.35s" }}>
-                {["BAFE SP203-1", "NSI Gold", "BSI Kitemark", "BS 5839-1:2025", "BS EN 12845", "PD 6662"].map((badge) => (
-                  <span key={badge} className="px-3 py-1 text-xs font-medium bg-[#E8340A]/10 border border-[#E8340A]/20 rounded-full text-[#FF6B35]">
-                    {badge}
-                  </span>
-                ))}
-              </div>
-              <div className="flex flex-col sm:flex-row items-start gap-4 pt-2 animate-fade-in-up" style={{ animationDelay: "0.4s" }}>
+              <div className="flex flex-wrap gap-3 mt-auto">
                 <Link href="/agreement">
-                  <Button size="lg" className="fire-gradient fire-glow text-white font-bold text-lg px-8 pulse-fire">
-                    <FileText className="mr-2 h-5 w-5" />
+                  <a className="bento-pill fire-gradient text-white border-0 font-semibold pulse-fire">
+                    <FileText className="h-3.5 w-3.5" />
                     Start Agreement
-                  </Button>
+                    <ArrowUpRight className="h-3.5 w-3.5" />
+                  </a>
                 </Link>
                 <Link href="/portal">
-                  <Button size="lg" variant="outline" className="border-[#E8340A]/30 hover:bg-[#E8340A]/10 text-lg px-8">
-                    <Shield className="mr-2 h-5 w-5" />
+                  <a className="bento-pill">
+                    <Shield className="h-3.5 w-3.5" />
                     Client Portal
-                  </Button>
+                    <ArrowUpRight className="h-3.5 w-3.5" />
+                  </a>
                 </Link>
               </div>
             </div>
-            <div className="relative order-first lg:order-last">
-              <div className="absolute inset-0 bg-gradient-to-r from-[#E8340A]/20 to-[#F5A623]/20 blur-3xl rounded-full scale-75" />
-              <img
-                src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663328149057/SZeDWIMkEBbvcIZE.png"
-                alt="Core Fire Protection AI Robot Assistant with branded service van"
-                className="relative z-10 w-full h-[500px] object-contain object-center animate-float"
-                loading="eager"
-              />
-            </div>
-          </div>
-        </div>
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-          <ChevronDown className="h-8 w-8 text-[#FF6B35]" />
-        </div>
-      </section>
+          </article>
 
-      {/* Portal Entry Cards */}
-      <section className="py-16 px-4 bg-card/30 border-y border-border/60">
-        <div className="container mx-auto max-w-5xl">
-          <div className="text-center mb-10">
-            <p className="text-xs font-bold uppercase tracking-widest text-[#FF6B35] mb-2">Portal Access</p>
-            <h2 className="text-3xl font-bold">Your Fire Safety Hub</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-            <Link href="/portal">
-              <Card className="border-border/60 hover:border-[#E8340A]/40 transition-all cursor-pointer group hover:shadow-lg hover:shadow-[#E8340A]/10 h-full">
-                <CardHeader>
-                  <div className="w-12 h-12 rounded-2xl fire-gradient flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-200">
-                    <Shield className="h-6 w-6 text-white" />
-                  </div>
-                  <CardTitle className="text-lg">Client Portal</CardTitle>
-                  <CardDescription>View your agreements, download PDFs, track renewals, and manage your fire safety compliance in one place.</CardDescription>
-                </CardHeader>
-              </Card>
-            </Link>
-            <Link href="/agreement">
-              <Card className="border-border/60 hover:border-[#E8340A]/40 transition-all cursor-pointer group hover:shadow-lg hover:shadow-[#E8340A]/10 h-full">
-                <CardHeader>
-                  <div className="w-12 h-12 rounded-2xl fire-gradient flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-200">
-                    <Pen className="h-6 w-6 text-white" />
-                  </div>
-                  <CardTitle className="text-lg">New Agreement</CardTitle>
-                  <CardDescription>Build a comprehensive service agreement with 76+ services, custom sections, and electronic signatures.</CardDescription>
-                </CardHeader>
-              </Card>
-            </Link>
-            <Link href="/dashboard">
-              <Card className="border-border/60 hover:border-[#E8340A]/40 transition-all cursor-pointer group hover:shadow-lg hover:shadow-[#E8340A]/10 h-full">
-                <CardHeader>
-                  <div className="w-12 h-12 rounded-2xl fire-gradient flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-200">
-                    <BarChart3 className="h-6 w-6 text-white" />
-                  </div>
-                  <CardTitle className="text-lg">Service Dashboard</CardTitle>
-                  <CardDescription>Monitor all active contracts, upcoming visits, revenue analytics, and service performance metrics.</CardDescription>
-                </CardHeader>
-              </Card>
-            </Link>
-            <Link href="/admin">
-              <Card className="border-border/60 hover:border-[#E8340A]/40 transition-all cursor-pointer group hover:shadow-lg hover:shadow-[#E8340A]/10 h-full">
-                <CardHeader>
-                  <div className="w-12 h-12 rounded-2xl fire-gradient flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-200">
-                    <Lock className="h-6 w-6 text-white" />
-                  </div>
-                  <CardTitle className="text-lg">Admin Dashboard</CardTitle>
-                  <CardDescription>Full agreement management, QR code generation, email dispatch, and business analytics for administrators.</CardDescription>
-                </CardHeader>
-              </Card>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section id="features" className="py-24 px-4">
-        <div className="container mx-auto max-w-7xl">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#E8340A]/10 border border-[#E8340A]/30 rounded-full text-sm font-medium text-[#FF6B35] mb-6">
-              <Zap className="h-4 w-4" />
-              PLATFORM FEATURES
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Everything You Need to{" "}
-              <span className="fire-gradient-text">Manage Compliance</span>
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              A complete digital platform for fire and security service agreement management,
-              from creation to signature to ongoing client management.
+          {/* Stats card */}
+          <article className="bento-card p-6 flex flex-col gap-4 justify-center">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+              Platform stats
             </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                icon: <FileText className="h-6 w-6 text-[#FF6B35]" />,
-                title: "Digital Agreement Builder",
-                desc: "Create comprehensive service agreements with 76+ services across 14 categories. Drag-and-drop section reordering, custom sections, and real-time pricing.",
-              },
-              {
-                icon: <Pen className="h-6 w-6 text-[#FF6B35]" />,
-                title: "Electronic Signatures",
-                desc: "Capture legally binding digital signatures from both client and company representatives directly on screen or via touchscreen devices.",
-              },
-              {
-                icon: <Download className="h-6 w-6 text-[#FF6B35]" />,
-                title: "Instant PDF Generation",
-                desc: "Generate professionally formatted PDF contracts with your branding, signatures, and full service schedules at the click of a button.",
-              },
-              {
-                icon: <QrCode className="h-6 w-6 text-[#FF6B35]" />,
-                title: "QR Code Access",
-                desc: "Generate unique QR codes for each agreement so clients can instantly access their portal and view their contract from any device.",
-              },
-              {
-                icon: <Shield className="h-6 w-6 text-[#FF6B35]" />,
-                title: "Client Portal",
-                desc: "Clients get a secure portal to view all their agreements, track renewal dates, download documents, and manage their compliance.",
-              },
-              {
-                icon: <BarChart3 className="h-6 w-6 text-[#FF6B35]" />,
-                title: "Analytics & Reporting",
-                desc: "Track revenue, monitor contract status, identify upcoming renewals, and get full visibility across your entire client base.",
-              },
-              {
-                icon: <Bell className="h-6 w-6 text-[#FF6B35]" />,
-                title: "Renewal Alerts",
-                desc: "Automatic notifications for contracts expiring within 30 or 60 days, ensuring you never miss a renewal opportunity.",
-              },
-              {
-                icon: <Users className="h-6 w-6 text-[#FF6B35]" />,
-                title: "Multi-Role Access",
-                desc: "Separate dashboards for admin, service team, and clients — each with role-appropriate views and permissions.",
-              },
-              {
-                icon: <Clock className="h-6 w-6 text-[#FF6B35]" />,
-                title: "Guided Walkthrough",
-                desc: "Step-by-step guided mode for creating agreements ensures no field is missed and every contract is complete and compliant.",
-              },
-            ].map((feature) => (
-              <div
-                key={feature.title}
-                className="stat-card group hover:border-[#E8340A]/30 transition-all duration-200"
-              >
-                <div className="w-12 h-12 rounded-xl bg-[#E8340A]/10 border border-[#E8340A]/20 flex items-center justify-center mb-4 group-hover:bg-[#E8340A]/15 transition-colors">
-                  {feature.icon}
+            <div className="grid grid-cols-3 gap-4">
+              {[
+                { value: "76+", label: "Services" },
+                { value: "14", label: "Categories" },
+                { value: "10+", label: "Yrs Exp." },
+              ].map(({ value, label }) => (
+                <div key={label} className="text-center">
+                  <div className="text-3xl font-bold font-display text-ember leading-none">{value}</div>
+                  <div className="text-xs text-muted-foreground mt-1 uppercase tracking-wider">{label}</div>
                 </div>
-                <h3 className="font-bold text-lg mb-2">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{feature.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Services Overview */}
-      <section id="services" className="py-24 px-4 bg-card/20 border-y border-border/60">
-        <div className="container mx-auto max-w-7xl">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <img
-                src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663328149057/djNeAHXiQcQruXwU.jpg"
-                alt="Fire safety compliance analytics dashboard"
-                className="relative z-10 w-full max-w-lg mx-auto rounded-2xl shadow-2xl shadow-[#E8340A]/20 border border-[#E8340A]/20"
-                loading="lazy"
-                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-              />
-            </div>
-            <div className="space-y-6">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#E8340A]/10 border border-[#E8340A]/30 rounded-full text-sm font-medium text-[#FF6B35]">
-                <Flame className="h-4 w-4" />
-                14 SERVICE CATEGORIES
-              </div>
-              <h2 className="text-4xl font-bold">
-                Complete Fire &amp; Security{" "}
-                <span className="fire-gradient-text">Systems Coverage</span>
-              </h2>
-              <p className="text-muted-foreground text-lg">
-                From fire detection and sprinkler systems to CCTV, access control and remote monitoring —
-                our service agreement covers every aspect of your fire and security compliance obligations.
-              </p>
-              <div className="grid grid-cols-2 gap-3">
-                {[
-                  { icon: <Bell className="h-3.5 w-3.5" />, label: "Fire Detection & Alarm" },
-                  { icon: <Droplets className="h-3.5 w-3.5" />, label: "Sprinkler Systems" },
-                  { icon: <Flame className="h-3.5 w-3.5" />, label: "Fire Suppression" },
-                  { icon: <Lightbulb className="h-3.5 w-3.5" />, label: "Emergency Lighting" },
-                  { icon: <Shield className="h-3.5 w-3.5" />, label: "Passive Fire Protection" },
-                  { icon: <Bell className="h-3.5 w-3.5" />, label: "Intruder Alarm" },
-                  { icon: <Camera className="h-3.5 w-3.5" />, label: "CCTV & Surveillance" },
-                  { icon: <KeyRound className="h-3.5 w-3.5" />, label: "Access Control" },
-                  { icon: <Radio className="h-3.5 w-3.5" />, label: "Remote Monitoring" },
-                  { icon: <Wrench className="h-3.5 w-3.5" />, label: "Portable Equipment" },
-                  { icon: <Zap className="h-3.5 w-3.5" />, label: "Emergency Callout" },
-                  { icon: <Building2 className="h-3.5 w-3.5" />, label: "Professional Services" },
-                ].map(({ icon, label }) => (
-                  <div key={label} className="flex items-center gap-2 text-sm p-2 rounded-lg hover:bg-[#E8340A]/5 transition-colors">
-                    <span className="text-[#FF6B35] flex-shrink-0">{icon}</span>
-                    <span className="text-muted-foreground">{label}</span>
-                  </div>
-                ))}
-              </div>
-              <Link href="/agreement">
-                <Button className="fire-gradient fire-glow text-white font-semibold mt-4">
-                  <FileText className="mr-2 h-4 w-4" />
-                  Create Your Agreement
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Why Choose Us */}
-      <section id="why-us" className="py-24 px-4">
-        <div className="container mx-auto max-w-7xl">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#E8340A]/10 border border-[#E8340A]/30 rounded-full text-sm font-medium text-[#FF6B35] mb-6">
-              <Award className="h-4 w-4" />
-              WHY CHOOSE US
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Trusted by Businesses{" "}
-              <span className="fire-gradient-text">Across Scotland</span>
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Core Fire Protection Ltd delivers industry-leading fire and security services backed by
-              decades of expertise and the highest accreditations in the industry.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-            {[
-              { icon: <Award className="h-8 w-8 text-[#FF6B35]" />, title: "BAFE Accredited", desc: "SP203-1 & SP101 certified. Independently assessed to the highest fire protection standards." },
-              { icon: <Star className="h-8 w-8 text-[#FF6B35]" />, title: "NSI Gold", desc: "National Security Inspectorate Gold certification for security systems installation and maintenance." },
-              { icon: <Shield className="h-8 w-8 text-[#FF6B35]" />, title: "BSI Kitemark", desc: "British Standards Institution Kitemark holder — the UK's most recognised quality mark." },
-              { icon: <CheckCircle2 className="h-8 w-8 text-[#FF6B35]" />, title: "BS 5839-1:2025", desc: "Fully compliant with the latest revision of the UK's primary fire detection and alarm standard." },
-            ].map((item) => (
-              <div key={item.title} className="stat-card text-center group hover:border-[#E8340A]/30 transition-all">
-                <div className="flex justify-center mb-4">
-                  <div className="w-16 h-16 rounded-2xl bg-[#E8340A]/10 border border-[#E8340A]/20 flex items-center justify-center group-hover:bg-[#E8340A]/15 transition-colors">
-                    {item.icon}
-                  </div>
-                </div>
-                <h3 className="font-bold text-lg mb-2">{item.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Testimonial */}
-          <div className="rounded-2xl border border-[#E8340A]/20 bg-[#E8340A]/5 p-8 md:p-12 text-center">
-            <div className="flex justify-center gap-1 mb-4">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="h-5 w-5 fill-[#FF6B35] text-[#FF6B35]" />
               ))}
             </div>
-            <blockquote className="text-xl md:text-2xl font-medium text-foreground max-w-2xl mx-auto mb-4 leading-relaxed">
+            <div className="flex flex-wrap gap-1.5 mt-2">
+              {["BAFE SP203-1", "NSI Gold", "BSI Kitemark"].map((badge) => (
+                <span key={badge} className="px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider bg-white/[0.06] border border-white/[0.08] rounded-full text-muted-foreground">
+                  {badge}
+                </span>
+              ))}
+            </div>
+          </article>
+
+          {/* Quick access card */}
+          <article className="bento-card p-6 flex flex-col gap-4">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+              Quick access
+            </p>
+            <div className="space-y-2 flex-1">
+              {[
+                { icon: FileText, label: "New Agreement", href: "/agreement", desc: "Create a digital service contract" },
+                { icon: Shield, label: "Client Portal", href: "/portal", desc: "View your agreements" },
+                { icon: BarChart3, label: "Service Dashboard", href: "/dashboard", desc: "Manage all services" },
+              ].map(({ icon: Icon, label, href, desc }) => (
+                <Link key={href} href={href}>
+                  <a className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.08] hover:border-white/[0.14] transition-all group">
+                    <div className="w-8 h-8 rounded-lg bg-white/[0.06] flex items-center justify-center shrink-0 group-hover:bg-ember/10 transition-colors">
+                      <Icon className="h-4 w-4 text-muted-foreground group-hover:text-ember transition-colors" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-sm font-medium text-foreground leading-none">{label}</div>
+                      <div className="text-xs text-muted-foreground mt-0.5 truncate">{desc}</div>
+                    </div>
+                    <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground ml-auto shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </a>
+                </Link>
+              ))}
+            </div>
+          </article>
+        </section>
+
+        {/* ── Features bento grid ───────────────────────────────── */}
+        <section id="features" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 auto-rows-[minmax(220px,auto)] gap-6 mb-6">
+
+          {/* Section label */}
+          <div className="lg:col-span-4 flex items-center justify-between pt-4 pb-2">
+            <div className="nord-tag">/01 — Features</div>
+            <h2 className="font-display text-2xl font-bold tracking-tight">Platform capabilities</h2>
+          </div>
+
+          {/* Feature card 1 — Digital Agreements */}
+          <article className="bento-card md:col-span-2 p-8 flex flex-col gap-4">
+            <div className="w-12 h-12 rounded-xl bg-ember/10 border border-ember/20 flex items-center justify-center">
+              <FileText className="h-6 w-6 text-ember" />
+            </div>
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-2">
+                /01 — Core feature
+              </p>
+              <h3 className="font-display text-2xl font-semibold leading-snug mb-3">
+                Digital Service Agreements
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Create comprehensive fire and security maintenance contracts digitally. Select from
+                76+ services across 14 categories, add custom line items, and generate legally-binding
+                PDF agreements in minutes.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2 mt-auto">
+              {["BS 5839-1:2025", "BS EN 12845", "PD 6662", "BAFE SP203-1"].map((std) => (
+                <span key={std} className="px-2.5 py-1 text-[10px] font-mono uppercase tracking-wider bg-white/[0.06] border border-white/[0.08] rounded-full text-muted-foreground">
+                  {std}
+                </span>
+              ))}
+            </div>
+          </article>
+
+          {/* Feature card 2 — Electronic Signatures */}
+          <article className="bento-card p-6 flex flex-col gap-4">
+            <div className="w-10 h-10 rounded-lg bg-white/[0.06] border border-white/[0.08] flex items-center justify-center">
+              <Pen className="h-5 w-5 text-foreground/70" />
+            </div>
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
+                /02 — Signatures
+              </p>
+              <h3 className="font-display text-lg font-semibold leading-snug mb-2">
+                Electronic Signatures
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Legally binding digital signatures. Sign on any device — no printing required.
+              </p>
+            </div>
+            <Link href="/agreement">
+              <a className="bento-pill mt-auto self-start">
+                <span>Try it</span>
+                <ArrowUpRight className="h-3.5 w-3.5" />
+              </a>
+            </Link>
+          </article>
+
+          {/* Feature card 3 — Client Portal */}
+          <article className="bento-card p-6 flex flex-col gap-4">
+            <div className="w-10 h-10 rounded-lg bg-white/[0.06] border border-white/[0.08] flex items-center justify-center">
+              <Shield className="h-5 w-5 text-foreground/70" />
+            </div>
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
+                /03 — Portal
+              </p>
+              <h3 className="font-display text-lg font-semibold leading-snug mb-2">
+                Client Portal
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Clients access all their agreements, compliance documents, and renewal dates in one place.
+              </p>
+            </div>
+            <Link href="/portal">
+              <a className="bento-pill mt-auto self-start">
+                <span>Access portal</span>
+                <ArrowUpRight className="h-3.5 w-3.5" />
+              </a>
+            </Link>
+          </article>
+
+          {/* Feature card 4 — Instant PDF */}
+          <article className="bento-card p-6 flex flex-col gap-4">
+            <div className="w-10 h-10 rounded-lg bg-white/[0.06] border border-white/[0.08] flex items-center justify-center">
+              <Download className="h-5 w-5 text-foreground/70" />
+            </div>
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
+                /04 — Export
+              </p>
+              <h3 className="font-display text-lg font-semibold leading-snug mb-2">
+                Instant PDF Generation
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Generate professional, BS-compliant PDF agreements instantly. Delivered by email automatically.
+              </p>
+            </div>
+          </article>
+
+          {/* Feature card 5 — AI Assistant */}
+          <article className="bento-card p-6 flex flex-col gap-4">
+            <div className="w-10 h-10 rounded-lg bg-white/[0.06] border border-white/[0.08] flex items-center justify-center">
+              <Zap className="h-5 w-5 text-foreground/70" />
+            </div>
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
+                /05 — AI
+              </p>
+              <h3 className="font-display text-lg font-semibold leading-snug mb-2">
+                Guided Form Assistant
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Step-by-step guided walkthrough with field highlighting. Complete agreements in minutes, not hours.
+              </p>
+            </div>
+          </article>
+
+          {/* Feature card 6 — QR Codes */}
+          <article className="bento-card p-6 flex flex-col gap-4">
+            <div className="w-10 h-10 rounded-lg bg-white/[0.06] border border-white/[0.08] flex items-center justify-center">
+              <QrCode className="h-5 w-5 text-foreground/70" />
+            </div>
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
+                /06 — QR
+              </p>
+              <h3 className="font-display text-lg font-semibold leading-snug mb-2">
+                QR Code Access
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Each agreement gets a unique QR code linking directly to the client portal view.
+              </p>
+            </div>
+          </article>
+        </section>
+
+        {/* ── Services bento grid ───────────────────────────────── */}
+        <section id="services" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 auto-rows-[minmax(220px,auto)] gap-6 mb-6">
+
+          {/* Section label */}
+          <div className="lg:col-span-4 flex items-center justify-between pt-4 pb-2">
+            <div className="nord-tag">/02 — Services</div>
+            <h2 className="font-display text-2xl font-bold tracking-tight">Our service range</h2>
+          </div>
+
+          {/* Services grid */}
+          {[
+            { icon: Bell, label: "Fire Detection & Alarms", count: "BS 5839-1:2025", desc: "Addressable & conventional systems, panels, detectors, call points" },
+            { icon: Droplets, label: "Sprinkler Systems", count: "BS EN 12845", desc: "Wet, dry, pre-action and deluge systems for all occupancy types" },
+            { icon: Camera, label: "CCTV Systems", count: "BAFE SP203-4", desc: "IP and analogue CCTV, DVR/NVR, remote monitoring integration" },
+            { icon: KeyRound, label: "Access Control", count: "BS EN 50133", desc: "Card readers, biometrics, intercoms, door controllers" },
+            { icon: Lightbulb, label: "Emergency Lighting", count: "BS 5266-1", desc: "Maintained and non-maintained emergency luminaires and testing" },
+            { icon: Radio, label: "Remote Monitoring", count: "BS 5979", desc: "24/7 ARC monitoring, dual-path signalling, BS 8243 compliant" },
+          ].map(({ icon: Icon, label, count, desc }) => (
+            <article key={label} className="bento-card p-6 flex flex-col gap-3 group">
+              <div className="flex items-start justify-between">
+                <div className="w-10 h-10 rounded-lg bg-white/[0.06] border border-white/[0.08] flex items-center justify-center group-hover:bg-ember/10 group-hover:border-ember/20 transition-colors">
+                  <Icon className="h-5 w-5 text-muted-foreground group-hover:text-ember transition-colors" />
+                </div>
+                <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground bg-white/[0.04] border border-white/[0.06] rounded-full px-2 py-0.5">
+                  {count}
+                </span>
+              </div>
+              <div>
+                <h3 className="font-display text-base font-semibold mb-1.5">{label}</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">{desc}</p>
+              </div>
+            </article>
+          ))}
+
+          {/* CTA card */}
+          <article className="bento-card md:col-span-2 p-8 flex flex-col gap-4 justify-between" style={{ background: 'linear-gradient(135deg, #E8340A, #FE7B02 60%, #ff9b35)' }}>
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-widest text-white/70 mb-3">
+                76+ services available
+              </p>
+              <h3 className="font-display text-3xl font-bold text-white leading-tight mb-3">
+                Ready to create your service agreement?
+              </h3>
+              <p className="text-white/80 text-sm leading-relaxed">
+                Select from our full catalogue of fire and security services. Digital signatures, instant PDF, BS compliant.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Link href="/agreement">
+                <a className="inline-flex items-center gap-2 h-10 px-5 rounded-full bg-white text-[#E8340A] text-sm font-bold hover:bg-white/90 transition-colors">
+                  <FileText className="h-4 w-4" />
+                  Start Agreement
+                  <ArrowUpRight className="h-3.5 w-3.5" />
+                </a>
+              </Link>
+              <Link href="/portal">
+                <a className="inline-flex items-center gap-2 h-10 px-5 rounded-full bg-white/20 text-white text-sm font-semibold border border-white/30 hover:bg-white/30 transition-colors">
+                  Client Portal
+                </a>
+              </Link>
+            </div>
+          </article>
+        </section>
+
+        {/* ── Why Us bento grid ─────────────────────────────────── */}
+        <section id="why-us" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 auto-rows-[minmax(220px,auto)] gap-6 mb-6">
+
+          {/* Section label */}
+          <div className="lg:col-span-4 flex items-center justify-between pt-4 pb-2">
+            <div className="nord-tag">/03 — Difference</div>
+            <h2 className="font-display text-2xl font-bold tracking-tight">Why Core Fire works differently</h2>
+          </div>
+
+          {[
+            {
+              label: "A",
+              title: "Specialist focus, narrow choice",
+              desc: "We list specialist fire and security solutions where the right choice is already narrow — not endless catalogues of near-identical options.",
+              icon: Shield,
+            },
+            {
+              label: "B",
+              title: "Built for real work",
+              desc: "Services are organised around practical maintenance agreements and clear compliance information so professionals can prepare jobs with confidence.",
+              icon: Wrench,
+            },
+            {
+              label: "C",
+              title: "Available when you need it",
+              desc: "On demand, making it easy to create agreements, check compliance status, and manage your fire safety portfolio whenever work is being planned.",
+              icon: Clock,
+            },
+            {
+              label: "D",
+              title: "Fully accredited",
+              desc: "BAFE SP203-1, NSI Gold, BSI Kitemark. Every agreement is generated to meet the latest British Standards — BS 5839-1:2025, BS EN 12845, PD 6662.",
+              icon: Award,
+            },
+          ].map(({ label, title, desc, icon: Icon }) => (
+            <article key={label} className="bento-card p-6 flex flex-col gap-4">
+              <div className="flex items-center gap-3">
+                <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground bg-white/[0.06] border border-white/[0.08] rounded-full w-7 h-7 flex items-center justify-center font-bold">
+                  {label}
+                </span>
+                <div className="w-8 h-8 rounded-lg bg-white/[0.06] border border-white/[0.08] flex items-center justify-center">
+                  <Icon className="h-4 w-4 text-muted-foreground" />
+                </div>
+              </div>
+              <div>
+                <h3 className="font-display text-lg font-semibold leading-snug mb-2">{title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{desc}</p>
+              </div>
+            </article>
+          ))}
+        </section>
+
+        {/* ── Accreditations marquee ────────────────────────────── */}
+        <section className="mb-6 overflow-hidden bento-card p-6">
+          <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-4 text-center">
+            Trusted accreditations
+          </p>
+          <div className="flex overflow-hidden">
+            <div className="flex gap-8 animate-marquee whitespace-nowrap">
+              {["BAFE SP203-1", "BAFE SP101", "NSI Gold", "BSI Kitemark", "BS 5839-1:2025", "BS EN 12845", "PD 6662", "BS 5266-1", "BS 5979", "BS EN 50133",
+                "BAFE SP203-1", "BAFE SP101", "NSI Gold", "BSI Kitemark", "BS 5839-1:2025", "BS EN 12845", "PD 6662", "BS 5266-1", "BS 5979", "BS EN 50133"].map((acc, i) => (
+                <span key={i} className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground shrink-0">
+                  <span className="w-1.5 h-1.5 rounded-full bg-ember/60 shrink-0" />
+                  {acc}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── About / Testimonial bento ─────────────────────────── */}
+        <section id="about" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 auto-rows-[minmax(220px,auto)] gap-6 mb-6">
+
+          {/* Section label */}
+          <div className="lg:col-span-4 flex items-center justify-between pt-4 pb-2">
+            <div className="nord-tag">/04 — About</div>
+            <h2 className="font-display text-2xl font-bold tracking-tight">Core Fire Protection</h2>
+          </div>
+
+          {/* About card */}
+          <article className="bento-card md:col-span-2 lg:col-span-2 p-8 flex flex-col gap-6">
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-3">
+                Glasgow, Scotland — Est. 2014
+              </p>
+              <h3 className="font-display text-3xl font-bold leading-tight mb-4">
+                Professional fire &amp; security solutions
+              </h3>
+              <p className="text-muted-foreground leading-relaxed mb-3">
+                Core Fire Protection Ltd is a Glasgow-based specialist in fire detection, alarm, sprinkler,
+                CCTV, and security systems. We serve commercial, industrial, and residential clients across
+                Scotland and the UK.
+              </p>
+              <p className="text-muted-foreground leading-relaxed">
+                Our digital portal makes it simple to create, sign, and manage service agreements — keeping
+                your business compliant with the latest British Standards.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2 mt-auto">
+              <a href="tel:01414331934" className="bento-pill">
+                <Phone className="h-3.5 w-3.5" />
+                0141 433 1934
+              </a>
+              <a href="mailto:info@corefireprotection.co.uk" className="bento-pill">
+                <Mail className="h-3.5 w-3.5" />
+                Email us
+              </a>
+              <a href="https://www.corefireprotection.co.uk" target="_blank" rel="noopener noreferrer" className="bento-pill">
+                <ExternalLink className="h-3.5 w-3.5" />
+                Website
+              </a>
+            </div>
+          </article>
+
+          {/* Testimonial card */}
+          <article className="bento-card md:col-span-2 p-8 flex flex-col gap-4 justify-between">
+            <div className="flex gap-1">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="h-4 w-4 fill-ember text-ember" />
+              ))}
+            </div>
+            <blockquote className="text-lg font-medium text-foreground leading-relaxed flex-1">
               "Core Fire Protection transformed how we manage our fire safety compliance. The digital agreement
               system saves us hours every month and the client portal keeps everything in one place."
             </blockquote>
-            <p className="text-sm text-muted-foreground">— Property Manager, Glasgow Commercial Estate</p>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-24 px-4 relative overflow-hidden bg-card/20 border-y border-border/60">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#E8340A]/10 via-transparent to-[#F5A623]/10 pointer-events-none" />
-        <div className="absolute top-0 left-0 w-full h-1 fire-gradient opacity-50" />
-        <div className="container mx-auto max-w-4xl text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#E8340A]/10 border border-[#E8340A]/30 rounded-full text-sm font-medium text-[#FF6B35] mb-8">
-            <Flame className="h-4 w-4" />
-            GET STARTED TODAY
-          </div>
-          <h2 className="text-4xl md:text-6xl font-bold mb-6">
-            Ready to{" "}
-            <span className="fire-gradient-text">Protect</span>
-            <br />
-            Your Business?
-          </h2>
-          <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
-            Create your comprehensive fire and security service agreement in minutes.
-            Digital signatures, instant PDF generation, and full BS compliance.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/agreement">
-              <Button size="lg" className="fire-gradient fire-glow text-white font-bold text-lg px-12 pulse-fire">
-                <FileText className="mr-2 h-5 w-5" />
-                Start Your Agreement Now
-              </Button>
-            </Link>
-            <Link href="/portal">
-              <Button size="lg" variant="outline" className="border-[#E8340A]/30 hover:bg-[#E8340A]/10 text-lg px-8">
-                <Shield className="mr-2 h-5 w-5" />
-                Access Client Portal
-              </Button>
-            </Link>
-          </div>
-          <div className="mt-12 flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
-            {[
-              "No setup fees",
-              "Instant PDF generation",
-              "Legally binding signatures",
-              "BS compliant documents",
-            ].map((text) => (
-              <div key={text} className="flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-[#FF6B35]" />
-                <span>{text}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="py-14 px-4 border-t border-border/60 bg-card/30 backdrop-blur-sm">
-        <div className="container mx-auto max-w-7xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-            {/* Brand */}
             <div>
-              <div className="flex items-center gap-2 mb-4">
-                <img
-                  src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663328149057/JiTjkhwCQcNFndvg.png"
-                  alt="Core Fire Protection"
-                  className="h-10 w-auto object-contain"
-                />
-              </div>
-              <p className="text-sm text-muted-foreground mb-3">Professional Fire &amp; Security Solutions</p>
-              <p className="text-sm text-muted-foreground">Unit 4, 200 Woodville Street</p>
-              <p className="text-sm text-muted-foreground">Glasgow, G51 2RL</p>
-              <div className="mt-4 flex flex-wrap gap-1.5">
-                {["BAFE SP203-1", "BAFE SP101", "NSI Gold", "BSI Kitemark", "BS 5839-1:2025", "BS EN 12845"].map((acc) => (
-                  <span key={acc} className="px-2 py-0.5 text-xs bg-[#E8340A]/10 border border-[#E8340A]/20 rounded text-[#FF6B35]">{acc}</span>
-                ))}
-              </div>
+              <p className="text-sm font-semibold text-foreground">Property Manager</p>
+              <p className="text-xs text-muted-foreground">Glasgow Commercial Estate</p>
             </div>
+          </article>
 
-            {/* Contact */}
-            <div>
-              <h3 className="font-bold mb-4 text-[#FF6B35]">Contact</h3>
-              <div className="space-y-3">
-                <a href="tel:01414331934" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-[#FF6B35] transition-colors">
-                  <Phone className="h-3.5 w-3.5 flex-shrink-0" />
+          {/* Contact card */}
+          <article className="bento-card p-6 flex flex-col gap-4">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+              Contact
+            </p>
+            <div className="space-y-3">
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Phone</p>
+                <a href="tel:01414331934" className="text-sm font-medium text-foreground hover:text-ember transition-colors">
                   0141 433 1934
                 </a>
-                <a href="mailto:info@corefireprotection.co.uk" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-[#FF6B35] transition-colors">
-                  <Mail className="h-3.5 w-3.5 flex-shrink-0" />
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Email</p>
+                <a href="mailto:info@corefireprotection.co.uk" className="text-sm font-medium text-foreground hover:text-ember transition-colors break-all">
                   info@corefireprotection.co.uk
                 </a>
-                <a href="https://www.corefireprotection.co.uk" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-[#FF6B35] transition-colors">
-                  <ExternalLink className="h-3.5 w-3.5 flex-shrink-0" />
-                  www.corefireprotection.co.uk
-                </a>
               </div>
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Address</p>
+                <p className="text-sm text-muted-foreground">Unit 4, 200 Woodville Street<br />Glasgow, G51 2RL</p>
+              </div>
+            </div>
+          </article>
+
+          {/* Accreditation card */}
+          <article className="bento-card p-6 flex flex-col gap-4">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+              Accreditations
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {["BAFE SP203-1", "BAFE SP101", "NSI Gold", "BSI Kitemark", "BS 5839-1:2025", "BS EN 12845", "PD 6662"].map((acc) => (
+                <span key={acc} className="px-2.5 py-1 text-[10px] font-mono uppercase tracking-wider bg-white/[0.06] border border-white/[0.08] rounded-full text-muted-foreground">
+                  {acc}
+                </span>
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed mt-auto">
+              Independently assessed and certified to the highest fire protection and security standards in the UK.
+            </p>
+          </article>
+        </section>
+
+      </main>
+
+      {/* ── Footer ───────────────────────────────────────────────── */}
+      <footer className="bg-ink text-ink-foreground mt-8">
+        <div className="container py-16">
+          <div className="grid gap-12 lg:grid-cols-4">
+            {/* Brand */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2.5">
+                <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded-sm bg-[#E8340A]/20 flex items-center justify-center">
+                  <Flame className="h-5 w-5 text-[#E8340A]" />
+                </div>
+                <span className="font-display text-xl font-bold tracking-[0.15em] uppercase leading-none text-ink-foreground">
+                  Core
+                  <span className="ml-1 text-[0.55em] font-mono font-normal tracking-widest align-middle text-ember">
+                    FIRE
+                  </span>
+                </span>
+              </div>
+              <p className="text-sm text-ink-foreground/70 leading-relaxed max-w-xs">
+                Professional fire and security systems management. Digital agreements, compliance tracking, and client portal.
+              </p>
+              <p className="text-[11px] font-mono uppercase tracking-widest text-ember">
+                Glasgow · Est. 2014
+              </p>
             </div>
 
             {/* Services */}
             <div>
-              <h3 className="font-bold mb-4 text-[#FF6B35]">Services</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>Fire Detection &amp; Alarm Systems</li>
-                <li>Sprinkler &amp; Suppression Systems</li>
-                <li>CCTV &amp; Access Control</li>
-                <li>Emergency Lighting</li>
-                <li>Portable Fire Equipment</li>
-                <li>Remote Monitoring</li>
-                <li>Emergency Callout</li>
+              <h4 className="font-mono text-[11px] uppercase tracking-widest text-ink-foreground/50 mb-4">
+                Services
+              </h4>
+              <ul className="space-y-2.5">
+                {["Fire Detection & Alarms", "Sprinkler Systems", "CCTV & Access Control", "Emergency Lighting", "Portable Fire Equipment", "Remote Monitoring"].map((s) => (
+                  <li key={s}>
+                    <span className="text-sm text-ink-foreground/70">{s}</span>
+                  </li>
+                ))}
               </ul>
             </div>
 
-            {/* Portal Links */}
+            {/* Portal */}
             <div>
-              <h3 className="font-bold mb-4 text-[#FF6B35]">Portal</h3>
-              <ul className="space-y-2.5 text-sm">
+              <h4 className="font-mono text-[11px] uppercase tracking-widest text-ink-foreground/50 mb-4">
+                Portal
+              </h4>
+              <ul className="space-y-2.5">
+                {[
+                  { label: "New Agreement", href: "/agreement" },
+                  { label: "Client Portal", href: "/portal" },
+                  { label: "Service Dashboard", href: "/dashboard" },
+                  { label: "Admin Panel", href: "/admin" },
+                ].map(({ label, href }) => (
+                  <li key={href}>
+                    <Link href={href}>
+                      <a className="text-sm text-ink-foreground/70 hover:text-ember transition-colors">
+                        {label}
+                      </a>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Contact */}
+            <div>
+              <h4 className="font-mono text-[11px] uppercase tracking-widest text-ink-foreground/50 mb-4">
+                Contact
+              </h4>
+              <ul className="space-y-3">
                 <li>
-                  <Link href="/portal" className="flex items-center gap-1.5 text-muted-foreground hover:text-[#FF6B35] transition-colors">
-                    <ArrowRight className="h-3 w-3" />
-                    Client Portal
-                  </Link>
+                  <a href="tel:01414331934" className="flex items-center gap-2 text-sm text-ink-foreground/70 hover:text-ember transition-colors">
+                    <Phone className="h-3.5 w-3.5 shrink-0" />
+                    0141 433 1934
+                  </a>
                 </li>
                 <li>
-                  <Link href="/agreement" className="flex items-center gap-1.5 text-muted-foreground hover:text-[#FF6B35] transition-colors">
-                    <ArrowRight className="h-3 w-3" />
-                    New Agreement
-                  </Link>
+                  <a href="mailto:info@corefireprotection.co.uk" className="flex items-center gap-2 text-sm text-ink-foreground/70 hover:text-ember transition-colors">
+                    <Mail className="h-3.5 w-3.5 shrink-0" />
+                    info@corefireprotection.co.uk
+                  </a>
                 </li>
                 <li>
-                  <Link href="/dashboard" className="flex items-center gap-1.5 text-muted-foreground hover:text-[#FF6B35] transition-colors">
-                    <ArrowRight className="h-3 w-3" />
-                    Service Dashboard
-                  </Link>
+                  <a href="https://www.corefireprotection.co.uk" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-ink-foreground/70 hover:text-ember transition-colors">
+                    <ExternalLink className="h-3.5 w-3.5 shrink-0" />
+                    corefireprotection.co.uk
+                  </a>
                 </li>
-                <li>
-                  <Link href="/admin" className="flex items-center gap-1.5 text-muted-foreground hover:text-[#FF6B35] transition-colors">
-                    <ArrowRight className="h-3 w-3" />
-                    Admin Dashboard
-                  </Link>
+                <li className="text-sm text-ink-foreground/50 pt-1">
+                  Unit 4, 200 Woodville Street<br />Glasgow, G51 2RL
                 </li>
               </ul>
             </div>
           </div>
 
           {/* Bottom bar */}
-          <div className="pt-8 border-t border-border/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
+          <div className="mt-16 pt-8 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-ink-foreground/40">
             <p>&copy; 2026 Core Fire Protection Ltd. All rights reserved.</p>
-            <p className="text-xs">BAFE SP203-1 | BAFE SP101 | NSI Gold | BSI Kitemark | BS 5839-1:2025 | BS EN 12845 | PD 6662</p>
+            <p className="text-xs font-mono">BAFE SP203-1 · BAFE SP101 · NSI Gold · BSI Kitemark · BS 5839-1:2025 · BS EN 12845</p>
           </div>
         </div>
       </footer>
@@ -631,10 +750,10 @@ export default function Home() {
       {showScrollTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full fire-gradient fire-glow text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-200"
+          className="fixed bottom-6 right-6 z-50 w-10 h-10 rounded-full bg-white/10 border border-white/20 text-foreground flex items-center justify-center shadow-lg hover:bg-white/20 hover:scale-110 transition-all duration-200 backdrop-blur"
           aria-label="Scroll to top"
         >
-          <ChevronUp className="h-5 w-5" />
+          <ChevronUp className="h-4 w-4" />
         </button>
       )}
 
